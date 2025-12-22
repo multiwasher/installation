@@ -1,0 +1,67 @@
+Português (PT),Inglês (EN),Espanhol (ES),Francês (FR)
+Timestamp,Timestamp,Marca de tiempo,Horodatage
+Serial Number,Serial Number,Número de serie,Numéro de série
+Nome do Técnico,Technician Name,Nombre del técnico,Nom du technicien
+Email do Técnico,Technician Email,Email del técnico,E-mail du technicien
+Telefone do Técnico,Technician Phone,Teléfono del técnico,Téléphone du technicien
+Nome do Cliente,Customer Name,Nombre del cliente,Nom du client
+NIF,Tax ID (VAT),NIF / CIF,N° de TVA
+Email do Cliente,Customer Email,Email del cliente,E-mail du client
+Morada,Address,Dirección,Adresse
+Código Postal,Postal Code,Código postal,Code postal
+Cidade,City,Ciudad,Ville
+País,Country,País,Pays
+Representante Cliente,Customer Rep.,Representante cliente,Représentant client
+Telefone do Cliente,Customer Phone,Teléfono del cliente,Téléphone du client
+Modelo,Model,Modelo,Modèle
+Voltagem,Voltage,Voltaje,Tension (Voltage)
+Frequência,Frequency,Frecuencia,Fréquence
+Aquecimento,Heating,Calefacción,Chauffage
+Estado de Entrega,Delivery Status,Estado de entrega,État de livraison
+Tipo de Instalação,Installation Type,Tipo de instalación,Type d'installation
+Responsab. Gradil,Gradil Responsibility,Responsabilidad Gradil,Responsabilité Gradil
+Pode receber TIR?,Can receive semi-truck?,¿Recibe camión TIR?,Accès camion TIR ?
+Tem empilhador?,Forklift available?,¿Tiene montacargas?,A un chariot élévateur ?
+Descarga s/ Técnico,Unload w/o Tech?,Descarga sin técnico,Déchargement sans Tech
+Técnico auxiliar?,Assistant technician?,¿Técnico auxiliar?,Technicien d'aide ?
+Armazenar equip.?,Can store equipment?,¿Puede almacenar?,Peut stocker l'équipement?
+Necessário cintas?,Are straps needed?,¿Necesita eslingas?,Sangles nécessaires ?
+Tem água na sala?,Water in the room?,¿Tiene agua en sala?,Eau dans la pièce ?
+Tam. adaptador água,Water adapter size,Tamaño adaptador agua,Taille adaptateur eau
+Energia eléctrica?,Electricity available?,¿Tiene electricidad?,Électricité disponible ?
+Tem escadas?,Are there stairs?,¿Tiene escaleras?,Y a-t-il des escaliers ?
+Tem ficha eléctrica?,Electric plug available?,¿Tiene enchufe?,Prise électrique ?
+Opção dos Amperes,Amperage option,Opción de amperios,Option d'ampérage
+Tem detergentes?,Detergents available?,¿Tiene detergentes?,A des détergents ?
+Doc. p/ Fábrica?,Factory entry docs?,¿Docs para fábrica?,Doc. entrée usine ?
+Equip. Proteção?,Mandatory PPE?,¿EPI obligatorio?,Équip. de protection ?
+Chão acabado?,Finished floor?,¿Suelo terminado?,Sol fini ?
+Dreno preparado?,Drain ready?,¿Drenaje preparado?,Drain préparé ?
+Ventilação prep.?,Ventilation ready?,¿Ventilación lista?,Ventilation préparée ?
+Utensílios p/ teste?,Dirty tools for tests?,¿Utensilios para test?,Ustensiles pour tests ?
+Operador presente?,Operator present?,¿Operador presente?,Opérateur présent ?
+Nome do Operador,Operator Name,Nombre del operador,Nom de l'opérateur
+Resp. Comission.,Commissioning Mgr.,Resp. comisionamiento,Resp. Mise en service
+Pressão Água,Water Pressure,Presión de agua,Pression de l'eau
+Marca Químicos,Chemical Brand,Marca de químicos,Marque des produits
+Largura Porta (cm),Door Width (cm),Ancho de puerta (cm),Largeur porte (cm)
+Altura Porta (cm),Door Height (cm),Altura de puerta (cm),Hauteur porte (cm)
+Chão ao Teto (cm),Floor to Ceiling (cm),Suelo a techo (cm),Sol au plafond (cm)
+Horário (Início),Working Hours (Start),Horario (Inicio),Heures (Début)
+Horário (Fim),Working Hours (End),Horario (Fin),Heures (Fin)
+Data Entrega,Est. Delivery Date,Fecha entrega prevista,Date livraison prévue
+Observações,General Remarks,Observaciones,Remarques générales
+Estado de entrega,Delivery status,Estado de entrega,État de livraison
+Assemblada,Assembled,Ensamblada,Assemblée
+Parcialmente desmontada,Partially disassembled,Parcialmente desmontada,Partiellement démontée
+Desmontada,Disassembled,Desmontada,Démontée
+Tipo de Instalação,Installation Type,Tipo de Instalación,Type d'Installation
+Enterrada,Underground / Buried,Soterrada / Enterrada,Enterrée
+Solo,Ground level / Floor,Suelo,Au sol
+Responsabilidade Gradil,Fencing Responsibility,Responsabilidad del Vallado,Responsabilité Clôture
+Somengil,Somengil,Somengil,Somengil
+Cliente,Customer / Client,Cliente,Client
+SOMENGIL,SOMENGIL,SOMENGIL,SOMENGIL
+Outra,Other,Otra,Autre
+Especifique,Specify,Especifique,Spécifiez
+Equipamento,Equipment,Equipo,Équipement

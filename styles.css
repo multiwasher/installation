@@ -1,0 +1,75 @@
+body { font-family: 'Inter', sans-serif; background-color: #a9b2b2; }
+
+/* Ajuste de cores para o fundo PRETO da Sidebar */
+.sidebar-dark-active { 
+    background-color: #1f2937; /* Slate-800 escuro para fundo ativo */
+    color: #ffffff; /* Texto branco */
+    border-right: 3px solid #004aad; /* Linha azul da Somengil */
+    font-weight: 600;
+}
+.sidebar-dark-active .section-icon {
+    background-color: #004aad; /* Ícone azul ativo */
+    color: #ffffff;
+}
+.sidebar-dark-inactive { 
+    color: #94a3b8; /* Slate-400 para texto inativo */
+    border-right: 3px solid transparent; 
+}
+.sidebar-dark-inactive:hover { 
+    background-color: #111827; /* Slate-900 para hover muito escuro */
+    color: #ffffff; 
+}
+.sidebar-dark-inactive .section-icon {
+     background-color: #1f2937; /* Slate-800 para ícone inativo */
+     color: #94a3b8;
+}
+
+/* Estilos globais antigos (mantidos, mas substituídos na sidebar) */
+.tab-active { 
+    background-color: #e6f0ff; 
+    color: #004aad; 
+    border-right: 3px solid #004aad; 
+    font-weight: 600;
+}
+.tab-inactive { 
+    color: #64748b; 
+    border-right: 3px solid transparent; 
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+/* Custom radio styling for better touch target */
+.form-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 2px solid #9ca3af; /* Gray-400 */
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.form-radio:checked {
+    border-color: transparent;
+    background-color: #004aad; /* Somengil Blue */
+    box-shadow: 0 0 0 4px #e6f0ff; /* Ring-2 Light Blue */
+}
+.form-radio:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 74, 173, 0.5);
+}
+

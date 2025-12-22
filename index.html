@@ -229,7 +229,7 @@
         window.appState = state;
 
         // URL do Google Apps Script para sincronização (Escrita/Leitura/Email)
-        const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyTCVZY6nQCCYXDsdHUL_xjh9761IUjREh9pmU3FCoqaGHYu3FgbEL40ZPiL-S_9Itq/exec"; 
+        const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwoy-S0Ekip6iIheoRxMxOjCPxQc0mv6R5337o0BWr9Bhns0Z3lXK1MYSCi4SKDPsbf/exec"; 
 
         // NOVO: Valores padrão vazios para garantir que campos não preenchidos no Sheets fiquem em branco na App.
         const emptyDefaults = {
@@ -297,10 +297,89 @@
         };
 
 
+        // --- Login Credentials ---
+        const LOGIN_CREDENTIALS = {
+            '123': { username: 'Tiago', destination: 'action' },
+            '456': { username: 'Diogo', destination: 'action' },
+            '789': { username: 'Miguel', destination: 'action' },
+            '101': { username: 'Richard', destination: 'action' },
+            '102': { username: 'Leonel', destination: 'action' },
+            '112': { username: 'GESTÃO', destination: 'creation' },
+            '911': { username: 'Voos', destination: 'maps' }
+        };
+
+        // Função de Login
+        window.handleLogin = async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorMsg = document.getElementById('login-error-message');
+            const btn = document.getElementById('login-btn');
+            const spinner = document.getElementById('login-loading-spinner');
+            const btnText = document.getElementById('login-btn-text');
+
+            // Limpar mensagem de erro anterior
+            errorMsg.classList.add('hidden');
+            errorMsg.textContent = '';
+
+            // Validar credenciais
+            let validCredential = null;
+            for (const [pass, cred] of Object.entries(LOGIN_CREDENTIALS)) {
+                if (password === pass && username.toLowerCase() === cred.username.toLowerCase()) {
+                    validCredential = cred;
+                    break;
+                }
+            }
+
+            if (!validCredential) {
+                errorMsg.textContent = window.translate('Credenciais inválidas') || 'Credenciais inválidas';
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // Mostrar loading
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            btnText.textContent = window.translate('A entrar...') || 'A entrar...';
+
+            // Aguardar um pouco para simular processamento
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Navegar para o destino
+            document.getElementById('login-view').classList.add('hidden');
+            
+            if (validCredential.destination === 'action') {
+                document.getElementById('action-view').classList.remove('hidden');
+            } else if (validCredential.destination === 'creation') {
+                document.getElementById('creation-form-view').classList.remove('hidden');
+            } else if (validCredential.destination === 'maps') {
+                // Placeholder para Mapa de Viagens
+                alert('Funcionalidade de Mapa de Viagens em desenvolvimento');
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                btnText.textContent = window.translate('Entrar') || 'Entrar';
+                return;
+            }
+
+            // Restaurar botão
+            btn.disabled = false;
+            spinner.classList.add('hidden');
+            btnText.textContent = window.translate('Entrar') || 'Entrar';
+            
+            // Limpar campos
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        };
+
         // --- Core Logic ---
 
         function initApp() {
-            showActionView();
+            // Mostrar tela de login inicialmente
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('action-view').classList.add('hidden');
+            document.getElementById('creation-form-view').classList.add('hidden');
+            document.getElementById('app-view').classList.add('hidden');
+            
             // Define o tab inicial com as classes escuras
             switchTab('section-1', true); 
             console.log("Aplicação iniciada. Fonte de dados: Google Apps Script.");
@@ -310,6 +389,131 @@
         window.showCreationView = () => {
             document.getElementById('action-view').classList.add('hidden');
             document.getElementById('creation-form-view').classList.remove('hidden');
+            // Limpar todos os campos do formulário de criação
+            clearCreationForm();
+            // Mostrar o primeiro tab por padrão
+            showCreationTab('new-equipment');
+        };
+        
+        // NOVO: Função para limpar o formulário de criação
+        window.clearCreationForm = () => {
+            // Limpar campo de serial
+            document.getElementById('creationSerialInput').value = '';
+            
+            // Gerar nova sugestão de serial
+            generateSerialSuggestion();
+        };
+        
+        // NOVO: Função para gerar sugestão aleatória (3 números + 1 letra)
+        window.generateSerialSuggestion = () => {
+            const numbers = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const letter = letters.charAt(Math.floor(Math.random() * letters.length));
+            const suggestion = numbers + letter;
+            document.getElementById('serialSuggestion').textContent = suggestion;
+        };
+        
+        // NOVO: Função para aplicar a sugestão ao campo
+        window.applySuggestion = () => {
+            const suggestion = document.getElementById('serialSuggestion').textContent;
+            const currentValue = document.getElementById('creationSerialInput').value;
+            
+            // Se o campo estiver vazio, preencher com a sugestão
+            if (!currentValue.trim()) {
+                document.getElementById('creationSerialInput').value = suggestion;
+            } else {
+                // Caso contrário, adicionar a sugestão no final
+                document.getElementById('creationSerialInput').value += suggestion;
+            }
+            
+            // Gerar nova sugestão
+            generateSerialSuggestion();
+        };
+        
+        // NOVO: Função para alternar entre tabs na création-form-view
+        window.showCreationTab = (tabName) => {
+            // Esconder todos os tabs
+            document.getElementById('tab-content-new-equipment').classList.add('hidden');
+            document.getElementById('tab-content-all-equipment').classList.add('hidden');
+            
+            // Remover classe ativa de todos os botões
+            document.getElementById('tab-new-equipment').classList.remove('border-b-2', 'border-somengil-blue', 'text-somengil-blue');
+            document.getElementById('tab-new-equipment').classList.add('border-b-2', 'border-transparent', 'text-gray-600');
+            
+            document.getElementById('tab-all-equipment').classList.remove('border-b-2', 'border-somengil-blue', 'text-somengil-blue');
+            document.getElementById('tab-all-equipment').classList.add('border-b-2', 'border-transparent', 'text-gray-600');
+            
+            if (tabName === 'new-equipment') {
+                document.getElementById('tab-content-new-equipment').classList.remove('hidden');
+                document.getElementById('tab-new-equipment').classList.remove('border-b-2', 'border-transparent', 'text-gray-600');
+                document.getElementById('tab-new-equipment').classList.add('border-b-2', 'border-somengil-blue', 'text-somengil-blue');
+            } else if (tabName === 'all-equipment') {
+                document.getElementById('tab-content-all-equipment').classList.remove('hidden');
+                document.getElementById('tab-all-equipment').classList.remove('border-b-2', 'border-transparent', 'text-gray-600');
+                document.getElementById('tab-all-equipment').classList.add('border-b-2', 'border-somengil-blue', 'text-somengil-blue');
+                
+                // Carregar dados quando o tab é selecionado
+                loadAllEquipments();
+            }
+        };
+        
+        // NOVO: Função para carregar todos os equipamentos
+        window.loadAllEquipments = async () => {
+            const loadingDiv = document.getElementById('equipment-loading');
+            const containerDiv = document.getElementById('equipment-list-container');
+            const emptyDiv = document.getElementById('equipment-empty');
+            const tableBody = document.getElementById('equipment-table-body');
+            
+            try {
+                const response = await fetch(GOOGLE_SHEET_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'fetchAll' })
+                });
+                
+                const result = await response.json();
+                
+                if (result.result === 'success' && result.data && result.data.length > 0) {
+                    // Preencher a tabela
+                    tableBody.innerHTML = result.data.map((equipment, index) => `
+                        <tr class="${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+                            <td class="border border-gray-300 p-2 font-mono text-sm">${equipment.serial || '-'}</td>
+                            <td class="border border-gray-300 p-2 text-sm">${equipment.timestamp || '-'}</td>
+                            <td class="border border-gray-300 p-2 text-sm">${equipment.somengil_technician || '-'}</td>
+                            <td class="border border-gray-300 p-2 text-sm">${equipment.customer || '-'}</td>
+                            <td class="border border-gray-300 p-2 text-sm">${equipment.model_product || '-'}</td>
+                            <td class="border border-gray-300 p-2 text-center">
+                                <button type="button" onclick="viewEquipmentDetails('${equipment.serial}')" class="text-somengil-blue hover:text-somengil-accent text-sm font-semibold">Ver</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    
+                    loadingDiv.classList.add('hidden');
+                    containerDiv.classList.remove('hidden');
+                    emptyDiv.classList.add('hidden');
+                } else {
+                    loadingDiv.classList.add('hidden');
+                    emptyDiv.classList.remove('hidden');
+                    containerDiv.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar equipamentos:', error);
+                loadingDiv.classList.add('hidden');
+                emptyDiv.classList.remove('hidden');
+                containerDiv.classList.add('hidden');
+            }
+        };
+        
+        // NOVO: Função para ver detalhes de um equipamento
+        window.viewEquipmentDetails = (serial) => {
+            state.serial = serial;
+            document.getElementById('creation-form-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            document.getElementById('display-serial').innerText = `Sheet #${state.serial}`;
+            
+            // Carregar dados do equipamento
+            loadSheetData(state.serial);
+            switchTab('section-1', true);
         };
 
         // NOVO: Navegação para a vista de Ações
@@ -329,24 +533,12 @@
             
             showLoading(true);
             
-            // 1. Coletar dados iniciais do formulário de criação
+            // 1. Apenas usar o número de série - os campos de criação foram removidos
             let creationData = {};
-            creationFields.forEach(key => {
-                // Tenta encontrar o input de texto/número
-                let input = document.getElementById(`field-creation-${key}`);
-                
-                if (input) {
-                    creationData[key] = input.value;
-                } else {
-                    // Tenta encontrar o input de rádio
-                    const checkedRadio = document.querySelector(`input[name="creation-${key}"]:checked`);
-                    creationData[key] = checkedRadio ? checkedRadio.value : "";
-                }
-            });
             
-            // 2. Preenche o estado global usando emptyDefaults para que o resto fique vazio
+            // 2. Preenche o estado global usando emptyDefaults para que tudo fique vazio
             state.serial = serial;
-            state.data = { ...emptyDefaults, ...creationData }; // USA emptyDefaults AQUI
+            state.data = { ...emptyDefaults, ...creationData }; // USA emptyDefaults
             
             // 3. Salvar (O Apps Script criará o separador se necessário)
             await saveData(true); // Força a gravação após a criação
@@ -354,7 +546,7 @@
             // 4. Transiciona para a aplicação principal
             document.getElementById('creation-form-view').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
-            document.getElementById('display-serial').innerText = `Sheet #${state.serial}`;
+            document.getElementById('display-serial').innerText = `S/n: ${state.serial}`;
             
             // Recarrega o formulário principal com os dados
             populateForm(state.data);
@@ -389,7 +581,7 @@
                 state.serial = serialInput;
                 document.getElementById('action-view').classList.add('hidden');
                 document.getElementById('app-view').classList.remove('hidden');
-                document.getElementById('display-serial').innerText = `Sheet #${state.serial}`;
+                document.getElementById('display-serial').innerText = `S/n: ${state.serial}`;
                 
                 await window.loadSheetData(state.serial);
             } catch (error) {
@@ -576,6 +768,13 @@
                             const result = await response.json();
                             if (result.result === 'success' && result.data) {
                                 state.data = { ...defaults, ...result.data };
+                                // Se temos serial/ID da resposta, armazenar em state.id
+                                if (result.data.serial) {
+                                    state.id = result.data.serial;
+                                    // Extrair apenas a parte aleatória (após o "&")
+                                    const randomPart = state.id.includes('&') ? state.id.split('&')[1] : state.id;
+                                    document.getElementById('display-serial').innerText = `S/N: ${randomPart}`;
+                                }
                             }
                         } else {
                             console.warn("Não foi possível carregar dados do Apps Script (status: " + response.status + ")");
@@ -589,7 +788,7 @@
                 // Preencher o formulário
                 populateForm(state.data);
                 window.calculateAndDisplayProgress(state.data);
-                switchTab('installation-info', true);
+                switchTab('installation-responsibility', true);
                 showLoading(false);
             } catch (error) {
                 console.error("Erro ao carregar dados:", error);
@@ -849,9 +1048,12 @@
             state.data = {};
             document.getElementById('app-view').classList.add('hidden');
             document.getElementById('creation-form-view').classList.add('hidden');
+            document.getElementById('action-view').classList.add('hidden');
             document.getElementById('accessSerialInput').value = '';
             document.getElementById('creationSerialInput').value = '';
-            showActionView();
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-view').classList.remove('hidden');
         };
 
         // Funções de navegação entre secções
@@ -870,7 +1072,7 @@
         };
 
         initComplianceSections();
-        setTimeout(() => window.switchTab('installation-info', true), 100);
+        setTimeout(() => window.switchTab('installation-responsibility', true), 100);
         
         // Inicializar traduções quando o DOM estiver pronto
         if (typeof initLanguage === 'function') {
@@ -881,8 +1083,119 @@
         }
     </script>
 
-    <!-- Action Selection View (Substitui o login inicial) -->
-    <div id="action-view" class="fixed inset-0 overflow-y-scroll bg-somengil-light">
+    <!-- LOGIN VIEW (Ecrã Inicial) -->
+    <div id="login-view" class="fixed inset-0 overflow-y-scroll bg-somengil-light">
+        <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
+            <div class="p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-lg text-center my-8" style="background: radial-gradient(circle at center, rgba(81, 184, 234, 1) 0%, rgba(0, 0, 0, 1) 100%);">
+                <div class="mb-8">
+                    <img src="https://static.wixstatic.com/media/a6967f_0c98d57376be4290aba002d8ba028a92~mv2.webp" 
+                         alt="MULTI WASHER" 
+                         class="mx-auto h-16 md:h-20 w-auto mb-3"
+                         onerror="this.onerror=null; this.innerHTML='<h1 class=\'text-3xl font-bold text-white\'>MULTI WASHER</h1>'">
+                    <div class="inline-block p-0.5 rounded-lg mt-1" style="background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);">
+                        <div class="px-3 py-1.5 rounded-md bg-black">
+                            <p class="text-white font-semibold uppercase text-xs tracking-widest" data-translate="Checklist Instalação">Checklist Instalação</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seletor de Idioma -->
+                <div class="mb-6 pb-6 border-b border-gray-700">
+                    <label class="block text-sm font-medium text-gray-300 mb-2" data-translate="Selecione o idioma">Selecione o idioma</label>
+                    <div class="flex justify-center gap-1.5 md:gap-2">
+                        <!-- PT -->
+                        <div class="p-0.5 rounded-lg" style="background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);">
+                            <button onclick="setLanguage('pt')" 
+                                class="language-btn bg-black px-2 md:px-4 py-2 rounded-md font-semibold transition duration-200 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white"
+                                data-lang="pt">
+                                <svg width="20" height="20" viewBox="0 0 24 24" class="md:w-6 md:h-6" style="border-radius: 2px; overflow: hidden;">
+                                    <rect width="10" height="24" fill="#006600"/>
+                                    <rect x="10" width="14" height="24" fill="#FF0000"/>
+                                </svg>
+                                PT
+                            </button>
+                        </div>
+                        <!-- EN -->
+                        <div class="p-0.5 rounded-lg" style="background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);">
+                            <button onclick="setLanguage('en')" 
+                                class="language-btn bg-black px-2 md:px-4 py-2 rounded-md font-semibold transition duration-200 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white"
+                                data-lang="en">
+                                <svg width="20" height="20" viewBox="0 0 24 24" class="md:w-6 md:h-6" style="border-radius: 2px; overflow: hidden;">
+                                    <rect width="24" height="24" fill="#012169"/>
+                                    <path d="M0,0 L24,24 M24,0 L0,24" stroke="white" stroke-width="3"/>
+                                    <path d="M0,0 L24,24 M24,0 L0,24" stroke="#C8102E" stroke-width="2"/>
+                                    <path d="M12,0 L12,24 M0,12 L24,12" stroke="white" stroke-width="5"/>
+                                    <path d="M12,0 L12,24 M0,12 L24,12" stroke="#C8102E" stroke-width="3"/>
+                                </svg>
+                                EN
+                            </button>
+                        </div>
+                        <!-- ES -->
+                        <div class="p-0.5 rounded-lg" style="background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);">
+                            <button onclick="setLanguage('es')" 
+                                class="language-btn bg-black px-2 md:px-4 py-2 rounded-md font-semibold transition duration-200 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white"
+                                data-lang="es">
+                                <svg width="20" height="20" viewBox="0 0 24 24" class="md:w-6 md:h-6" style="border-radius: 2px; overflow: hidden;">
+                                    <rect width="24" height="6" fill="#AA151B"/>
+                                    <rect y="6" width="24" height="12" fill="#F1BF00"/>
+                                    <rect y="18" width="24" height="6" fill="#AA151B"/>
+                                </svg>
+                                ES
+                            </button>
+                        </div>
+                        <!-- FR -->
+                        <div class="p-0.5 rounded-lg" style="background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);">
+                            <button onclick="setLanguage('fr')" 
+                                class="language-btn bg-black px-2 md:px-4 py-2 rounded-md font-semibold transition duration-200 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white"
+                                data-lang="fr">
+                                <svg width="20" height="20" viewBox="0 0 24 24" class="md:w-6 md:h-6" style="border-radius: 2px; overflow: hidden;">
+                                    <rect width="8" height="24" fill="#002395"/>
+                                    <rect x="8" width="8" height="24" fill="#FFFFFF"/>
+                                    <rect x="16" width="8" height="24" fill="#ED2939"/>
+                                </svg>
+                                FR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulário de Login -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-6" data-translate="Bom-vindo">Bom-vindo</h2>
+                    <form onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-left text-sm font-medium text-gray-300 mb-2" data-translate="Nome do Utilizador">Nome do Utilizador</label>
+                            <input type="text" id="login-username" placeholder="ex: Tiago, Diogo, GESTÃO..." 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-somengil-blue focus:border-somengil-blue outline-none transition text-center text-lg placeholder-slate-400"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-left text-sm font-medium text-gray-300 mb-2" data-translate="Senha">Senha</label>
+                            <input type="password" id="login-password" placeholder="••••••" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-somengil-blue focus:border-somengil-blue outline-none transition text-center text-lg placeholder-slate-400"
+                                required>
+                        </div>
+                        <div id="login-error-message" class="hidden mt-2 p-3 bg-red-900/50 border border-red-600 text-red-300 text-sm rounded-lg text-center"></div>
+                        <button type="submit" id="login-btn"
+                            class="w-full bg-somengil-blue hover:bg-somengil-accent text-white font-bold py-3 px-4 rounded-lg transition duration-200 shadow-lg shadow-somengil-blue/30 flex items-center justify-center gap-2 min-h-[48px]">
+                            <svg id="login-loading-spinner" class="hidden animate-spin h-5 w-5 text-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span id="login-btn-text" data-translate="Entrar">Entrar</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-700 text-xs text-gray-500">
+                    &copy; Somengil 2025.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Selection View (Após login) -->
+    <div id="action-view" class="hidden fixed inset-0 overflow-y-scroll bg-somengil-light">
         <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
             <div class="p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-lg text-center my-8" style="background: radial-gradient(circle at center, rgba(81, 184, 234, 1) 0%, rgba(0, 0, 0, 1) 100%);">
             <div class="mb-8">
@@ -988,6 +1301,15 @@
                 </button>
             </div>
             
+            <!-- Botão de Logout -->
+            <div class="mt-6 pt-6 border-t border-gray-700">
+                <button onclick="logout()"
+                    class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg shadow-red-600/30"
+                    data-translate="Sair">
+                    Sair
+                </button>
+            </div>
+            
             <div class="mt-8 pt-6 border-t border-gray-700 text-xs text-gray-500">
                 &copy; Somengil 2025.
             </div>
@@ -1000,129 +1322,103 @@
     <div id="creation-form-view" class="hidden fixed inset-0 overflow-y-scroll bg-somengil-light">
         <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-4xl my-8">
-            <h2 class="text-2xl font-bold text-somengil-blue mb-2" data-translate="Novo Equipamento - Dados Iniciais">Novo Equipamento - Dados Iniciais</h2>
-            <p class="text-slate-500 mb-6" data-translate="Estes dados serão usados para criar o novo separador da checklist.">Estes dados serão usados para criar o novo separador da checklist.</p>
             
-            <form onsubmit="createNewEquipment(event)" class="space-y-6">
+            <!-- TABS -->
+            <div class="flex gap-4 mb-6 border-b border-gray-200">
+                <button onclick="showCreationTab('new-equipment')" id="tab-new-equipment" class="py-2 px-4 font-semibold text-somengil-blue border-b-2 border-somengil-blue" data-translate="Criar Novo">Criar Novo Equipamento</button>
+                <button onclick="showCreationTab('all-equipment')" id="tab-all-equipment" class="py-2 px-4 font-semibold text-gray-600 border-b-2 border-transparent hover:text-somengil-blue" data-translate="Ver Todos">Ver Todos os Equipamentos</button>
+            </div>
+            
+            <!-- TAB: CRIAR NOVO EQUIPAMENTO -->
+            <div id="tab-content-new-equipment" class="block">
+                <h2 class="text-2xl font-bold text-somengil-blue mb-2" data-translate="Novo Equipamento - Dados Iniciais">Novo Equipamento - Dados Iniciais</h2>
+                <p class="text-slate-500 mb-6" data-translate="Estes dados serão usados para criar o novo separador da checklist.">Estes dados serão usados para criar o novo separador da checklist.</p>
                 
-                <!-- Serial Number -->
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                     <label class="block text-sm font-bold text-somengil-blue mb-1" data-translate="Número de Série (Nome do Separador na Sheet)">Número de Série (Nome do Separador na Sheet)</label>
-                    <input type="text" id="creationSerialInput" data-translate-placeholder="Introduza o novo Número de Série" placeholder="Introduza o novo Número de Série (Ex: 999)" required
-                        class="w-full px-4 py-2 border border-blue-400 rounded focus:ring-2 focus:ring-somengil-blue focus:border-somengil-blue outline-none transition text-lg font-mono placeholder-slate-400">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- I. TÉCNICO -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-700 mb-3 border-b pb-2" data-translate="I. Técnico">I. Técnico</h3>
-                        <div class="space-y-3">
-                            <div><label class="block text-sm" data-translate="Nome do Técnico">Nome do Técnico</label><input type="text" id="field-creation-tecnicoNome" required class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Email">Email</label><input type="email" id="field-creation-tecnicoEmail" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Telefone">Telefone (+351)</label><input type="text" id="field-creation-tecnicoTelefone" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                        </div>
-                    </div>
+                <form onsubmit="window.createNewEquipment(event)" class="space-y-6 max-w-2xl">
                     
-                    <!-- II. CLIENTE (Colspan 2) -->
-                    <div class="md:col-span-2 bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-700 mb-3 border-b pb-2" data-translate="II. Cliente">II. Cliente</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="col-span-2"><label class="block text-sm" data-translate="Nome do Cliente">Nome do Cliente</label><input type="text" id="field-creation-clienteNome" required class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="NIF">Nº Contribuinte</label><input type="text" id="field-creation-clienteNIF" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Email">Email</label><input type="email" id="field-creation-clienteEmail" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div class="col-span-2"><label class="block text-sm" data-translate="Morada">Morada</label><input type="text" id="field-creation-clienteMorada" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Código Postal">Código Postal</label><input type="text" id="field-creation-clienteCodigoPostal" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Cidade">Cidade</label><input type="text" id="field-creation-clienteCidade" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="País">País</label><input type="text" id="field-creation-clientePais" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Representante Cliente">Representante</label><input type="text" id="field-creation-clienteRepresentante" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
-                            <div><label class="block text-sm" data-translate="Telefone do Cliente">Telefone Cliente</label><input type="text" id="field-creation-clienteTelefone" class="w-full p-2 border border-gray-300 rounded text-sm"></div>
+                    <!-- Serial Number -->
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <label class="block text-sm font-bold text-somengil-blue mb-3" data-translate="Número de Série (Nome do Separador na Sheet)">Número de Série (Nome do Separador na Sheet)</label>
+                        
+                        <div class="mb-4">
+                            <label class="block text-xs text-gray-600 mb-2" data-translate="Introduza o novo Número de Série">Introduza o novo Número de Série</label>
+                            <input type="text" id="creationSerialInput" placeholder="Ex: 001, 999, ABC-123, etc" required
+                                class="w-full px-4 py-3 border-2 border-blue-400 rounded-lg focus:ring-2 focus:ring-somengil-blue focus:border-somengil-blue outline-none transition text-lg font-mono placeholder-slate-400">
                         </div>
+
+                        <div class="hidden">
+                            <label class="block text-xs text-gray-600 mb-2">Sugestão:</label>
+                            <div id="serialSuggestion" class="bg-white border-2 border-blue-300 rounded-lg px-4 py-3 font-mono text-base font-bold text-somengil-blue cursor-pointer hover:bg-blue-50 transition" onclick="applySuggestion()">
+                                ---
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between pt-4">
+                        <button type="button" onclick="showActionView()"
+                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition font-medium"
+                            data-translate="Voltar">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="create-checklist-btn"
+                            class="bg-somengil-blue hover:bg-somengil-accent text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-somengil-blue/30 transition-all"
+                            data-translate="Criar Checklist">
+                            Criar Checklist
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- TAB: VER TODOS OS EQUIPAMENTOS -->
+            <div id="tab-content-all-equipment" class="hidden">
+                <h2 class="text-2xl font-bold text-somengil-blue mb-2" data-translate="Ver Todos os Equipamentos">Ver Todos os Equipamentos</h2>
+                <p class="text-slate-500 mb-6">Listagem de todos os equipamentos no Compliance Sheet</p>
+                
+                <div id="equipment-loading" class="text-center py-8">
+                    <div class="inline-block animate-spin h-8 w-8 text-somengil-blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <p class="mt-2 text-gray-600">A carregar equipamentos...</p>
+                </div>
+                
+                <div id="equipment-list-container" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-somengil-blue text-white">
+                                    <th class="border border-gray-300 p-2 text-left">ID/Serial</th>
+                                    <th class="border border-gray-300 p-2 text-left">Timestamp</th>
+                                    <th class="border border-gray-300 p-2 text-left">Técnico</th>
+                                    <th class="border border-gray-300 p-2 text-left">Cliente</th>
+                                    <th class="border border-gray-300 p-2 text-left">Modelo</th>
+                                    <th class="border border-gray-300 p-2 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipment-table-body">
+                                <!-- Preenchido por JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- III. EQUIPAMENTO -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-700 mb-3 border-b pb-2" data-translate="III. Equipamento">III. Equipamento</h3>
-                         <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1" data-translate="Modelo">Modelo</label>
-                            <div class="flex flex-wrap gap-2" onchange="createNewEquipment.latestData = true">
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoModelo" value="MWS 200" class="form-radio"> <span>MWS 200</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoModelo" value="MWS 300" class="form-radio"> <span>MWS 300</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoModelo" value="MWS 500" class="form-radio"> <span>MWS 500</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoModelo" value="MWS 700" class="form-radio"> <span>MWS 700</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoModelo" value="MWS 715" class="form-radio"> <span>MWS 715</span></label>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1" data-translate="Voltagem">Voltagem</label>
-                            <input type="text" id="field-creation-equipamentoVoltagem" class="w-full p-2 border border-gray-300 rounded text-sm" placeholder="Ex: 400V">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1" data-translate="Frequência">Frequência</label>
-                            <div class="flex gap-4" onchange="createNewEquipment.latestData = true">
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoFrequencia" value="50Hz" class="form-radio"> <span>50Hz</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoFrequencia" value="60Hz" class="form-radio"> <span>60Hz</span></label>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1" data-translate="Aquecimento">Aquecimento</label>
-                            <div class="flex gap-4" onchange="createNewEquipment.latestData = true">
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoAquecimento" value="Electrico" class="form-radio"> <span>Elétrico</span></label>
-                                <label class="flex items-center space-x-1"><input type="radio" name="creation-equipamentoAquecimento" value="Vapor" class="form-radio"> <span>Vapor</span></label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- IV. MONTAGEM -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-gray-700 mb-3 border-b pb-2" data-translate="IV. Montagem">IV. Montagem</h3>
-                        <div class="space-y-4" onchange="createNewEquipment.latestData = true">
-                            <div>
-                                <label class="block text-sm font-medium mb-1" data-translate="Estado de Entrega">Estado de entrega</label>
-                                <div class="flex flex-col gap-1">
-                                    <label class="flex items-center space-x-1"><input type="radio" name="creation-condicaoMontagem" value="Assemblada" class="form-radio"> <span data-translate="Assemblada">Assemblada</span></label>
-                                    <label class="flex items-center space-x-1"><input type="radio" name="creation-condicaoMontagem" value="Parcialmente desmontada" class="form-radio"> <span data-translate="Parcialmente desmontada">Parcialmente desmontada</span></label>
-                                    <label class="flex items-center space-x-1"><input type="radio" name="creation-condicaoMontagem" value="Desmontada" class="form-radio"> <span data-translate="Desmontada">Desmontada</span></label>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1" data-translate="Tipo de Instalação">Tipo de Instalação</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center space-x-1"><input type="radio" name="creation-instalacaoTipo" value="Enterrada" class="form-radio"> <span data-translate="Enterrada">Enterrada</span></label>
-                                    <label class="flex items-center space-x-1"><input type="radio" name="creation-instalacaoTipo" value="Sola" class="form-radio"> <span data-translate="Solo">Solo</span></label>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1" data-translate="Responsabilidade Gradil">Responsabilidade Gradil</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center space-x-1 cursor-pointer"><input type="radio" name="creation-responsabilidadeGradil" value="Cliente" class="form-radio text-somengil-blue focus:ring-somengil-blue"> <span data-translate="Cliente">Cliente</span></label>
-                                    <label class="flex items-center space-x-1 cursor-pointer"><input type="radio" name="creation-responsabilidadeGradil" value="SOMENGIL" class="form-radio text-somengil-blue focus:ring-somengil-blue"> <span data-translate="SOMENGIL">SOMENGIL</span></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                
+                <div id="equipment-empty" class="hidden text-center py-8">
+                    <p class="text-gray-600 text-lg">Nenhum equipamento encontrado</p>
                 </div>
-
+                
                 <div class="flex justify-between mt-8">
-                     <button type="button" onclick="showActionView()"
+                     <button type="button" onclick="logout()"
                         class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition"
                         data-translate="Voltar">
-                        Cancelar
-                    </button>
-                    <button type="submit" 
-                        class="bg-somengil-blue hover:bg-somengil-accent text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-somengil-blue/30 transition-all"
-                        data-translate="Criar e Abrir Equipamento">
-                        Criar e Abrir Checklist
+                        Voltar
                     </button>
                 </div>
-            </form>
+            </div>
             </div>
         </div>
-    </div>
-
-
-    <!-- App View (Checklist Principal) -->
+    </div>    <!-- App View (Checklist Principal) -->
     <div id="app-view" class="hidden flex h-screen">
         
         <!-- Mobile Sidebar Overlay -->
@@ -1139,7 +1435,7 @@
                     <div class="flex-1">
                         <h2 class="font-bold text-xl text-white">Checklist</h2>
                         <div class="flex items-center mt-2 text-sm text-blue-300 font-mono bg-gray-900/50 px-2 py-1 rounded w-fit">
-                            <span id="display-serial">Sheet #...</span>
+                            <span id="display-serial">S/N: ...</span>
                         </div>
                     </div>
                     
@@ -1968,7 +2264,7 @@
                             // Tornar funções acessíveis globalmente
                             window.photoUploadState = {
                                 selectedImages: [],
-                                GOOGLE_SHEET_API_URL: "https://script.google.com/macros/s/AKfycbyTCVZY6nQCCYXDsdHUL_xjh9761IUjREh9pmU3FCoqaGHYu3FgbEL40ZPiL-S_9Itq/exec"
+                                GOOGLE_SHEET_API_URL: "https://script.google.com/macros/s/AKfycbwoy-S0Ekip6iIheoRxMxOjCPxQc0mv6R5337o0BWr9Bhns0Z3lXK1MYSCi4SKDPsbf/exec"
                             };
 
                             window.handleImageUpload = function(event) {
