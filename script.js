@@ -1,3 +1,94 @@
+// --- EDIÇÃO DE VOOS ---
+(async () => {
+    // ...existing code...
+
+    // Garante que flightsData está definido globalmente
+    window.flightsData = [];
+
+    // --- EDIÇÃO DE VOOS ---
+    let editingFlightId = null;
+    window.editFlight = (id) => {
+        const flight = window.flightsData.find(f => f.id === id);
+        if (!flight) {
+            alert('Voo não encontrado.');
+            return;
+        }
+        editingFlightId = id;
+        document.getElementById('flight-modal').classList.remove('hidden');
+        document.getElementById('flight-date').value = flight.date || '';
+        document.getElementById('flight-date-arrival').value = flight.dateArrival || '';
+        document.getElementById('flight-airport').value = flight.airport || '';
+        document.getElementById('flight-destination').value = flight.destination || '';
+        document.getElementById('flight-departure-time').value = flight.departureTime || '';
+        document.getElementById('flight-arrival-time').value = flight.arrivalTime || '';
+        updateFlightTechnicianList();
+        document.getElementById('flight-technician').value = flight.technician || '';
+        document.getElementById('flight-status').value = flight.status || '';
+        document.getElementById('flight-notes').value = flight.notes || '';
+    };
+
+    const origShowFlightModal = window.showFlightModal;
+    window.showFlightModal = function() {
+        editingFlightId = null;
+        origShowFlightModal();
+    };
+    const origCloseFlightModal = window.closeFlightModal;
+    window.closeFlightModal = function() {
+        editingFlightId = null;
+        origCloseFlightModal();
+    };
+
+    // Remove any previous listeners to avoid duplicates
+    const flightForm = document.getElementById('flight-form');
+    if (flightForm) {
+        flightForm.onsubmit = null;
+        flightForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dateDeparture = document.getElementById('flight-date').value;
+            const dateArrival = document.getElementById('flight-date-arrival').value;
+            const departureTime = document.getElementById('flight-departure-time').value;
+            const arrivalTime = document.getElementById('flight-arrival-time').value;
+            if (!dateDeparture || !dateArrival || !departureTime || !arrivalTime) {
+                alert('Preencha data de partida, data de chegada, hora de partida e hora de chegada.');
+                return;
+            }
+            const flightData = {
+                date: dateDeparture,
+                dateArrival: dateArrival,
+                airport: document.getElementById('flight-airport').value,
+                destination: document.getElementById('flight-destination').value,
+                departureTime: departureTime,
+                arrivalTime: arrivalTime,
+                technician: document.getElementById('flight-technician').value,
+                status: document.getElementById('flight-status').value,
+                notes: document.getElementById('flight-notes').value,
+            };
+            try {
+                let flightId = editingFlightId;
+                if (flightId) {
+                    // Edit mode: update existing
+                    await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
+                        ...flightData,
+                        createdAt: window.flightsData.find(f => f.id === flightId)?.createdAt || new Date().toISOString()
+                    });
+                } else {
+                    // New flight
+                    flightId = crypto.randomUUID();
+                    await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
+                        ...flightData,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                closeFlightModal();
+            } catch (err) {
+                alert("Erro ao guardar voo.");
+            }
+        });
+    }
+
+    // ...existing code...
+
+})();
 (async () => {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js");
     const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js");
@@ -70,7 +161,7 @@ let complianceData = [];
 let editingDoc = null;
 let sidebarExpanded = false;
 let costsData = [];
-let flightsData = [];
+// flightsData é sempre window.flightsData
 
 // --- INICIALIZAÇÃO ---
 window.addEventListener('load', () => {
@@ -101,7 +192,7 @@ const listenToData = () => {
     
     const flightsRef = window.fbCollection(window.db, 'artifacts', window.appId, 'public', 'data', 'flights');
     window.fbOnSnapshot(flightsRef, (snap) => {
-        flightsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        window.flightsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     });
 };
 
@@ -394,7 +485,9 @@ window.exportCostsPDF = () => {
 
 // --- MÓDULO DE VOOS ---
 window.showFlightModal = () => {
+    editingFlightId = null;
     document.getElementById('flight-modal').classList.remove('hidden');
+    document.getElementById('flight-form').reset();
     document.getElementById('flight-date').valueAsDate = new Date();
     updateFlightTechnicianList();
 };
@@ -402,6 +495,7 @@ window.showFlightModal = () => {
 window.closeFlightModal = () => {
     document.getElementById('flight-modal').classList.add('hidden');
     document.getElementById('flight-form').reset();
+    editingFlightId = null;
 };
 
 const updateFlightTechnicianList = () => {
@@ -437,11 +531,23 @@ document.getElementById('flight-form')?.addEventListener('submit', async (e) => 
         technician: document.getElementById('flight-technician').value,
         status: document.getElementById('flight-status').value,
         notes: document.getElementById('flight-notes').value,
-        createdAt: new Date().toISOString()
     };
     try {
-        const flightId = crypto.randomUUID();
-        await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), flightData);
+        let flightId = editingFlightId;
+        if (flightId) {
+            // Edit mode: update existing
+            await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
+                ...flightData,
+                createdAt: flightsData.find(f => f.id === flightId)?.createdAt || new Date().toISOString()
+            });
+        } else {
+            // New flight
+            flightId = crypto.randomUUID();
+            await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
+                ...flightData,
+                createdAt: new Date().toISOString()
+            });
+        }
         closeFlightModal();
     } catch (err) {
         alert("Erro ao guardar voo.");
@@ -515,6 +621,7 @@ const renderFlightsTable = () => {
             'Cancelado': 'bg-red-50 text-red-600'
         };
         const statusClass = statusColors[item.status] || 'bg-slate-50 text-slate-600';
+        const editBtn = sessionUser.role === 'ADMIN' ? `<button onclick=\"editFlight('${item.id}')\" title=\"Editar\" class=\"p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 border border-blue-100\"><i data-lucide=\"pencil\" style=\"width:18px\"></i></button>` : '';
         const deleteBtn = sessionUser.role === 'ADMIN' ? `<button onclick=\"deleteFlight('${item.id}')\" class=\"p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 border border-red-100\"><i data-lucide=\"trash-2\" style=\"width:18px\"></i></button>` : '';
         return `
             <tr class=\"hover:bg-blue-50/30 transition-colors\">
@@ -526,7 +633,8 @@ const renderFlightsTable = () => {
                 <td class=\"px-8 py-6 font-mono text-slate-600\">${item.arrivalTime || '---'}</td>
                 <td class=\"px-8 py-6 text-slate-600\">${item.technician || '---'}</td>
                 <td class=\"px-8 py-6\"><span class=\"px-3 py-1 rounded-full text-[10px] font-black ${statusClass}\">${item.status || '---'}</span></td>
-                <td class=\"px-8 py-6 text-right\">
+                <td class=\"px-8 py-6 text-right flex justify-end gap-2\">
+                    ${editBtn}
                     ${deleteBtn}
                 </td>
             </tr>
@@ -717,6 +825,36 @@ const renderForm = () => {
     const container = document.getElementById('form-sections-container');
     const sidebarContainer = document.getElementById('sidebar-sections');
 
+    // Dropdown config for GESTÃO
+    const YESNO_FIELDS = [
+        "Inst_Status_Planned_NotPlanned",
+        "Equip_Delivered_Yes_No",
+        "Doc_Manual_Delivered_Explained",
+        "Train_Wash_Daily_Yes_No",
+        "Train_Clean_Daily_Yes_No",
+        "PrevMaint_Training_Yes_No",
+        "Prog_Training_Yes_No",
+        "Machine_Programmed_Yes_No",
+        "WashTest_Performed_Yes_No"
+    ];
+    const COUNTRY_LIST = [
+        "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
+    ];
+    const RATING_FIELDS = {
+        "WashTest_Quality_Rating": [
+            { value: "very bad", label: "😡 Muito Mau" },
+            { value: "bad", label: "😕 Mau" },
+            { value: "good", label: "🙂 Bom" },
+            { value: "very good", label: "😃 Muito Bom" }
+        ]
+    };
+    const TECHNICIAN_FIELD = "Inst_Technician_Name";
+    const getTechnicianOptions = () => {
+        return Object.values(USERS)
+            .filter(u => u.role === "TECH")
+            .map(u => `<option value="${u.name}">${u.name}</option>`)
+            .join("");
+    };
     container.innerHTML = FORM_STRUCTURE.map(section => {
         const prog = calculateProgress(section);
         return `
@@ -731,17 +869,90 @@ const renderForm = () => {
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${section.fields.map(field => `
-                        <div>
-                            <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
-                            <input type="text" 
-                                   class="form-input" 
-                                   data-field="${field}" 
-                                   value="${editingDoc[field] || ''}" 
-                                   oninput="updateDocField('${field}', this.value)"
-                                   ${field === 'Inst_Technician_Name' && sessionUser.role === 'TECH' ? 'disabled' : ''}>
-                        </div>
-                    `).join('')}
+                    ${section.fields.map(field => {
+                        // Dropdown for YES/NO fields
+                        if (YESNO_FIELDS.includes(field)) {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        <option value="Sim" ${editingDoc[field]==='Sim'?'selected':''}>Sim</option>
+                                        <option value="Não" ${editingDoc[field]==='Não'?'selected':''}>Não</option>
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Dropdown for WashTest_Quality_Rating
+                        if (RATING_FIELDS[field]) {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        ${RATING_FIELDS[field].map(opt => `<option value=\"${opt.value}\" ${editingDoc[field]===opt.value?'selected':''}>${opt.label}</option>`).join('')}
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Dropdown for Cust_Country
+                        if (field === "Cust_Country") {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        ${COUNTRY_LIST.map(opt => `<option value="${opt}" ${editingDoc[field]===opt?'selected':''}>${opt}</option>`).join('')}
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Dropdown for Inst_Technician_Name (ADMIN only)
+                        if (field === TECHNICIAN_FIELD && sessionUser.role === 'ADMIN') {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        ${getTechnicianOptions().replace(`value=\"${editingDoc[field]}\"`, `value=\"${editingDoc[field]}\" selected`)}
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Technician field for TECH (disabled input)
+                        if (field === TECHNICIAN_FIELD && sessionUser.role === 'TECH') {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <input type="text" class="form-input" data-field="${field}" value="${editingDoc[field] || ''}" disabled>
+                                </div>
+                            `;
+                        }
+                        // Inst_Date as date input
+                        if (field === "Inst_Date") {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <input type="date" 
+                                           class="form-input" 
+                                           data-field="${field}" 
+                                           value="${editingDoc[field] || ''}" 
+                                           oninput="updateDocField('${field}', this.value)">
+                                </div>
+                            `;
+                        }
+                        // Default: text input
+                        return `
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                <input type="text" 
+                                       class="form-input" 
+                                       data-field="${field}" 
+                                       value="${editingDoc[field] || ''}" 
+                                       oninput="updateDocField('${field}', this.value)">
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;
