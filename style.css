@@ -1,0 +1,203 @@
+/* Botão com fundo preto e borda gradiente azul para '+ Novo Custo' e '+ Novo Voo' */
+.btn-gradient-border {
+    background: #000;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px 0 rgba(15,23,42,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: center;
+    border: 3px solid;
+    border-image: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(81,184,234,1) 100%);
+    border-image-slice: 1;
+    transition: filter 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    cursor: pointer;
+}
+/* Botão principal reutilizável (estilo do botão de login) */
+.btn-principal {
+    background: #0f172a;
+    background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%);
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px 0 rgba(15,23,42,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: center;
+    transition: filter 0.2s, box-shadow 0.2s, background 0.2s;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.btn-principal:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 6px 32px 0 rgba(37,99,235,0.12), 0 2px 8px 0 rgba(0,0,0,0.12);
+    background: #000;
+    background: linear-gradient(90deg, #000 0%, #2563eb 100%);
+}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --somengil-blue: #004aad;
+    --somengil-light: #51b8ea;
+    --somengil-dark: #0f172a;
+}
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: #f8fafc; 
+    margin: 0; 
+    color: #1e293b;
+    overflow-x: hidden;
+}
+
+/* --- ESTILOS DO LOGIN --- */
+.login-gradient {
+    background: radial-gradient(circle at center, rgba(81, 184, 234, 1) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+.emblema-outer {
+    display: inline-block;
+    padding: 2px;
+    border-radius: 0.5rem;
+    background: linear-gradient(90deg, rgba(81, 184, 234, 1) 0%, rgba(27, 71, 148, 1) 100%);
+}
+
+.emblema-inner {
+    padding: 12px 50px;
+    border-radius: 0.4rem;
+    background-color: black;
+}
+
+.btn-entrar {
+    background: linear-gradient(90deg, #004aad 0%, #51b8ea 100%);
+    transition: all 0.3s ease;
+}
+.btn-entrar:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -5px rgba(0, 74, 173, 0.4);
+}
+
+/* --- LAYOUT DA APP --- */
+.sidebar {
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(81,184,234,1) 100%);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 80px;
+    z-index: 50;
+}
+.sidebar.expanded { width: 320px; }
+
+.main-content {
+    margin-left: 80px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar.expanded + .main-content { margin-left: 320px; }
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s, box-shadow 0.2s, filter 0.2s, transform 0.2s;
+    white-space: nowrap;
+    box-shadow: none;
+    transform: none;
+    background: none;
+    /* Sidebar nav-item base style */
+    .nav-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: #cbd5e1;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        font-weight: 500;
+        transition: color 0.2s, background 0.2s;
+    }
+.nav-item:hover, .nav-item.active {
+/* Efeito hover: só muda a cor do ícone/texto, sem background */
+.nav-item:hover, .nav-item.active {
+    background: none;
+    color: #2563eb;
+}
+
+/* Efeito hover apenas no ícone dentro do nav-item */
+.nav-item:hover i[data-lucide], .nav-item.active i[data-lucide] {
+    color: #2563eb;
+    transition: color 0.2s;
+}
+
+/* Garante que o ícone não herda cor errada por padrão */
+.nav-item i[data-lucide] {
+    color: inherit;
+    transition: color 0.2s;
+}
+}
+
+    /* Forçar ícones Lucide na sidebar a ficarem brancos */
+    .sidebar .nav-item i,
+    .sidebar .nav-item svg {
+        color: #fff !important;
+        stroke: #fff !important;
+    }
+    .sidebar .sidebar-text {
+        color: #fff !important;
+    }
+    background: rgba(255,255,255,0.08);
+}
+
+/* --- ESTILOS DO FORMULÁRIO --- */
+.form-card {
+    background: white;
+    border-radius: 1.5rem;
+    border: 1px solid #e2e8f0;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.progress-bar-bg { height: 4px; background: #334155; border-radius: 2px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--somengil-light); transition: width 0.5s ease; }
+.progress-bar-fill.complete { background: #10b981; }
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-weight: 600;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--somengil-blue); background: white; }
+
+.hidden { display: none !important; }
+
+.main-title {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 900;    /* font-black */
+  color: #0f172a;      /* text-slate-900 */
+  letter-spacing: -0.04em; /* tracking-tighter */
+  line-height: 1.1;
+  margin-bottom: 0.25em;
+}

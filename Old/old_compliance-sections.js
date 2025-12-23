@@ -1,7 +1,8 @@
 /**
- * COMPLIANCE SECTIONS STRUCTURE
+ * COMPLIANCE SECTIONS STRUCTURE - v2.0
  * Configuração completa com 1.1 a 1.5 como subsecções do Ponto 1
  * Seguido pelas seções 2-14 (documentation, training, measurements, etc)
+ * FIX: Removido prefixo do ícone dos títulos (2025-12-22)
  */
 
 const COMPLIANCE_SECTIONS = [
@@ -346,7 +347,7 @@ function generateSectionHTML(section, sectionNumber) {
     let html = `
         <div id="${section.id}" class="content-section hidden">
             <div style="background-color: #dfe4e4;" class="rounded-xl shadow-sm border border-gray-200 p-4 md:p-6 mb-4 md:mb-6">
-                <h3 class="text-base md:text-lg font-semibold text-somengil-blue mb-3 md:mb-4 pb-2 border-b border-gray-100">${section.icon}. ${section.title}</h3>
+                <h3 class="text-base md:text-lg font-semibold text-somengil-blue mb-3 md:mb-4 pb-2 border-b border-gray-100">${section.title}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     `;
     

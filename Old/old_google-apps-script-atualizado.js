@@ -70,20 +70,42 @@ for (const key in FORM_TO_SHEET_MAP) {
 
 
 /**
+ * Handler para requisições OPTIONS (CORS preflight)
+ */
+function doOptions(e) {
+    return buildCorsResponse();
+}
+
+/**
+ * Função auxiliar para construir resposta com headers CORS
+ */
+function buildCorsResponse() {
+    const output = ContentService.createTextOutput('');
+    output.setMimeType(ContentService.MimeType.JSON);
+    output.setHeader('Access-Control-Allow-Origin', '*');
+    output.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    output.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    output.setHeader('Access-Control-Max-Age', '86400');
+    return output;
+}
+
+/**
  * Função principal para processar requisições POST da aplicação web (escrita, leitura e envio de email).
  * @param {object} request O objeto de requisição POST.
  */
 function doPost(request) {
   const output = ContentService.createTextOutput();
+  
+  // CORS Headers - Permitir requisições de qualquer origem
+  output.setHeader('Access-Control-Allow-Origin', '*');
+  output.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  output.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  output.setHeader('Access-Control-Max-Age', '86400');
   output.setMimeType(ContentService.MimeType.JSON);
-
-  // CRITICAL SAFETY CHECK against manual/malformed execution
-  if (!request) {
-      Logger.log("Erro: Objeto de requisição (request) não fornecido.");
-      return output.setContent(JSON.stringify({ 
-          result: "error", 
-          message: "Erro interno: A requisição não pôde ser processada (Objeto 'request' ausente)." 
-      }));
+  
+  // Se for um pedido vazio (preflight), responde apenas com headers
+  if (!request || !request.postData) {
+    return buildCorsResponse();
   }
 
   // 1. Inicializa com URL-encoded parameters (default para 'fetch')
