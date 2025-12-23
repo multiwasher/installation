@@ -498,7 +498,7 @@ window.closeFlightModal = () => {
     editingFlightId = null;
 };
 
-const updateFlightTechnicianList = () => {
+window.updateFlightTechnicianList = () => {
     const select = document.getElementById('flight-technician');
     select.innerHTML = '<option value="">Selecionar...</option>';
     Object.values(USERS).forEach(user => {
@@ -511,48 +511,7 @@ const updateFlightTechnicianList = () => {
     });
 };
 
-document.getElementById('flight-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const dateDeparture = document.getElementById('flight-date').value;
-    const dateArrival = document.getElementById('flight-date-arrival').value;
-    const departureTime = document.getElementById('flight-departure-time').value;
-    const arrivalTime = document.getElementById('flight-arrival-time').value;
-    if (!dateDeparture || !dateArrival || !departureTime || !arrivalTime) {
-        alert('Preencha data de partida, data de chegada, hora de partida e hora de chegada.');
-        return;
-    }
-    const flightData = {
-        date: dateDeparture,
-        dateArrival: dateArrival,
-        airport: document.getElementById('flight-airport').value,
-        destination: document.getElementById('flight-destination').value,
-        departureTime: departureTime,
-        arrivalTime: arrivalTime,
-        technician: document.getElementById('flight-technician').value,
-        status: document.getElementById('flight-status').value,
-        notes: document.getElementById('flight-notes').value,
-    };
-    try {
-        let flightId = editingFlightId;
-        if (flightId) {
-            // Edit mode: update existing
-            await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
-                ...flightData,
-                createdAt: flightsData.find(f => f.id === flightId)?.createdAt || new Date().toISOString()
-            });
-        } else {
-            // New flight
-            flightId = crypto.randomUUID();
-            await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'flights', flightId), {
-                ...flightData,
-                createdAt: new Date().toISOString()
-            });
-        }
-        closeFlightModal();
-    } catch (err) {
-        alert("Erro ao guardar voo.");
-    }
-});
+
 
 const renderFlightsView = () => {
     const filtersContainer = document.getElementById('flight-filters');
