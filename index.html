@@ -123,7 +123,7 @@
         <!-- CONTEÚDO PRINCIPAL -->
         <main class="main-content flex-1">
             <header class="p-6 md:p-10 flex justify-between items-center bg-white/70 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200">
-                <button onclick="toggleSidebar()" class="p-3 bg-white rounded-xl shadow-sm border hover:bg-slate-50">
+                <button id="hamburger-btn" onclick="toggleSidebar()" class="p-3 bg-white rounded-xl shadow-sm border hover:bg-slate-50 hamburger-menu">
                     <i data-lucide="menu"></i>
                 </button>
                 <div class="flex items-center gap-4">
@@ -150,21 +150,23 @@
                         </span>
                     </div>
 
-                    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
-                                <tr>
-                                    <th class="px-8 py-5">S/N Máquina</th>
-                                    <th class="px-8 py-5">Cliente</th>
-                                    <th class="px-8 py-5">Técnico</th>
-                                    <th class="px-8 py-5">Progresso</th>
-                                    <th class="px-8 py-5 text-right">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body" class="divide-y divide-slate-100 font-semibold text-sm">
-                                <!-- Injetado dinamicamente via JS -->
-                            </tbody>
-                        </table>
+                    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl table-responsive-wrapper">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
+                                    <tr>
+                                        <th class="px-8 py-5">S/N Máquina</th>
+                                        <th class="px-8 py-5">Cliente</th>
+                                        <th class="px-8 py-5">Técnico</th>
+                                        <th class="px-8 py-5">Progresso</th>
+                                        <th class="px-8 py-5 text-right">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class="divide-y divide-slate-100 font-semibold text-sm">
+                                    <!-- Injetado dinamicamente via JS -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

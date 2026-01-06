@@ -236,6 +236,13 @@ window.setView = (view) => {
     // Garantir que o botão Sair nunca é escondido
     const sairBtn = document.querySelector('.nav-item.text-red-400');
     if (sairBtn) sairBtn.classList.remove('hidden');
+    
+    // Close sidebar on mobile when navigating
+    if (window.innerWidth <= 768) {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.remove('mobile-open');
+        document.body.classList.remove('sidebar-open');
+    }
 
     if (view === 'dashboard') {
         document.getElementById('view-dashboard').classList.remove('hidden');
@@ -261,21 +268,38 @@ window.setView = (view) => {
 };
 
 window.toggleSidebar = () => {
-    sidebarExpanded = !sidebarExpanded;
+    const isMobile = window.innerWidth <= 768;
     const sidebar = document.getElementById('sidebar');
-    const sidebarTexts = document.querySelectorAll('.sidebar-text');
-    const sidebarLogo = document.getElementById('sidebar-logo');
-    const sidebarCollapsedLogo = document.getElementById('sidebar-collapsed-logo');
-    if (sidebarExpanded) {
-        sidebar.classList.add('expanded');
-        sidebarTexts.forEach(t => t.classList.remove('hidden'));
-        if (sidebarLogo) sidebarLogo.classList.remove('hidden');
-        if (sidebarCollapsedLogo) sidebarCollapsedLogo.classList.add('hidden');
+    const body = document.body;
+    
+    if (isMobile) {
+        // Mobile: Toggle overlay and slide-in sidebar
+        const isOpen = sidebar.classList.contains('mobile-open');
+        if (isOpen) {
+            sidebar.classList.remove('mobile-open');
+            body.classList.remove('sidebar-open');
+        } else {
+            sidebar.classList.add('mobile-open');
+            body.classList.add('sidebar-open');
+        }
     } else {
-        sidebar.classList.remove('expanded');
-        sidebarTexts.forEach(t => t.classList.add('hidden'));
-        if (sidebarLogo) sidebarLogo.classList.add('hidden');
-        if (sidebarCollapsedLogo) sidebarCollapsedLogo.classList.remove('hidden');
+        // Desktop: Toggle expanded width
+        sidebarExpanded = !sidebarExpanded;
+        const sidebarTexts = document.querySelectorAll('.sidebar-text');
+        const sidebarLogo = document.getElementById('sidebar-logo');
+        const sidebarCollapsedLogo = document.getElementById('sidebar-collapsed-logo');
+        
+        if (sidebarExpanded) {
+            sidebar.classList.add('expanded');
+            sidebarTexts.forEach(t => t.classList.remove('hidden'));
+            if (sidebarLogo) sidebarLogo.classList.remove('hidden');
+            if (sidebarCollapsedLogo) sidebarCollapsedLogo.classList.add('hidden');
+        } else {
+            sidebar.classList.remove('expanded');
+            sidebarTexts.forEach(t => t.classList.add('hidden'));
+            if (sidebarLogo) sidebarLogo.classList.add('hidden');
+            if (sidebarCollapsedLogo) sidebarCollapsedLogo.classList.remove('hidden');
+        }
     }
 };
 
@@ -735,22 +759,24 @@ const renderDashboard = () => {
         const statsContainer = document.querySelector('.flex.justify-between.items-end');
         if (statsContainer && !document.getElementById('stats-cards')) {
             statsContainer.innerHTML = `
-                <div>
-                    <h1 class="text-4xl font-black text-slate-900 tracking-tighter">Compliance Central</h1>
-                    <p class="text-slate-500 font-medium">Gestão de Fichas Técnicas Somengil.</p>
-                </div>
-                <div class="flex gap-4" id="stats-cards">
-                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 min-w-[180px]">
-                        <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Técnicos Ativos</p>
-                        <p class="text-4xl font-black text-blue-900">${activeTechs}</p>
+                <div class="flex flex-col gap-4 w-full">
+                    <div>
+                        <h1 class="text-4xl font-black text-slate-900 tracking-tighter">Compliance Central</h1>
+                        <p class="text-slate-500 font-medium">Gestão de Fichas Técnicas Somengil.</p>
                     </div>
-                    <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200 min-w-[180px]">
-                        <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Instalações</p>
-                        <p class="text-4xl font-black text-emerald-900">${completedInstalls}</p>
+                    <div class="flex gap-4 flex-col md:flex-row dashboard-header-cards w-full" id="stats-cards">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 flex-1">
+                            <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Técnicos Ativos</p>
+                            <p class="text-4xl font-black text-blue-900">${activeTechs}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200 flex-1">
+                            <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Instalações</p>
+                            <p class="text-4xl font-black text-emerald-900">${completedInstalls}</p>
+                        </div>
+                        <button onclick="createNewForm()" class="bg-[#0f172a] text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-lg hover:bg-black transition-all flex-1 justify-center">
+                            <i data-lucide="plus"></i> Nova Ficha
+                        </button>
                     </div>
-                    <button onclick="createNewForm()" class="bg-[#0f172a] text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-lg hover:bg-black transition-all">
-                        <i data-lucide="plus"></i> Nova Ficha
-                    </button>
                 </div>
             `;
         } else if (!statsContainer) {
@@ -1088,4 +1114,17 @@ const generatePDF = (item) => {
 
     doc.save(`Ficha_${item.Equip_Serial_Number || 'Somengil'}.pdf`);
 };
+
+// Mobile sidebar overlay handler
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && e.target === document.body) {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                document.body.classList.remove('sidebar-open');
+            }
+        }
+    });
+});
 })();
