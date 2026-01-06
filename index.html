@@ -239,24 +239,26 @@
 
                     <!-- Tabela de Voos -->
                     <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
-                                <tr>
-                                    <th class="px-8 py-5">Data Partida</th>
-                                    <th class="px-8 py-5">Data Chegada</th>
-                                    <th class="px-8 py-5">Aeroporto</th>
-                                    <th class="px-8 py-5">Destino</th>
-                                    <th class="px-8 py-5">Hora Partida</th>
-                                    <th class="px-8 py-5">Hora Chegada</th>
-                                    <th class="px-8 py-5">Técnico</th>
-                                    <th class="px-8 py-5">Status</th>
-                                    <th class="px-8 py-5 text-right">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="flights-table-body" class="divide-y divide-slate-100 font-semibold text-sm">
-                                <!-- Injetado dinamicamente via JS -->
-                            </tbody>
-                        </table>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
+                                    <tr>
+                                        <th class="px-8 py-5">Data Partida</th>
+                                        <th class="px-8 py-5">Data Chegada</th>
+                                        <th class="px-8 py-5">Aeroporto</th>
+                                        <th class="px-8 py-5">Destino</th>
+                                        <th class="px-8 py-5">Hora Partida</th>
+                                        <th class="px-8 py-5">Hora Chegada</th>
+                                        <th class="px-8 py-5">Técnico</th>
+                                        <th class="px-8 py-5">Status</th>
+                                        <th class="px-8 py-5 text-right">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="flights-table-body" class="divide-y divide-slate-100 font-semibold text-sm">
+                                    <!-- Injetado dinamicamente via JS -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
