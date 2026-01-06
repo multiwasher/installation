@@ -307,7 +307,7 @@ window.handleLogout = () => {
     location.reload();
 };
 
-// --- MÓDULO DE CUSTOS ---
+// --- MÓDULO DE DESPESAS ---
 window.showCostModal = () => {
     document.getElementById('cost-modal').classList.remove('hidden');
     document.getElementById('cost-date').valueAsDate = new Date();
@@ -387,7 +387,7 @@ const renderCostsTable = () => {
     }
     
     if (dataToShow.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="px-8 py-20 text-center text-slate-400 italic">Sem custos registados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="px-8 py-20 text-center text-slate-400 italic">Sem despesas registadas.</td></tr>`;
         return;
     }
     
@@ -462,7 +462,7 @@ window.exportCostsPDF = () => {
     y += 10;
     doc.setFontSize(12);
     doc.setTextColor(100, 100, 100);
-    doc.text("RELATÓRIO DE CUSTOS", pageWidth / 2, y, { align: "center" });
+    doc.text("RELATÓRIO DE DESPESAS", pageWidth / 2, y, { align: "center" });
     
     y += 15;
     doc.setDrawColor(200, 200, 200);
@@ -504,7 +504,7 @@ window.exportCostsPDF = () => {
     doc.setFont("helvetica", "bold");
     doc.text(`TOTAL: ${totalValue.toFixed(2)}€`, 170, y);
     
-    doc.save(`Custos_${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`Despesas_${new Date().toISOString().split('T')[0]}.pdf`);
 };
 
 // --- MÓDULO DE VOOS ---

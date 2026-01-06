@@ -81,6 +81,23 @@ body {
     background-color: black;
 }
 
+/* Mobile responsive styling for COMPLIANCE PORTAL */
+@media (max-width: 768px) {
+    .emblema-outer {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    .emblema-inner {
+        padding: 8px 20px;
+    }
+    
+    .emblema-inner p {
+        font-size: 0.9rem !important;
+        letter-spacing: 0.15em !important;
+    }
+}
+
 .btn-entrar {
     background: linear-gradient(90deg, #004aad 0%, #51b8ea 100%);
     transition: all 0.3s ease;
