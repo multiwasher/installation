@@ -163,6 +163,15 @@ let sidebarExpanded = false;
 let costsData = [];
 // flightsData é sempre window.flightsData
 
+// --- SIGNATURE PADS ---
+let signaturePadTechnician = null;
+let signaturePadCustomer = null;
+
+const SIGNATURE_FIELDS = {
+    technician: 'Signature_Technician',
+    customer: 'Signature_Customer'
+};
+
 // --- INICIALIZAÇÃO ---
 window.addEventListener('load', () => {
     lucide.createIcons();
@@ -806,6 +815,67 @@ window.editForm = (id) => {
     setView('form');
 };
 
+// --- SIGNATURE PAD HELPERS ---
+window.initializeSignaturePads = () => {
+    // Technician signature pad
+    const techCanvasEl = document.getElementById('signature-technician-canvas');
+    if (techCanvasEl && !signaturePadTechnician) {
+        signaturePadTechnician = new SignaturePad(techCanvasEl, {
+            penColor: '#0f172a',
+            backgroundColor: '#ffffff',
+            minWidth: 1,
+            maxWidth: 2.5
+        });
+    }
+
+    // Customer signature pad
+    const custCanvasEl = document.getElementById('signature-customer-canvas');
+    if (custCanvasEl && !signaturePadCustomer) {
+        signaturePadCustomer = new SignaturePad(custCanvasEl, {
+            penColor: '#0f172a',
+            backgroundColor: '#ffffff',
+            minWidth: 1,
+            maxWidth: 2.5
+        });
+    }
+
+    // Load existing signatures if available
+    if (editingDoc && editingDoc.Signature_Technician && signaturePadTechnician) {
+        const img = new Image();
+        img.src = editingDoc.Signature_Technician;
+        img.onload = () => {
+            signaturePadTechnician.fromDataURL(editingDoc.Signature_Technician);
+        };
+    }
+    if (editingDoc && editingDoc.Signature_Customer && signaturePadCustomer) {
+        const img = new Image();
+        img.src = editingDoc.Signature_Customer;
+        img.onload = () => {
+            signaturePadCustomer.fromDataURL(editingDoc.Signature_Customer);
+        };
+    }
+};
+
+window.clearSignatureTechnician = () => {
+    if (signaturePadTechnician) signaturePadTechnician.clear();
+};
+
+window.clearSignatureCustomer = () => {
+    if (signaturePadCustomer) signaturePadCustomer.clear();
+};
+
+window.saveSignatureTechnician = () => {
+    if (signaturePadTechnician && !signaturePadTechnician.isEmpty()) {
+        editingDoc.Signature_Technician = signaturePadTechnician.toDataURL();
+    }
+};
+
+window.saveSignatureCustomer = () => {
+    if (signaturePadCustomer && !signaturePadCustomer.isEmpty()) {
+        editingDoc.Signature_Customer = signaturePadCustomer.toDataURL();
+    }
+};
+
 const renderForm = () => {
     const container = document.getElementById('form-sections-container');
     const sidebarContainer = document.getElementById('sidebar-sections');
@@ -926,6 +996,25 @@ const renderForm = () => {
                                 </div>
                             `;
                         }
+                        // Signature fields - Special handling
+                        if (field === "Signature_Technician" || field === "Signature_Customer") {
+                            const canvasId = field === "Signature_Technician" ? "signature-technician-canvas" : "signature-customer-canvas";
+                            const label = field === "Signature_Technician" ? "Assinatura Técnico" : "Assinatura Cliente";
+                            const hasSignature = !!editingDoc[field];
+                            return `
+                                <div class="md:col-span-1 lg:col-span-1">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${label}</label>
+                                    <div class="signature-pad-container">
+                                        <canvas id="${canvasId}" class="signature-pad-canvas"></canvas>
+                                        <div class="signature-pad-controls">
+                                            <button type="button" class="signature-clear-btn" onclick="${field === 'Signature_Technician' ? 'clearSignatureTechnician()' : 'clearSignatureCustomer()'}">Limpar</button>
+                                            <button type="button" class="signature-save-btn" onclick="${field === 'Signature_Technician' ? 'saveSignatureTechnician()' : 'saveSignatureCustomer()'}">Guardar</button>
+                                        </div>
+                                        ${hasSignature ? `<div class="signature-display"><img src="${editingDoc[field]}" alt="Signature"></div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
                         // Default: text input
                         return `
                             <div>
@@ -967,6 +1056,11 @@ const renderForm = () => {
         }).join('')}
     `;
     lucide.createIcons();
+    
+    // Initialize signature pads after form is rendered
+    setTimeout(() => {
+        initializeSignaturePads();
+    }, 100);
 };
 
 window.updateDocField = (field, value) => {
@@ -1031,6 +1125,10 @@ const calculateTotalProgress = (item) => {
 window.saveForm = async () => {
     if (!editingDoc) return;
     try {
+        // Save any pending signatures before saving the form
+        saveSignatureTechnician();
+        saveSignatureCustomer();
+        
         const id = editingDoc.id;
         await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'compliance', id), {
             ...editingDoc,
@@ -1038,6 +1136,8 @@ window.saveForm = async () => {
         }, { merge: true });
         setView('dashboard');
         editingDoc = null;
+        signaturePadTechnician = null;
+        signaturePadCustomer = null;
     } catch (err) {
         alert("Erro ao gravar. Verifique as suas permissões.");
     }
