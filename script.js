@@ -1205,9 +1205,30 @@ const generatePDF = (item) => {
             const label = field.replace(/_/g, ' ');
             doc.setFont("helvetica", "bold");
             doc.text(`${label}:`, 25, y);
-            doc.setFont("helvetica", "normal");
-            doc.text(`${val}`, 80, y);
-            y += 7;
+            
+            // Handle signature fields as images
+            if ((field === 'Signature_Technician' || field === 'Signature_Customer') && val !== "---") {
+                // Signature is stored as base64 PNG
+                if (val.startsWith('data:image')) {
+                    // Image is already base64 encoded
+                    try {
+                        doc.addImage(val, 'PNG', 80, y - 2, 60, 30);
+                        y += 35;
+                    } catch (e) {
+                        doc.setFont("helvetica", "normal");
+                        doc.text("[Signature Image]", 80, y);
+                        y += 7;
+                    }
+                } else {
+                    doc.setFont("helvetica", "normal");
+                    doc.text("[Signature Present]", 80, y);
+                    y += 7;
+                }
+            } else {
+                doc.setFont("helvetica", "normal");
+                doc.text(`${val}`, 80, y);
+                y += 7;
+            }
         });
         y += 5;
     });
