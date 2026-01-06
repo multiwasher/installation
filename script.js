@@ -1165,6 +1165,15 @@ const generatePDF = (item) => {
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
 
+    // Add logo to top left (40mm width, aspect ratio maintained automatically)
+    try {
+        doc.addImage('https://static.wixstatic.com/media/a6967f_d83f45c5e4f446009fcfd984d5d85f6f~mv2.png', 'PNG', 20, 10, 35, 0);
+        y = 50;
+    } catch (e) {
+        console.log("Could not load logo image");
+        y = 20;
+    }
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.setTextColor(0, 74, 173);
