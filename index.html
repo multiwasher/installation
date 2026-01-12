@@ -1,28 +1,59 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somengil Compliance Portal</title>
     
-    <!-- Tailwind CSS para Estilização Rápida -->
+    <!-- Tailwind CSS for Quick Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons para Iconografia -->
+    <!-- Lucide Icons for Iconography -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- jsPDF para Exportação de Fichas -->
+    <!-- jsPDF for Sheet Exports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- SignaturePad para Assinaturas Digitais -->
+    <!-- SignaturePad for Digital Signatures -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
-    <!-- Estilos Externos -->
+    <!-- External Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- PWA - Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA - Metadata for iOS -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Compliance">
+    <link rel="apple-touch-icon" href="https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png">
+    
+    <!-- PWA - Theme and Color -->
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="Compliance Platform for Somengil installation processes">
+    
+    <!-- PWA - Icon -->
+    <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png">
 </head>
 <body>
 
-    <!-- ECRÃ DE LOGIN -->
+    <!-- PWA Installation Button (floating) -->
+    <div id="install-prompt" class="hidden fixed top-4 right-4 bg-white shadow-lg rounded-lg p-4 z-50 max-w-xs">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex-1">
+                <p class="font-bold text-sm text-gray-900">Install App</p>
+                <p class="text-xs text-gray-600">Quick access from your home screen</p>
+            </div>
+            <button id="install-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold text-sm whitespace-nowrap">
+                Install
+            </button>
+            <button id="close-install" class="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
     <div id="view-login" class="min-h-screen flex items-center justify-center p-4 bg-white">
         <div class="w-full p-10 rounded-2xl text-center login-gradient shadow-2xl border border-black/20" style="max-width: 480px;">
             
@@ -38,33 +69,33 @@
                 </div>
             </div>
 
-            <!-- Seleção de Idioma -->
+            <!-- Language Selection -->
             <div class="flex justify-center gap-3 mb-6">
-                <button class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white bg-white/10">PT</button>
-                <button class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40">EN</button>
-                <button class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40">FR</button>
-                <button class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40">ES</button>
+                <button id="lang-pt" class="lang-btn text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40 transition-all">PT</button>
+                <button id="lang-en" class="lang-btn text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white bg-white/10 transition-all">EN</button>
+                <button id="lang-fr" class="lang-btn text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40 transition-all">FR</button>
+                <button id="lang-es" class="lang-btn text-[10px] font-black uppercase tracking-widest px-3 py-1.5 border border-white/20 rounded text-white/40 transition-all">ES</button>
             </div>
 
             <hr class="border-black/30 mb-8">
 
-            <h2 class="text-white text-xl font-black uppercase tracking-tight">Bem-vindo</h2>
-            <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-8">Sessão Segura</p>
+            <h2 class="text-white text-xl font-black uppercase tracking-tight">Welcome</h2>
+            <p class="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-8">Secure Session</p>
 
             <!-- Formulário de Login -->
             <form id="login-form" class="space-y-5 max-w-[320px] mx-auto text-left">
                 <div class="relative">
                     <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                    <input type="text" id="login-user" placeholder="Utilizador" class="w-full bg-white text-slate-900 rounded-xl p-3.5 pl-12 font-semibold outline-none shadow-inner" required>
+                    <input type="text" id="login-user" placeholder="Username" class="w-full bg-white text-slate-900 rounded-xl p-3.5 pl-12 font-semibold outline-none shadow-inner" required>
                 </div>
                 <div class="relative">
                     <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                    <input type="password" id="login-pass" placeholder="Senha" class="w-full bg-white text-slate-900 rounded-xl p-3.5 pl-12 font-semibold outline-none shadow-inner" required>
+                    <input type="password" id="login-pass" placeholder="Password" class="w-full bg-white text-slate-900 rounded-xl p-3.5 pl-12 font-semibold outline-none shadow-inner" required>
                 </div>
-                <div id="login-error" class="text-red-400 text-[11px] font-bold text-center hidden">Credenciais inválidas.</div>
+                <div id="login-error" class="text-red-400 text-[11px] font-bold text-center hidden">Invalid credentials.</div>
                 
                 <button type="submit" class="w-full py-4 rounded-xl font-bold uppercase tracking-[0.15em] text-sm mt-4 text-white shadow-xl flex items-center justify-center gap-3 btn-entrar">
-                    Entrar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    Sign In<i data-lucide="arrow-right"></i>
                 </button>
             </form>
 
@@ -95,14 +126,14 @@
                 </div>
                 <div onclick="setView('voos')" class="nav-item" id="nav-voos">
                     <i data-lucide="plane"></i>
-                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Voos</span>
+                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Flights</span>
                 </div>
                 <div onclick="setView('costs')" class="nav-item" id="nav-costs">
                     <i data-lucide="wallet"></i>
-                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Despesas</span>
+                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Expenses</span>
                 </div>
 
-                <!-- Espaço flexível para empurrar o logo para o centro -->
+                <!-- Flexible space to push the logo to the center -->
                 <div class="flex-1 flex flex-col">
                     <div class="flex-1"></div>
                     <div id="sidebar-collapsed-logo-container" class="flex justify-center items-center w-full mb-6">
@@ -110,20 +141,20 @@
                     </div>
                 </div>
                 <div id="sidebar-sections" class="mt-8 space-y-1 hidden">
-                    <p class="px-3 text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Progresso Secções</p>
-                    <!-- Injetado dinamicamente via JS -->
+                    <p class="px-3 text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Section Progress</p>
+                    <!-- Injected dynamically via JS -->
                 </div>
             </nav>
 
             <div class="px-4 pt-4 border-t border-slate-800">
                 <div onclick="handleLogout()" class="nav-item text-red-400 hover:text-red-300">
                     <i data-lucide="log-out"></i>
-                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Sair</span>
+                    <span class="sidebar-text ml-4 hidden font-bold text-sm">Logout</span>
                 </div>
             </div>
         </aside>
 
-        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- MAIN CONTENT -->
         <main class="main-content flex-1">
             <header class="p-6 md:p-10 flex justify-between items-center bg-white/70 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200">
                 <button id="hamburger-btn" onclick="toggleSidebar()" class="p-3 bg-white rounded-xl shadow-sm border hover:bg-slate-50 hamburger-menu">
@@ -131,24 +162,24 @@
                 </button>
                 <div class="flex items-center gap-4">
                     <div class="text-right hidden sm:block">
-                        <p id="header-user-name" class="font-black text-slate-900 text-sm leading-none">Utilizador</p>
-                        <p id="header-user-role" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Cargo</p>
+                        <p id="header-user-name" class="font-black text-slate-900 text-sm leading-none">User</p>
+                        <p id="header-user-role" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Role</p>
                     </div>
                     <div class="w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black ml-[5px]" id="user-avatar">U</div>
                 </div>
             </header>
 
             <div class="p-6 md:p-10">
-                <!-- VISTA DASHBOARD -->
+                <!-- DASHBOARD VIEW -->
                 <div id="view-dashboard" class="space-y-10 animate-in fade-in duration-500 mt-[10px]">
                     <div class="flex justify-between items-end">
                         <div>
                             <h1 class="main-title">Compliance Central</h1>
-                            <p class="text-slate-500 font-medium">Gestão de Fichas Técnicas Somengil.</p>
+                            <p class="text-slate-500 font-medium">Management of Somengil Technical Forms.</p>
                         </div>
                         <span class="emblema-outer">
                             <button onclick="createNewForm()" class="text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-lg hover:bg-black transition-all" style="background:transparent;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Nova Ficha
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> New Form
                             </button>
                         </span>
                     </div>
@@ -158,22 +189,22 @@
                             <table class="w-full text-left">
                                 <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
                                     <tr>
-                                        <th class="px-8 py-5">S/N Máquina</th>
-                                        <th class="px-8 py-5">Cliente</th>
-                                        <th class="px-8 py-5">Técnico</th>
-                                        <th class="px-8 py-5">Progresso</th>
-                                        <th class="px-8 py-5 text-right">Ação</th>
+                                        <th class="px-8 py-5">Machine S/N</th>
+                                        <th class="px-8 py-5">Client</th>
+                                        <th class="px-8 py-5">Technician</th>
+                                        <th class="px-8 py-5">Progress</th>
+                                        <th class="px-8 py-5 text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-body" class="divide-y divide-slate-100 font-semibold text-sm">
-                                    <!-- Injetado dinamicamente via JS -->
+                                    <!-- Injected dynamically via JS -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- VISTA FORMULÁRIO -->
+                <!-- FORM VIEW -->
                 <div id="view-form" class="hidden max-w-5xl mx-auto space-y-12 pb-40 animate-in slide-in-from-right duration-500">
                     <div class="flex items-center justify-between sticky top-[110px] bg-[#f8fafc]/90 backdrop-blur-md py-4 z-30 border-b">
                         <button onclick="setView('dashboard')" class="p-3 bg-white rounded-xl shadow-sm border"><i data-lucide="arrow-left"></i></button>
@@ -182,144 +213,144 @@
                                 <i data-lucide="file-down"></i> PDF
                             </button>
                             <button onclick="saveForm()" class="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center gap-3 shadow-xl hover:brightness-110">
-                                <i data-lucide="save"></i> Gravar
+                                <i data-lucide="save"></i> Save
                             </button>
                         </div>
                     </div>
 
                     <div id="form-sections-container">
-                        <!-- Injetado dinamicamente via JS -->
+                        <!-- Injected dynamically via JS -->
                     </div>
                 </div>
 
-                <!-- VISTA VOOS -->
+                <!-- FLIGHTS VIEW -->
                 <div id="view-voos" class="hidden space-y-10 animate-in fade-in duration-500 mt-[10px] pb-40">
                     <div class="flex justify-between items-end">
                         <div>
-                            <h1 class="main-title">Gestão de Voos</h1>
-                            <p class="text-slate-500 font-medium">Planeamento e controlo de deslocações.</p>
+                            <h1 class="main-title">Flight Management</h1>
+                            <p class="text-slate-500 font-medium">Planning and control of trips.</p>
                         </div>
                         <button id="btn-new-flight" onclick="showFlightModal()" class="btn-principal">
-                            <i data-lucide="plus"></i> Novo Voo
+                            <i data-lucide="plus"></i> New Flight
                         </button>
                     </div>
 
-                    <!-- Filtros (apenas GESTÃO) -->
+                    <!-- Filters (Management only) -->
                     <div id="flight-filters" class="hidden bg-white rounded-3xl border border-slate-200 p-6 shadow-xl">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Início</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Start Date</label>
                                 <input type="date" id="filter-flight-date-from" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Fim</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">End Date</label>
                                 <input type="date" id="filter-flight-date-to" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Técnico</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Technician</label>
                                 <select id="filter-flight-technician" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
-                                    <option value="">Todos</option>
+                                    <option value="">All</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Status</label>
                                 <select id="filter-flight-status" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
-                                    <option value="">Todos</option>
-                                    <option value="Planeado">Planeado</option>
-                                    <option value="Confirmado">Confirmado</option>
-                                    <option value="Realizado">Realizado</option>
-                                    <option value="Cancelado">Cancelado</option>
+                                    <option value="">All</option>
+                                    <option value="Planeado">Planned</option>
+                                    <option value="Confirmado">Confirmed</option>
+                                    <option value="Realizado">Completed</option>
+                                    <option value="Cancelado">Cancelled</option>
                                 </select>
                             </div>
                         </div>
                         <div class="flex gap-3 mt-4">
-                            <button onclick="applyFlightFilters()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold text-sm">Filtrar</button>
+                            <button onclick="applyFlightFilters()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold text-sm">Filter</button>
                             <button onclick="exportFlightsPDF()" class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold text-sm flex items-center gap-2">
-                                <i data-lucide="file-down" style="width:16px"></i> Exportar PDF
+                                <i data-lucide="file-down" style="width:16px"></i> Export PDF
                             </button>
                         </div>
                     </div>
 
-                    <!-- Tabela de Voos -->
+                    <!-- Flights Table -->
                     <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
                                     <tr>
-                                        <th class="px-8 py-5">Data Partida</th>
-                                        <th class="px-8 py-5">Data Chegada</th>
-                                        <th class="px-8 py-5">Aeroporto</th>
-                                        <th class="px-8 py-5">Destino</th>
-                                        <th class="px-8 py-5">Hora Partida</th>
-                                        <th class="px-8 py-5">Hora Chegada</th>
-                                        <th class="px-8 py-5">Técnico</th>
+                                        <th class="px-8 py-5">Departure Date</th>
+                                        <th class="px-8 py-5">Arrival Date</th>
+                                        <th class="px-8 py-5">Airport</th>
+                                        <th class="px-8 py-5">Destination</th>
+                                        <th class="px-8 py-5">Departure Time</th>
+                                        <th class="px-8 py-5">Arrival Time</th>
+                                        <th class="px-8 py-5">Technician</th>
                                         <th class="px-8 py-5">Status</th>
-                                        <th class="px-8 py-5 text-right">Ação</th>
+                                        <th class="px-8 py-5 text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="flights-table-body" class="divide-y divide-slate-100 font-semibold text-sm">
-                                    <!-- Injetado dinamicamente via JS -->
+                                    <!-- Injected dynamically via JS -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- MODAL NOVO VOO -->
+                <!-- NEW FLIGHT MODAL -->
                 <div id="flight-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">Novo Voo</h2>
+                        <h2 class="text-2xl font-black text-slate-900 mb-6">New Flight</h2>
                         <form id="flight-form" class="space-y-4">
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Partida</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Departure Date</label>
                                     <input type="date" id="flight-date" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Chegada</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Arrival Date</label>
                                     <input type="date" id="flight-date-arrival" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                                 </div>
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Aeroporto</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Airport</label>
                                 <input type="text" id="flight-airport" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" placeholder="Ex: LAX, CDG, LIS" required>
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Destino</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Destination</label>
                                 <input type="text" id="flight-destination" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Hora Partida</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Departure Time</label>
                                     <input type="time" id="flight-departure-time" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Hora Chegada</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Arrival Time</label>
                                     <input type="time" id="flight-arrival-time" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                                 </div>
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Técnico</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Technician</label>
                                 <select id="flight-technician" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
-                                    <option value="">Selecionar...</option>
+                                    <option value="">Select...</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Status</label>
                                 <select id="flight-status" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
-                                    <option value="Planeado">Planeado</option>
-                                    <option value="Confirmado">Confirmado</option>
-                                    <option value="Realizado">Realizado</option>
-                                    <option value="Cancelado">Cancelado</option>
+                                    <option value="Planeado">Planned</option>
+                                    <option value="Confirmado">Confirmed</option>
+                                    <option value="Realizado">Completed</option>
+                                    <option value="Cancelado">Cancelled</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Notas</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Notes</label>
                                 <textarea id="flight-notes" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" rows="3"></textarea>
                             </div>
                             <div class="flex gap-3 pt-4">
-                                <button type="submit" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold">Guardar</button>
-                                <button type="button" onclick="closeFlightModal()" class="flex-1 bg-slate-200 text-slate-900 py-2.5 rounded-xl font-bold">Cancelar</button>
+                                <button type="submit" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold">Save</button>
+                                <button type="button" onclick="closeFlightModal()" class="flex-1 bg-slate-200 text-slate-900 py-2.5 rounded-xl font-bold">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -327,38 +358,38 @@
                 <div id="view-costs" class="hidden space-y-10 animate-in fade-in duration-500 p-6 md:p-10 mt-[10px]">
                     <div class="flex justify-between items-end">
                         <div>
-                            <h1 class="main-title">Análise de Despesas</h1>
-                            <p class="text-slate-500 font-medium">Registo e controlo de despesas.</p>
+                            <h1 class="main-title">Expense Analysis</h1>
+                            <p class="text-slate-500 font-medium">Recording and control of expenses.</p>
                         </div>
                         <button onclick="showCostModal()" class="btn-principal">
-                            <i data-lucide="plus"></i> Novo Custo
+                            <i data-lucide="plus"></i> New Cost
                         </button>
-                            <!-- Removed duplicate 'Novo Custo' button -->
+                            <!-- Removed duplicate 'New Cost' button -->
                     </div>
 
-                    <!-- Filtros e Tabela de Custos agrupados -->
+                    <!-- Filters and grouped Costs Table -->
                     <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
                         <div id="cost-filters" class="hidden p-6 border-b border-slate-100">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Início</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Start Date</label>
                                     <input type="date" id="filter-date-from" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data Fim</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">End Date</label>
                                     <input type="date" id="filter-date-to" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Técnico</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Technician</label>
                                     <select id="filter-technician" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
-                                        <option value="">Todos</option>
+                                        <option value="">All</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="flex gap-3 mt-4">
-                                <button onclick="applyFilters()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold text-sm">Filtrar</button>
+                                <button onclick="applyFilters()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold text-sm">Filter</button>
                                 <button onclick="exportCostsPDF()" class="bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold text-sm flex items-center gap-2">
-                                    <i data-lucide="file-down" style="width:16px"></i> Exportar PDF
+                                    <i data-lucide="file-down" style="width:16px"></i> Export PDF
                                 </button>
                             </div>
                         </div>
@@ -366,59 +397,59 @@
                             <table class="w-full text-left">
                                 <thead class="bg-slate-50 text-[10px] font-black text-slate-400 uppercase">
                                     <tr>
-                                        <th class="px-4 py-5">Data</th>
-                                        <th class="px-4 py-5">Tipo</th>
-                                        <th class="px-4 py-5">Descrição</th>
-                                        <th class="px-4 py-5">Valor (€)</th>
-                                        <th class="px-4 py-5">Técnico</th>
-                                        <th class="px-4 py-5 text-right">Ação</th>
+                                        <th class="px-4 py-5">Date</th>
+                                        <th class="px-4 py-5">Type</th>
+                                        <th class="px-4 py-5">Description</th>
+                                        <th class="px-4 py-5">Value (€)</th>
+                                        <th class="px-4 py-5">Technician</th>
+                                        <th class="px-4 py-5 text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="costs-table-body" class="divide-y divide-slate-100 font-semibold text-sm">
-                                    <!-- Injetado dinamicamente via JS -->
+                                    <!-- Injected dynamically via JS -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- MODAL NOVO CUSTO -->
+                <!-- NEW COST MODAL -->
                 <div id="cost-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">Novo Custo</h2>
+                        <h2 class="text-2xl font-black text-slate-900 mb-6">New Cost</h2>
                         
                         <form id="cost-form" class="space-y-4">
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Data</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Date</label>
                                 <input type="date" id="cost-date" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
                             </div>
 
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Tipo</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Type</label>
                                 <select id="cost-type" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" required>
-                                    <option value="">Selecionar...</option>
-                                    <option value="Combustível">Combustível</option>
-                                    <option value="Manutenção">Manutenção</option>
-                                    <option value="Pernoita">Pernoita</option>
-                                    <option value="Refeição">Refeição</option>
-                                    <option value="Transportes">Transportes</option>
-                                    <option value="Outro">Outro</option>
+                                    <option value="">Select...</option>
+                                    <option value="Combustível">Fuel</option>
+                                    <option value="Manutenção">Maintenance</option>
+                                    <option value="Pernoita">Accommodation</option>
+                                    <option value="Refeição">Meals</option>
+                                    <option value="Transportes">Transport</option>
+                                    <option value="Outro">Other</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Descrição</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Description</label>
                                 <textarea id="cost-description" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" rows="3" required></textarea>
                             </div>
 
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Valor (€)</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Value (€)</label>
                                 <input type="number" id="cost-value" class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-blue-500 outline-none" step="0.01" min="0" required>
                             </div>
 
                             <div class="flex gap-3 pt-4">
-                                <button type="submit" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold">Guardar</button>
-                                <button type="button" onclick="closeCostModal()" class="flex-1 bg-slate-200 text-slate-900 py-2.5 rounded-xl font-bold">Cancelar</button>
+                                <button type="submit" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold">Save</button>
+                                <button type="button" onclick="closeCostModal()" class="flex-1 bg-slate-200 text-slate-900 py-2.5 rounded-xl font-bold">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -427,7 +458,106 @@
         </main>
     </div>
 
-    <!-- LÓGICA DA APLICAÇÃO E FIREBASE -->
+    <!-- APPLICATION LOGIC AND FIREBASE -->
     <script src="script.js"></script>
+
+    <!-- Register Service Worker for PWA -->
+    <script>
+        // Register Service Worker only on HTTPS or localhost
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const isHttps = window.location.protocol === 'https:';
+
+                if (isHttps || isLocalhost) {
+                    navigator.serviceWorker.register('./service-worker.js')
+                        .then((registration) => {
+                            console.log('Service Worker registered successfully:', registration);
+
+                            // Check for updates every 30 minutes
+                            setInterval(() => {
+                                registration.update();
+                            }, 30 * 60 * 1000);
+
+                            // Notify when an update is available
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'activated') {
+                                        console.log('New version available. Page will update on next access.');
+                                    }
+                                });
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Error registering Service Worker:', error);
+                        });
+                } else {
+                    console.warn('Service Worker requires HTTPS. Use HTTPS or localhost for testing.');
+                }
+            });
+
+            // Listener for Service Worker messages
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('New Service Worker activated');
+                window.location.reload();
+            });
+        } else {
+            console.warn('Service Workers not supported in this browser');
+        }
+
+        // Detect when the app is installed
+        window.addEventListener('beforeinstallprompt', (event) => {
+            // Prevent default prompt
+            event.preventDefault();
+            
+            // Save the event for later use
+            window.deferredPrompt = event;
+            console.log('App ready to be installed');
+            
+            // Show installation button
+            document.getElementById('install-prompt').classList.remove('hidden');
+        });
+
+        // Installation button click
+        document.getElementById('install-btn').addEventListener('click', async () => {
+            if (window.deferredPrompt) {
+                window.deferredPrompt.prompt();
+                const { outcome } = await window.deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                
+                // Clear the event
+                window.deferredPrompt = null;
+                
+                // Hide the button
+                document.getElementById('install-prompt').classList.add('hidden');
+            }
+        });
+
+        // Close prompt without installing
+        document.getElementById('close-install').addEventListener('click', () => {
+            document.getElementById('install-prompt').classList.add('hidden');
+            window.deferredPrompt = null;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('Compliance Portal installed successfully!');
+            // Clear the deferred event
+            window.deferredPrompt = null;
+        });
+
+        // Detect if app is running as PWA
+        window.addEventListener('load', () => {
+            const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                          window.matchMedia('(display-mode: fullscreen)').matches ||
+                          document.referrer.includes('android-app://') ||
+                          window.navigator.standalone === true;
+
+            if (isPWA) {
+                console.log('App running as PWA');
+                document.body.classList.add('pwa-mode');
+            }
+        });
+    </script>
 </body>
 </html>

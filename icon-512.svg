@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo -->
+  <rect width="512" height="512" fill="#1a1a1a" rx="100"/>
+  
+  <!-- Escudo com verificação (símbolo de compliance) -->
+  <g transform="translate(256, 256)">
+    <!-- Escudo -->
+    <path d="M 0 -120 L 96 -66 L 96 0 Q 0 80 0 120 Q -96 80 -96 0 L -96 -66 Z" 
+          fill="none" stroke="#2563eb" stroke-width="10" stroke-linejoin="round"/>
+    
+    <!-- Marca de verificação -->
+    <g transform="scale(3.2)">
+      <path d="M -12 -2 L -4 6 L 12 -10" 
+            fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>

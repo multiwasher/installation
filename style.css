@@ -474,3 +474,35 @@ body {
     display: block;
 }
 
+/* PWA Install Prompt */
+#install-prompt {
+    animation: slideIn 0.3s ease-out;
+}
+
+#install-prompt.hidden {
+    display: none !important;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+#install-btn {
+    transition: all 0.2s ease;
+}
+
+#install-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+#install-btn:active {
+    transform: scale(0.95);
+}

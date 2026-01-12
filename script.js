@@ -1,3 +1,90 @@
+// --- SISTEMA DE TRADUÇÃO ---
+window.currentLanguage = 'en'; // Default to English
+
+// Traduções para a interface do login
+const uiTranslations = {
+    'Welcome': { pt: 'Bem-vindo', en: 'Welcome', es: 'Bienvenido', fr: 'Bienvenue' },
+    'Secure Session': { pt: 'Sessão Segura', en: 'Secure Session', es: 'Sesión Segura', fr: 'Séance Sécurisée' },
+    'Username': { pt: 'Utilizador', en: 'Username', es: 'Usuario', fr: 'Utilisateur' },
+    'Password': { pt: 'Senha', en: 'Password', es: 'Contraseña', fr: 'Mot de passe' },
+    'Invalid credentials.': { pt: 'Credenciais inválidas.', en: 'Invalid credentials.', es: 'Credenciales inválidas.', fr: 'Identifiants invalides.' },
+    'Sign In': { pt: 'Entrar', en: 'Sign In', es: 'Iniciar sesión', fr: 'Se connecter' },
+};
+
+// Função para traduzir um texto
+window.t = (key) => {
+    if (uiTranslations[key]) {
+        return uiTranslations[key][window.currentLanguage] || uiTranslations[key]['en'];
+    }
+    return key;
+};
+
+// Função para mudar idioma
+window.setLanguage = (lang) => {
+    window.currentLanguage = lang;
+    
+    // Atualizar botões de idioma
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('text-white', 'bg-white/10');
+        btn.classList.add('text-white/40');
+    });
+    document.getElementById(`lang-${lang}`).classList.remove('text-white/40');
+    document.getElementById(`lang-${lang}`).classList.add('text-white', 'bg-white/10');
+    
+    // Atualizar textos visíveis
+    updateLoginScreenTranslation();
+    
+    // Guardar no localStorage
+    localStorage.setItem('preferredLanguage', lang);
+};
+
+// Função para atualizar a tradução do ecrã de login
+window.updateLoginScreenTranslation = () => {
+    const lang = window.currentLanguage;
+    
+    const welcomeTitle = document.querySelector('h2.text-white');
+    const secureSession = document.querySelector('p.text-white\\/50.mb-8');
+    const userInput = document.getElementById('login-user');
+    const passInput = document.getElementById('login-pass');
+    const submitBtn = document.querySelector('button[type="submit"].btn-entrar');
+    
+    if (welcomeTitle) welcomeTitle.innerText = window.t('Welcome');
+    if (secureSession) secureSession.innerText = window.t('Secure Session');
+    if (userInput) userInput.placeholder = window.t('Username');
+    if (passInput) passInput.placeholder = window.t('Password');
+    
+    if (submitBtn) {
+        submitBtn.innerText = window.t('Sign In');
+        submitBtn.innerHTML = window.t('Sign In') + '<i data-lucide="arrow-right"></i>';
+        lucide.createIcons();
+    }
+};
+
+// Inicializar event listeners para botões de idioma
+document.addEventListener('DOMContentLoaded', () => {
+    // Restaurar idioma salvo ou usar padrão
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    window.setLanguage(savedLang);
+    
+    // Adicionar listeners aos botões de idioma
+    document.getElementById('lang-pt')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.setLanguage('pt');
+    });
+    document.getElementById('lang-en')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.setLanguage('en');
+    });
+    document.getElementById('lang-fr')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.setLanguage('fr');
+    });
+    document.getElementById('lang-es')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.setLanguage('es');
+    });
+});
+
 // --- EDIÇÃO DE VOOS ---
 (async () => {
     // ...existing code...

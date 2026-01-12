@@ -1,0 +1,47 @@
+{
+  "name": "Somengil Compliance Portal",
+  "short_name": "Compliance",
+  "description": "Plataforma de Compliance para processos de instalação Somengil",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://static.wixstatic.com/media/a6967f_2875317daaec45fb9ec1572c639c3977~mv2.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://static.wixstatic.com/media/a6967f_4351130797b64affaf415756ba8ad8b7~mv2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "prefer_related_applications": false
+}
