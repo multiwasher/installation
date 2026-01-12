@@ -64,6 +64,205 @@ const translationsData = {
     "Somengil": { pt: "Somengil", en: "Somengil", es: "Somengil", fr: "Somengil" },
     "Cliente": { pt: "Cliente", en: "Customer / Client", es: "Cliente", fr: "Client" },
     
+    // ========== TRADUÇÕES DOS CAMPOS DO FORMULÁRIO ==========
+    // 1.1 - INSTALLATION RESPONSIBILITY
+    "Inst_Status_Planned_NotPlanned": { pt: "Status Instalação (Planejada/Não Planejada)", en: "Installation Status (Planned/Not Planned)", es: "Estado de instalación (Planificada/No planificada)", fr: "Statut installation (Prévue/Non prévue)" },
+    "Inst_Date": { pt: "Data Instalação", en: "Installation Date", es: "Fecha de instalación", fr: "Date d'installation" },
+    "Inst_Company": { pt: "Empresa Instalação", en: "Installation Company", es: "Empresa de instalación", fr: "Entreprise d'installation" },
+    "Inst_Technician_Name": { pt: "Nome Técnico Instalação", en: "Installation Technician Name", es: "Nombre del técnico de instalación", fr: "Nom du technicien d'installation" },
+    "Inst_Technician_Phone": { pt: "Telefone Técnico Instalação", en: "Installation Technician Phone", es: "Teléfono del técnico de instalación", fr: "Téléphone du technicien d'installation" },
+    "Inst_Technician_Email": { pt: "Email Técnico Instalação", en: "Installation Technician Email", es: "Email del técnico de instalación", fr: "E-mail du technicien d'installation" },
+    
+    // 1.2 - CUSTOMER IDENTIFICATION
+    "Cust_Name": { pt: "Nome Cliente", en: "Customer Name", es: "Nombre del cliente", fr: "Nom du client" },
+    "Cust_Address": { pt: "Morada Cliente", en: "Customer Address", es: "Dirección del cliente", fr: "Adresse du client" },
+    "Cust_ZipCode": { pt: "Código Postal Cliente", en: "Customer Postal Code", es: "Código postal del cliente", fr: "Code postal du client" },
+    "Cust_City": { pt: "Cidade Cliente", en: "Customer City", es: "Ciudad del cliente", fr: "Ville du client" },
+    "Cust_Country": { pt: "País Cliente", en: "Customer Country", es: "País del cliente", fr: "Pays du client" },
+    "Cust_VAT_Number": { pt: "NIF/VAT Cliente", en: "Customer Tax ID (VAT)", es: "NIF/CIF del cliente", fr: "N° de TVA du client" },
+    "Cust_Representative_Person": { pt: "Pessoa Representante Cliente", en: "Customer Representative Person", es: "Persona representante del cliente", fr: "Personne représentante du client" },
+    "Cust_Representative_Phone": { pt: "Telefone Representante Cliente", en: "Customer Representative Phone", es: "Teléfono del representante del cliente", fr: "Téléphone du représentant du client" },
+    "Cust_Representative_Email": { pt: "Email Representante Cliente", en: "Customer Representative Email", es: "Email del representante del cliente", fr: "E-mail du représentant du client" },
+    
+    // 1.3 - SERVICE IDENTIFICATION
+    "Svc_Installation": { pt: "Serviço Instalação", en: "Installation Service", es: "Servicio de instalación", fr: "Service d'installation" },
+    "Svc_Preventive_Maintenance": { pt: "Manutenção Preventiva", en: "Preventive Maintenance", es: "Mantenimiento preventivo", fr: "Maintenance préventive" },
+    "Svc_Corrective_Maintenance": { pt: "Manutenção Corretiva", en: "Corrective Maintenance", es: "Mantenimiento correctivo", fr: "Maintenance corrective" },
+    "Svc_Warranty": { pt: "Garantia", en: "Warranty", es: "Garantía", fr: "Garantie" },
+    
+    // 1.4 - EQUIPMENT AND ACCESSORIES IDENTIFICATION
+    "Equip_Quantity": { pt: "Quantidade Equipamento", en: "Equipment Quantity", es: "Cantidad de equipos", fr: "Quantité d'équipement" },
+    "Equip_Model_Product": { pt: "Modelo/Produto Equipamento", en: "Equipment Model/Product", es: "Modelo/Producto del equipo", fr: "Modèle/Produit d'équipement" },
+    "Equip_Serial_Number": { pt: "Número Série Equipamento", en: "Equipment Serial Number", es: "Número de serie del equipo", fr: "Numéro de série d'équipement" },
+    "Equip_Delivered_Yes_No": { pt: "Equipamento Entregue (Sim/Não)", en: "Equipment Delivered (Yes/No)", es: "Equipo entregado (Sí/No)", fr: "Équipement livré (Oui/Non)" },
+    "Equip_Notes": { pt: "Notas Equipamento", en: "Equipment Notes", es: "Notas del equipo", fr: "Notes équipement" },
+    
+    // 1.5 - EXTRAS
+    "EXTRA_SDS": { pt: "SDS (Fichas Segurança)", en: "SDS (Safety Data Sheets)", es: "SDS (Hojas de datos de seguridad)", fr: "SDS (Fiches de données de sécurité)" },
+    "EXTRA_DRD": { pt: "DRD (Desenho Referência Técnica)", en: "DRD (Technical Reference Drawing)", es: "DRD (Dibujo de referencia técnica)", fr: "DRD (Dessin de référence technique)" },
+    "EXTRA_DTC": { pt: "DTC (Desenho Técnico CAD)", en: "DTC (CAD Technical Drawing)", es: "DTC (Dibujo técnico CAD)", fr: "DTC (Dessin technique CAO)" },
+    "EXTRA_CRE_DRD": { pt: "CRE/DRD (Referências)", en: "CRE/DRD (References)", es: "CRE/DRD (Referencias)", fr: "CRE/DRD (Références)" },
+    "EXTRA_IVS_DRD": { pt: "IVS/DRD (Documentação)", en: "IVS/DRD (Documentation)", es: "IVS/DRD (Documentación)", fr: "IVS/DRD (Documentation)" },
+    "EXTRA_EFS": { pt: "EFS (Especificações)", en: "EFS (Specifications)", es: "EFS (Especificaciones)", fr: "EFS (Spécifications)" },
+    "EXTRA_EXD": { pt: "EXD (Equipamento Explosivo)", en: "EXD (Explosive Equipment)", es: "EXD (Equipamiento explosivo)", fr: "EXD (Équipement explosif)" },
+    "EXTRA_HMI": { pt: "HMI (Interface Homem-Máquina)", en: "HMI (Human Machine Interface)", es: "HMI (Interfaz hombre-máquina)", fr: "HMI (Interface homme-machine)" },
+    "EXTRA_STM": { pt: "STM (Sistemas de Transporte)", en: "STM (Transport Systems)", es: "STM (Sistemas de transporte)", fr: "STM (Systèmes de transport)" },
+    
+    // 2 - DOCUMENTATION
+    "Doc_Manual_Delivered_Explained": { pt: "Manual Entregue/Explicado", en: "Manual Delivered/Explained", es: "Manual entregado/Explicado", fr: "Manuel livré/Expliqué" },
+    "Doc_Receiver_Name": { pt: "Nome Responsável Documentação", en: "Documentation Receiver Name", es: "Nombre del responsable de documentación", fr: "Nom du responsable de documentation" },
+    "Doc_Receiver_Position": { pt: "Posição Responsável Documentação", en: "Documentation Receiver Position", es: "Posición del responsable de documentación", fr: "Poste du responsable de documentation" },
+    "Doc_Receiver_Phone": { pt: "Telefone Responsável Documentação", en: "Documentation Receiver Phone", es: "Teléfono del responsable de documentación", fr: "Téléphone du responsable de documentation" },
+    "Doc_Receiver_Email": { pt: "Email Responsável Documentação", en: "Documentation Receiver Email", es: "Email del responsable de documentación", fr: "E-mail du responsable de documentation" },
+    "Doc_No_Explain_Why": { pt: "Motivo Não Explicado", en: "Reason Not Explained", es: "Motivo no explicado", fr: "Raison non expliquée" },
+    
+    // 3 - TRAINING (WASHING)
+    "Train_Wash_Daily_Yes_No": { pt: "Treinamento Lavagem Diária (Sim/Não)", en: "Daily Washing Training (Yes/No)", es: "Entrenamiento de lavado diario (Sí/No)", fr: "Formation lavage quotidien (Oui/Non)" },
+    "Train_Wash_Who_Name": { pt: "Nome Responsável Lavagem", en: "Washing Training Person Name", es: "Nombre del responsable de lavado", fr: "Nom du responsable lavage" },
+    "Train_Wash_Who_Position": { pt: "Posição Responsável Lavagem", en: "Washing Training Person Position", es: "Posición del responsable de lavado", fr: "Poste du responsable lavage" },
+    "Train_Wash_Who_Phone": { pt: "Telefone Responsável Lavagem", en: "Washing Training Person Phone", es: "Teléfono del responsable de lavado", fr: "Téléphone du responsable lavage" },
+    "Train_Wash_Who_Email": { pt: "Email Responsável Lavagem", en: "Washing Training Person Email", es: "Email del responsable de lavado", fr: "E-mail du responsable lavage" },
+    "Train_Wash_No_Explain_Why": { pt: "Motivo Sem Treinamento Lavagem", en: "Reason No Washing Training", es: "Motivo sin entrenamiento de lavado", fr: "Raison pas de formation lavage" },
+    
+    // 4 - TRAINING (CLEANING)
+    "Train_Clean_Daily_Yes_No": { pt: "Treinamento Limpeza Diária (Sim/Não)", en: "Daily Cleaning Training (Yes/No)", es: "Entrenamiento de limpieza diaria (Sí/No)", fr: "Formation nettoyage quotidien (Oui/Non)" },
+    "Train_Clean_Who_Name": { pt: "Nome Responsável Limpeza", en: "Cleaning Training Person Name", es: "Nombre del responsable de limpieza", fr: "Nom du responsable nettoyage" },
+    "Train_Clean_Who_Position": { pt: "Posição Responsável Limpeza", en: "Cleaning Training Person Position", es: "Posición del responsable de limpieza", fr: "Poste du responsable nettoyage" },
+    "Train_Clean_Who_Phone": { pt: "Telefone Responsável Limpeza", en: "Cleaning Training Person Phone", es: "Teléfono del responsable de limpieza", fr: "Téléphone du responsable nettoyage" },
+    "Train_Clean_Who_Email": { pt: "Email Responsável Limpeza", en: "Cleaning Training Person Email", es: "Email del responsable de limpieza", fr: "E-mail du responsable nettoyage" },
+    "Train_Clean_No_Explain_Why": { pt: "Motivo Sem Treinamento Limpeza", en: "Reason No Cleaning Training", es: "Motivo sin entrenamiento de limpieza", fr: "Raison pas de formation nettoyage" },
+    
+    // 5 - MEASUREMENTS
+    "Meas_Water_Input_Temp": { pt: "Temperatura Entrada Água", en: "Water Input Temperature", es: "Temperatura entrada de agua", fr: "Température entrée eau" },
+    "Meas_Input_Pressure": { pt: "Pressão Entrada", en: "Input Pressure", es: "Presión entrada", fr: "Pression entrée" },
+    "Meas_Water_Quality": { pt: "Qualidade Água", en: "Water Quality", es: "Calidad del agua", fr: "Qualité de l'eau" },
+    "Meas_Electrical_Info": { pt: "Informação Elétrica", en: "Electrical Information", es: "Información eléctrica", fr: "Informations électriques" },
+    "Meas_Electrical_Consumption": { pt: "Consumo Elétrico", en: "Electrical Consumption", es: "Consumo eléctrico", fr: "Consommation électrique" },
+    "Meas_Consumption_Measurement": { pt: "Medição Consumo", en: "Consumption Measurement", es: "Medición de consumo", fr: "Mesure de consommation" },
+    "Meas_Consumption_Who_Identified": { pt: "Quem Identificou Consumo", en: "Who Identified Consumption", es: "Quién identificó consumo", fr: "Qui a identifié consommation" },
+    
+    // 6 - WASHING
+    "WashTest_Performed_Yes_No": { pt: "Teste Lavagem Realizado (Sim/Não)", en: "Washing Test Performed (Yes/No)", es: "Prueba de lavado realizada (Sí/No)", fr: "Test lavage réalisé (Oui/Non)" },
+    "WashTest_Quality_Rating": { pt: "Classificação Qualidade Lavagem", en: "Washing Quality Rating", es: "Clasificación de calidad del lavado", fr: "Évaluation qualité lavage" },
+    "WashTest_Answer_Explanation": { pt: "Explicação Resposta Lavagem", en: "Washing Answer Explanation", es: "Explicación respuesta lavado", fr: "Explication réponse lavage" },
+    "WashTest_Detergent_Used": { pt: "Detergente Utilizado", en: "Detergent Used", es: "Detergente utilizado", fr: "Détergent utilisé" },
+    "WashTest_Debit": { pt: "Débito Teste", en: "Test Flow Rate", es: "Flujo de prueba", fr: "Débit test" },
+    "WashTest_Concentration": { pt: "Concentração Detergente", en: "Detergent Concentration", es: "Concentración de detergente", fr: "Concentration détergent" },
+    
+    // 7 - PREVENTIVE MAINTENANCE
+    "PrevMaint_Training_Yes_No": { pt: "Treinamento Manutenção Preventiva (Sim/Não)", en: "Preventive Maintenance Training (Yes/No)", es: "Entrenamiento mantenimiento preventivo (Sí/No)", fr: "Formation maintenance préventive (Oui/Non)" },
+    "PrevMaint_Who_Name": { pt: "Nome Responsável Manutenção Preventiva", en: "Preventive Maintenance Person Name", es: "Nombre del responsable mantenimiento preventivo", fr: "Nom du responsable maintenance préventive" },
+    "PrevMaint_Who_Position": { pt: "Posição Responsável Manutenção Preventiva", en: "Preventive Maintenance Person Position", es: "Posición del responsable mantenimiento preventivo", fr: "Poste responsable maintenance préventive" },
+    "PrevMaint_Who_Phone": { pt: "Telefone Responsável Manutenção Preventiva", en: "Preventive Maintenance Person Phone", es: "Teléfono del responsable mantenimiento preventivo", fr: "Téléphone responsable maintenance préventive" },
+    "PrevMaint_Who_Email": { pt: "Email Responsável Manutenção Preventiva", en: "Preventive Maintenance Person Email", es: "Email del responsable mantenimiento preventivo", fr: "E-mail responsable maintenance préventive" },
+    "PrevMaint_No_Explain_Why": { pt: "Motivo Sem Treinamento Manutenção Preventiva", en: "Reason No Preventive Maintenance Training", es: "Motivo sin entrenamiento mantenimiento preventivo", fr: "Raison pas formation maintenance préventive" },
+    
+    // 8 - PROGRAMMING
+    "Prog_Training_Yes_No": { pt: "Treinamento Programação (Sim/Não)", en: "Programming Training (Yes/No)", es: "Entrenamiento programación (Sí/No)", fr: "Formation programmation (Oui/Non)" },
+    "Prog_Training_Who_Name": { pt: "Nome Responsável Programação", en: "Programming Training Person Name", es: "Nombre del responsable programación", fr: "Nom du responsable programmation" },
+    "Prog_Training_Who_Position": { pt: "Posição Responsável Programação", en: "Programming Training Person Position", es: "Posición del responsable programación", fr: "Poste responsable programmation" },
+    "Prog_Training_Who_Phone": { pt: "Telefone Responsável Programação", en: "Programming Training Person Phone", es: "Teléfono del responsable programación", fr: "Téléphone responsable programmation" },
+    "Prog_Training_Who_Email": { pt: "Email Responsável Programação", en: "Programming Training Person Email", es: "Email del responsable programación", fr: "E-mail responsable programmation" },
+    "Prog_Training_No_Explain_Why": { pt: "Motivo Sem Treinamento Programação", en: "Reason No Programming Training", es: "Motivo sin entrenamiento programación", fr: "Raison pas formation programmation" },
+    
+    // 9 - PROGRAM
+    "Machine_Programmed_Yes_No": { pt: "Máquina Programada (Sim/Não)", en: "Machine Programmed (Yes/No)", es: "Máquina programada (Sí/No)", fr: "Machine programmée (Oui/Non)" },
+    "Machine_Programmed_For_Utensils": { pt: "Máquina Programada para Utensílios", en: "Machine Programmed for Utensils", es: "Máquina programada para utensilios", fr: "Machine programmée pour ustensiles" },
+    "Program_Number": { pt: "Número Programa", en: "Program Number", es: "Número de programa", fr: "Numéro du programme" },
+    "Photo_Program1": { pt: "Foto Programa 1", en: "Photo Program 1", es: "Foto Programa 1", fr: "Photo programme 1" },
+    "Photo_Program2": { pt: "Foto Programa 2", en: "Photo Program 2", es: "Foto Programa 2", fr: "Photo programme 2" },
+    "Photo_Program3": { pt: "Foto Programa 3", en: "Photo Program 3", es: "Foto Programa 3", fr: "Photo programme 3" },
+    "Photo_Program4_A": { pt: "Foto Programa 4A", en: "Photo Program 4A", es: "Foto Programa 4A", fr: "Photo programme 4A" },
+    "Photo_Program4_B": { pt: "Foto Programa 4B", en: "Photo Program 4B", es: "Foto Programa 4B", fr: "Photo programme 4B" },
+    "Utensils_Description_Trolley": { pt: "Descrição Utensílios/Carrinho", en: "Utensils/Trolley Description", es: "Descripción utensilios/carro", fr: "Description ustensiles/chariot" },
+    "Photo_Utensil1": { pt: "Foto Utensílio 1", en: "Photo Utensil 1", es: "Foto Utensilio 1", fr: "Photo ustensile 1" },
+    "Photo_Utensil2": { pt: "Foto Utensílio 2", en: "Photo Utensil 2", es: "Foto Utensilio 2", fr: "Photo ustensile 2" },
+    "Photo_Utensil3": { pt: "Foto Utensílio 3", en: "Photo Utensil 3", es: "Foto Utensilio 3", fr: "Photo ustensile 3" },
+    "Photo_Utensil4": { pt: "Foto Utensílio 4", en: "Photo Utensil 4", es: "Foto Utensilio 4", fr: "Photo ustensile 4" },
+    "Photo_Utensil5": { pt: "Foto Utensílio 5", en: "Photo Utensil 5", es: "Foto Utensilio 5", fr: "Photo ustensile 5" },
+    
+    // 10 - PROGRAM DATA
+    "Data_Wash_Time": { pt: "Tempo Lavagem", en: "Wash Time", es: "Tiempo de lavado", fr: "Temps de lavage" },
+    "Data_Rinse_Time": { pt: "Tempo Enxague", en: "Rinse Time", es: "Tiempo de enjuague", fr: "Temps de rinçage" },
+    "Data_Spin_Time": { pt: "Tempo Centrifugação", en: "Spin Time", es: "Tiempo de centrifugado", fr: "Temps d'essorage" },
+    "Data_Wash_Temperature": { pt: "Temperatura Lavagem", en: "Wash Temperature", es: "Temperatura de lavado", fr: "Température de lavage" },
+    "Data_Rinse_Temperature": { pt: "Temperatura Enxague", en: "Rinse Temperature", es: "Temperatura de enjuague", fr: "Température de rinçage" },
+    "Data_Final_Ventilation": { pt: "Ventilação Final", en: "Final Ventilation", es: "Ventilación final", fr: "Ventilation finale" },
+    "Data_Open_Door_Ventilation": { pt: "Ventilação Porta Aberta", en: "Open Door Ventilation", es: "Ventilación puerta abierta", fr: "Ventilation porte ouverte" },
+    
+    // 11 - STATUS TRAINING
+    "Status_Installation_Training_Completed": { pt: "Status Treinamento Instalação Completo", en: "Installation Training Status Completed", es: "Estado entrenamiento instalación completado", fr: "Statut formation installation terminée" },
+    
+    // 12 - POINTS TO EVALUATE
+    "Eval_Machine_Type": { pt: "Tipo Máquina", en: "Machine Type", es: "Tipo de máquina", fr: "Type de machine" },
+    "Eval_Heating": { pt: "Aquecimento", en: "Heating", es: "Calefacción", fr: "Chauffage" },
+    "Eval_Assembly": { pt: "Montagem", en: "Assembly", es: "Montaje", fr: "Assemblage" },
+    "Eval_General_Condition": { pt: "Estado Geral", en: "General Condition", es: "Estado general", fr: "État général" },
+    "Eval_Sensor_Level_Tank": { pt: "Sensor Nível Tanque", en: "Tank Level Sensor", es: "Sensor nivel tanque", fr: "Capteur niveau réservoir" },
+    "Eval_Tank_Boiler_Solenoid_Valve": { pt: "Tanque/Caldeira/Válvula Solenóide", en: "Tank/Boiler/Solenoid Valve", es: "Tanque/caldera/válvula solenoide", fr: "Réservoir/chaudière/électrovanne" },
+    "Eval_EV_Steam_Vat_Boiler": { pt: "Válvula Vapor/Caldeira", en: "Steam Valve/Boiler", es: "Válvula vapor/caldeira", fr: "Vanne vapeur/chaudière" },
+    "Eval_Detergent_Dispenser_Dryer": { pt: "Dispensador Detergente/Secador", en: "Detergent Dispenser/Dryer", es: "Dispensador detergente/secador", fr: "Distributeur détergent/séchoir" },
+    "Eval_Sensor_Safety_Interlock": { pt: "Sensor Segurança Intertravamento", en: "Safety Interlock Sensor", es: "Sensor seguridad intertravamiento", fr: "Capteur sécurité verrouillage" },
+    "Eval_Inductive_Position_Sensor": { pt: "Sensor Posição Indutivo", en: "Inductive Position Sensor", es: "Sensor posición inductivo", fr: "Capteur position inductif" },
+    "Eval_Unit_Parameters_Post_Discharge": { pt: "Parâmetros Unidade Pós-Descarregamento", en: "Unit Parameters Post-Discharge", es: "Parámetros unidad post-descarga", fr: "Paramètres unité post-décharge" },
+    "Eval_Drive_Parameters_Reboot": { pt: "Parâmetros Acionamento Reinicialização", en: "Drive Parameters Reboot", es: "Parámetros accionamiento reinicio", fr: "Paramètres entraînement redémarrage" },
+    "Eval_Direction_Rotation_Basket": { pt: "Direção Rotação Cesto", en: "Basket Rotation Direction", es: "Dirección rotación cesta", fr: "Direction rotation panier" },
+    "Eval_Wash_Rinse_Injectors": { pt: "Injetores Lavagem/Enxague", en: "Wash/Rinse Injectors", es: "Inyectores lavado/enjuague", fr: "Injecteurs lavage/rinçage" },
+    "Eval_Screw_Tightening_Rinsing_Pump": { pt: "Aperto Parafuso Bomba Enxague", en: "Rinsing Pump Screw Tightening", es: "Apriete tornillo bomba enjuague", fr: "Serrage vis pompe rinçage" },
+    "Eval_Console_Calibration_Procedure": { pt: "Procedimento Calibração Consola", en: "Console Calibration Procedure", es: "Procedimiento calibración consola", fr: "Procédure calibration console" },
+    "Eval_Language_Console": { pt: "Idioma Consola", en: "Console Language", es: "Idioma consola", fr: "Langue console" },
+    "Eval_Unit_Setpoint_Temperature": { pt: "Temperatura Setpoint Unidade", en: "Unit Setpoint Temperature", es: "Temperatura setpoint unidad", fr: "Température consigne unité" },
+    
+    // 13 - CONSUMPTION
+    "Cons_Tension_Tests": { pt: "Testes Tensão", en: "Tension Tests", es: "Pruebas tensión", fr: "Tests tension" },
+    "Cons_Heater_1_Tank_A": { pt: "Aquecedor 1 Tanque (A)", en: "Heater 1 Tank (A)", es: "Calentador 1 tanque (A)", fr: "Radiateur 1 réservoir (A)" },
+    "Cons_Heater_2_Tank_A": { pt: "Aquecedor 2 Tanque (A)", en: "Heater 2 Tank (A)", es: "Calentador 2 tanque (A)", fr: "Radiateur 2 réservoir (A)" },
+    "Cons_Heater_3_Tank_A": { pt: "Aquecedor 3 Tanque (A)", en: "Heater 3 Tank (A)", es: "Calentador 3 tanque (A)", fr: "Radiateur 3 réservoir (A)" },
+    "Cons_Heater_4_Tank_A": { pt: "Aquecedor 4 Tanque (A)", en: "Heater 4 Tank (A)", es: "Calentador 4 tanque (A)", fr: "Radiateur 4 réservoir (A)" },
+    "Cons_Heater_Boiler_1_A": { pt: "Aquecedor Caldeira 1 (A)", en: "Heater Boiler 1 (A)", es: "Calentador caldeira 1 (A)", fr: "Radiateur chaudière 1 (A)" },
+    "Cons_Heater_Boiler_2_A": { pt: "Aquecedor Caldeira 2 (A)", en: "Heater Boiler 2 (A)", es: "Calentador caldeira 2 (A)", fr: "Radiateur chaudière 2 (A)" },
+    "Cons_Washing_Pump_A": { pt: "Bomba Lavagem (A)", en: "Washing Pump (A)", es: "Bomba lavado (A)", fr: "Pompe lavage (A)" },
+    "Cons_Basket_Motor_4_Hz_A": { pt: "Motor Cesto 4 Hz (A)", en: "Basket Motor 4 Hz (A)", es: "Motor cesta 4 Hz (A)", fr: "Moteur panier 4 Hz (A)" },
+    "Cons_Basket_Motor_80_Hz_A": { pt: "Motor Cesto 80 Hz (A)", en: "Basket Motor 80 Hz (A)", es: "Motor cesta 80 Hz (A)", fr: "Moteur panier 80 Hz (A)" },
+    "Cons_Fan_A": { pt: "Ventilador (A)", en: "Fan (A)", es: "Ventilador (A)", fr: "Ventilateur (A)" },
+    "Cons_Rising_Pump_A": { pt: "Bomba Elevação (A)", en: "Rising Pump (A)", es: "Bomba elevación (A)", fr: "Pompe relevage (A)" },
+    "Temp_Confirm_Tank": { pt: "Temperatura Confirmação Tanque", en: "Tank Temperature Confirmation", es: "Confirmación temperatura tanque", fr: "Confirmation température réservoir" },
+    "Temp_Confirm_Boiler": { pt: "Temperatura Confirmação Caldeira", en: "Boiler Temperature Confirmation", es: "Confirmación temperatura caldeira", fr: "Confirmation température chaudière" },
+    "Relay_Supervision_Regulation_A": { pt: "Relé Supervisão Regulação (A)", en: "Relay Supervision Regulation (A)", es: "Relé supervisión regulación (A)", fr: "Relais supervision régulation (A)" },
+    "Thermal_Reg_Rinsing_Pump_A": { pt: "Regulação Térmica Bomba Enxague (A)", en: "Thermal Reg Rinsing Pump (A)", es: "Reg. térmica bomba enjuague (A)", fr: "Régulation thermique pompe rinçage (A)" },
+    "Thermal_Reg_Fan_A": { pt: "Regulação Térmica Ventilador (A)", en: "Thermal Reg Fan (A)", es: "Reg. térmica ventilador (A)", fr: "Régulation thermique ventilateur (A)" },
+    "Thermal_Variable_Speed_Drive_A_P305": { pt: "Accionamiento Velocidad Variable (A) P305", en: "Variable Speed Drive (A) P305", es: "Accionamiento velocidad variable (A) P305", fr: "Entraînement vitesse variable (A) P305" },
+    "Washing_Pressure": { pt: "Pressão Lavagem", en: "Washing Pressure", es: "Presión lavado", fr: "Pression lavage" },
+    
+    // 14 - SUMMARY
+    "Summary_Notes": { pt: "Notas Resumo", en: "Summary Notes", es: "Notas resumen", fr: "Notes résumé" },
+    "Summary_Date": { pt: "Data Resumo", en: "Summary Date", es: "Fecha resumen", fr: "Date résumé" },
+    "Signature_Technician": { pt: "Assinatura Técnico", en: "Technician Signature", es: "Firma técnico", fr: "Signature technicien" },
+    "Signature_Customer": { pt: "Assinatura Cliente", en: "Customer Signature", es: "Firma cliente", fr: "Signature client" },
+    
+    // ========== SEÇÕES DO FORMULÁRIO ==========
+    "1.1 - INSTALLATION RESPONSABILITY": { pt: "1.1 - RESPONSABILIDADE INSTALAÇÃO", en: "1.1 - INSTALLATION RESPONSIBILITY", es: "1.1 - RESPONSABILIDAD INSTALACIÓN", fr: "1.1 - RESPONSABILITÉ INSTALLATION" },
+    "1.2 - CUSTOMER IDENTIFICATION": { pt: "1.2 - IDENTIFICAÇÃO CLIENTE", en: "1.2 - CUSTOMER IDENTIFICATION", es: "1.2 - IDENTIFICACIÓN CLIENTE", fr: "1.2 - IDENTIFICATION CLIENT" },
+    "1.3 - SERVICE IDENTIFICATION": { pt: "1.3 - IDENTIFICAÇÃO SERVIÇO", en: "1.3 - SERVICE IDENTIFICATION", es: "1.3 - IDENTIFICACIÓN SERVICIO", fr: "1.3 - IDENTIFICATION SERVICE" },
+    "1.4 - EQUIPMENT AND ACCESSORIES IDENTIFICATION": { pt: "1.4 - IDENTIFICAÇÃO EQUIPAMENTO E ACESSÓRIOS", en: "1.4 - EQUIPMENT AND ACCESSORIES IDENTIFICATION", es: "1.4 - IDENTIFICACIÓN EQUIPAMIENTO Y ACCESORIOS", fr: "1.4 - IDENTIFICATION ÉQUIPEMENT ET ACCESSOIRES" },
+    "1.5 - EXTRAS": { pt: "1.5 - EXTRAS", en: "1.5 - EXTRAS", es: "1.5 - EXTRAS", fr: "1.5 - EXTRAS" },
+    "2 - DOCUMENTATION": { pt: "2 - DOCUMENTAÇÃO", en: "2 - DOCUMENTATION", es: "2 - DOCUMENTACIÓN", fr: "2 - DOCUMENTATION" },
+    "3 - TRAINING (WASHING)": { pt: "3 - TREINAMENTO (LAVAGEM)", en: "3 - TRAINING (WASHING)", es: "3 - ENTRENAMIENTO (LAVADO)", fr: "3 - FORMATION (LAVAGE)" },
+    "4 - TRAINING (CLEANING)": { pt: "4 - TREINAMENTO (LIMPEZA)", en: "4 - TRAINING (CLEANING)", es: "4 - ENTRENAMIENTO (LIMPIEZA)", fr: "4 - FORMATION (NETTOYAGE)" },
+    "5 - MEASUREMENTS": { pt: "5 - MEDIÇÕES", en: "5 - MEASUREMENTS", es: "5 - MEDICIONES", fr: "5 - MESURES" },
+    "6 - WASHING": { pt: "6 - LAVAGEM", en: "6 - WASHING", es: "6 - LAVADO", fr: "6 - LAVAGE" },
+    "7 - PREVENTIVE MAINTENANCE": { pt: "7 - MANUTENÇÃO PREVENTIVA", en: "7 - PREVENTIVE MAINTENANCE", es: "7 - MANTENIMIENTO PREVENTIVO", fr: "7 - MAINTENANCE PRÉVENTIVE" },
+    "8 - PROGRAMMING": { pt: "8 - PROGRAMAÇÃO", en: "8 - PROGRAMMING", es: "8 - PROGRAMACIÓN", fr: "8 - PROGRAMMATION" },
+    "9 - PROGRAM": { pt: "9 - PROGRAMA", en: "9 - PROGRAM", es: "9 - PROGRAMA", fr: "9 - PROGRAMME" },
+    "10 - PROGRAM DATA": { pt: "10 - DADOS PROGRAMA", en: "10 - PROGRAM DATA", es: "10 - DATOS PROGRAMA", fr: "10 - DONNÉES PROGRAMME" },
+    "11 - STATUS TRAINING": { pt: "11 - STATUS TREINAMENTO", en: "11 - STATUS TRAINING", es: "11 - ESTADO ENTRENAMIENTO", fr: "11 - STATUT FORMATION" },
+    "12 - POINTS TO EVALUATE": { pt: "12 - PONTOS A AVALIAR", en: "12 - POINTS TO EVALUATE", es: "12 - PUNTOS A EVALUAR", fr: "12 - POINTS À ÉVALUER" },
+    "13 - CONSUMPTION": { pt: "13 - CONSUMO", en: "13 - CONSUMPTION", es: "13 - CONSUMO", fr: "13 - CONSOMMATION" },
+    "14 - SUMMARY": { pt: "14 - RESUMO", en: "14 - SUMMARY", es: "14 - RESUMEN", fr: "14 - RÉSUMÉ" },
+    "HOJA TÉCNICA DE CUMPLIMIENTO": { pt: "FICHA TÉCNICA DE CONFORMIDADE", en: "TECHNICAL COMPLIANCE SHEET", es: "HOJA TÉCNICA DE CUMPLIMIENTO", fr: "FICHE TECHNIQUE DE CONFORMITÉ" },
+    "Equipo": { pt: "Equipamento", en: "Equipment", es: "Equipo", fr: "Équipement" },
+    "Exportado el": { pt: "Exportado em", en: "Exported on", es: "Exportado el", fr: "Exporté le" },
+    
     // Traduções adicionais para a interface da aplicação
     "MULTI WASHER": { pt: "MULTI WASHER", en: "MULTI WASHER", es: "MULTI WASHER", fr: "MULTI WASHER" },
     "Checklist Instalação": { pt: "Checklist Instalação", en: "Installation Checklist", es: "Checklist Instalación", fr: "Checklist d'Installation" },
@@ -390,3 +589,6 @@ window.setLanguage = function(lang) {
 
 // Exportar updateLanguageButtons
 window.updateLanguageButtons = updateLanguageButtons;
+
+// Exportar translationsData para uso global
+window.translationsData = translationsData;

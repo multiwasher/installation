@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             listenToData();
         }
     });
+})();
 
 // Utilizadores Autorizados
 const USERS = {
@@ -528,11 +529,170 @@ window.deleteCost = async (id) => {
     }
 };
 
+// Mostrar modal de seleção de idioma para PDF
+// Variável para armazenar o callback da seleção de idioma
+let pdfLanguageCallback = null;
+
+window.testPDFModal = () => {
+    console.log('[PDF TEST] Testing modal display');
+    window.showPDFLanguageSelector((lang) => {
+        console.log('[PDF TEST] Language selected:', lang);
+        alert('You selected: ' + lang);
+    });
+};
+
+window.selectPDFLanguage = (lang) => {
+    const modal = document.getElementById('pdf-language-modal');
+    if (modal) modal.remove();
+    
+    if (pdfLanguageCallback) {
+        pdfLanguageCallback(lang);
+        pdfLanguageCallback = null;
+    }
+};
+
+window.showPDFLanguageSelector = (callback) => {
+    console.log('[PDF] Showing language selector modal');
+    pdfLanguageCallback = callback;
+    
+    // Criar overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'pdf-language-modal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 1rem;
+    `;
+    
+    // Criar container do modal
+    const container = document.createElement('div');
+    container.style.cssText = `
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        max-width: 28rem;
+        width: 100%;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        animation: slideUp 0.3s ease-out;
+    `;
+    
+    // Adicionar CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .pdf-lang-btn {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            padding: 0.875rem;
+            border-radius: 0.75rem;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .pdf-lang-btn:hover {
+            background-color: #1d4ed8;
+        }
+        .pdf-lang-btn-cancel {
+            width: 100%;
+            margin-top: 1rem;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 0.875rem;
+            border-radius: 0.75rem;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .pdf-lang-btn-cancel:hover {
+            background-color: #cbd5e1;
+        }
+    `;
+    if (!document.querySelector('style[data-pdf-modal]')) {
+        style.setAttribute('data-pdf-modal', 'true');
+        document.head.appendChild(style);
+    }
+    
+    container.innerHTML = `
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin-bottom: 0.5rem; margin-top: 0;">Select PDF Language</h2>
+        <p style="font-size: 0.875rem; color: #475569; margin-bottom: 1.5rem; margin-top: 0.5rem;">Choose the language for the exported PDF:</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <button onclick="window.selectPDFLanguage('pt')" class="pdf-lang-btn">🇵🇹 Português</button>
+            <button onclick="window.selectPDFLanguage('en')" class="pdf-lang-btn">🇬🇧 English</button>
+            <button onclick="window.selectPDFLanguage('es')" class="pdf-lang-btn">🇪🇸 Español</button>
+            <button onclick="window.selectPDFLanguage('fr')" class="pdf-lang-btn">🇫🇷 Français</button>
+        </div>
+        
+        <button onclick="document.getElementById('pdf-language-modal').remove(); window.pdfLanguageCallback = null;" class="pdf-lang-btn-cancel">Cancel</button>
+    `;
+    
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+    console.log('[PDF] Modal created and appended to body');
+};
+
 window.exportCostsPDF = () => {
+    window.showPDFLanguageSelector((lang) => {
+        window.generateCostsPDF(lang);
+    });
+};
+
+window.generateCostsPDF = (lang = 'en') => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
+    
+    // Função auxiliar para traduzir com fallback
+    const translateField = (text, targetLang) => {
+        if (!window.translationsData) return text;
+        if (window.translationsData[text]) {
+            return window.translationsData[text][targetLang] || window.translationsData[text]['en'] || text;
+        }
+        if (window.translate) {
+            return window.translate(text, targetLang);
+        }
+        return text;
+    };
+    
+    // Traduções para o PDF
+    const pdfTexts = {
+        title: { pt: "RELATÓRIO DE DESPESAS", en: "EXPENSE REPORT", es: "INFORME DE GASTOS", fr: "RAPPORT DE DÉPENSES" },
+        generatedAt: { pt: "Gerado em:", en: "Generated on:", es: "Generado en:", fr: "Généré le:" },
+        user: { pt: "Utilizador:", en: "User:", es: "Usuario:", fr: "Utilisateur:" },
+        date: { pt: "Data", en: "Date", es: "Fecha", fr: "Date" },
+        type: { pt: "Tipo", en: "Type", es: "Tipo", fr: "Type" },
+        description: { pt: "Descrição", en: "Description", es: "Descripción", fr: "Description" },
+        value: { pt: "Valor (€)", en: "Value (€)", es: "Valor (€)", fr: "Valeur (€)" },
+        technician: { pt: "Técnico", en: "Technician", es: "Técnico", fr: "Technicien" },
+        total: { pt: "Total:", en: "Total:", es: "Total:", fr: "Total:" }
+    };
     
     let dataToExport = costsData;
     if (sessionUser.role === 'ADMIN') {
@@ -558,7 +718,7 @@ window.exportCostsPDF = () => {
     y += 10;
     doc.setFontSize(12);
     doc.setTextColor(100, 100, 100);
-    doc.text("RELATÓRIO DE DESPESAS", pageWidth / 2, y, { align: "center" });
+    doc.text(pdfTexts.title[lang], pageWidth / 2, y, { align: "center" });
     
     y += 15;
     doc.setDrawColor(200, 200, 200);
@@ -567,20 +727,21 @@ window.exportCostsPDF = () => {
     y += 10;
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-PT')}`, 20, y);
+    const dateFormatted = new Date().toLocaleDateString(lang === 'pt' ? 'pt-PT' : lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'fr-FR');
+    doc.text(`${pdfTexts.generatedAt[lang]} ${dateFormatted}`, 20, y);
     y += 7;
-    doc.text(`Utilizador: ${sessionUser.name}`, 20, y);
+    doc.text(`${pdfTexts.user[lang]} ${sessionUser.name}`, 20, y);
     y += 15;
     
     // Tabela
     doc.setFont("helvetica", "bold");
     doc.setFillColor(240, 240, 240);
     doc.rect(20, y, pageWidth - 40, 8, "F");
-    doc.text("Data", 25, y + 6);
-    doc.text("Tipo", 60, y + 6);
-    doc.text("Descrição", 90, y + 6);
-    doc.text("Valor", 170, y + 6);
-    doc.text("Técnico", 195, y + 6);
+    doc.text(pdfTexts.date[lang], 25, y + 6);
+    doc.text(pdfTexts.type[lang], 60, y + 6);
+    doc.text(pdfTexts.description[lang], 90, y + 6);
+    doc.text(pdfTexts.value[lang], 170, y + 6);
+    doc.text(pdfTexts.technician[lang], 195, y + 6);
     y += 12;
     
     doc.setFont("helvetica", "normal");
@@ -598,9 +759,13 @@ window.exportCostsPDF = () => {
     
     y += 5;
     doc.setFont("helvetica", "bold");
-    doc.text(`TOTAL: ${totalValue.toFixed(2)}€`, 170, y);
+    doc.text(`${pdfTexts.total[lang]} ${totalValue.toFixed(2)}€`, 170, y);
     
-    doc.save(`Despesas_${new Date().toISOString().split('T')[0]}.pdf`);
+    const filename = lang === 'pt' ? `Despesas_${new Date().toISOString().split('T')[0]}.pdf` : 
+                     lang === 'en' ? `Expenses_${new Date().toISOString().split('T')[0]}.pdf` :
+                     lang === 'es' ? `Gastos_${new Date().toISOString().split('T')[0]}.pdf` :
+                     `Depenses_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
 };
 
 // --- MÓDULO DE VOOS ---
@@ -734,10 +899,42 @@ window.deleteFlight = async (id) => {
 };
 
 window.exportFlightsPDF = () => {
+    window.showPDFLanguageSelector((lang) => {
+        window.generateFlightsPDF(lang);
+    });
+};
+
+window.generateFlightsPDF = (lang = 'en') => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
+    
+    // Função auxiliar para traduzir com fallback
+    const translateField = (text, targetLang) => {
+        if (!window.translationsData) return text;
+        if (window.translationsData[text]) {
+            return window.translationsData[text][targetLang] || window.translationsData[text]['en'] || text;
+        }
+        if (window.translate) {
+            return window.translate(text, targetLang);
+        }
+        return text;
+    };
+    
+    // Traduções para o PDF
+    const pdfTexts = {
+        title: { pt: "RELATÓRIO DE VOOS", en: "FLIGHT REPORT", es: "INFORME DE VUELOS", fr: "RAPPORT DE VOLS" },
+        generatedAt: { pt: "Gerado em:", en: "Generated on:", es: "Generado en:", fr: "Généré le:" },
+        user: { pt: "Utilizador:", en: "User:", es: "Usuario:", fr: "Utilisateur:" },
+        date: { pt: "Data", en: "Date", es: "Fecha", fr: "Date" },
+        airport: { pt: "Aerop.", en: "Airport", es: "Aeropto.", fr: "Aérop." },
+        destination: { pt: "Destino", en: "Destination", es: "Destino", fr: "Destination" },
+        departure: { pt: "Partida", en: "Departure", es: "Salida", fr: "Départ" },
+        arrival: { pt: "Chegada", en: "Arrival", es: "Llegada", fr: "Arrivée" },
+        technician: { pt: "Técnico", en: "Technician", es: "Técnico", fr: "Technicien" },
+        status: { pt: "Status", en: "Status", es: "Estado", fr: "Statut" }
+    };
     
     let dataToExport = flightsData;
     const dateFrom = document.getElementById('filter-flight-date-from').value;
@@ -761,7 +958,7 @@ window.exportFlightsPDF = () => {
     y += 10;
     doc.setFontSize(12);
     doc.setTextColor(100, 100, 100);
-    doc.text("RELATÓRIO DE VOOS", pageWidth / 2, y, { align: "center" });
+    doc.text(pdfTexts.title[lang], pageWidth / 2, y, { align: "center" });
     
     y += 15;
     doc.setDrawColor(200, 200, 200);
@@ -770,9 +967,10 @@ window.exportFlightsPDF = () => {
     y += 10;
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-PT')}`, 20, y);
+    const dateFormatted = new Date().toLocaleDateString(lang === 'pt' ? 'pt-PT' : lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'fr-FR');
+    doc.text(`${pdfTexts.generatedAt[lang]} ${dateFormatted}`, 20, y);
     y += 7;
-    doc.text(`Utilizador: ${sessionUser.name}`, 20, y);
+    doc.text(`${pdfTexts.user[lang]} ${sessionUser.name}`, 20, y);
     y += 15;
     
     // Tabela
@@ -780,13 +978,13 @@ window.exportFlightsPDF = () => {
     doc.setFillColor(240, 240, 240);
     doc.rect(20, y, pageWidth - 40, 8, "F");
     doc.setFontSize(9);
-    doc.text("Data", 22, y + 6);
-    doc.text("Aerop.", 45, y + 6);
-    doc.text("Destino", 65, y + 6);
-    doc.text("Partida", 100, y + 6);
-    doc.text("Chegada", 125, y + 6);
-    doc.text("Técnico", 150, y + 6);
-    doc.text("Status", 180, y + 6);
+    doc.text(pdfTexts.date[lang], 22, y + 6);
+    doc.text(pdfTexts.airport[lang], 45, y + 6);
+    doc.text(pdfTexts.destination[lang], 65, y + 6);
+    doc.text(pdfTexts.departure[lang], 100, y + 6);
+    doc.text(pdfTexts.arrival[lang], 125, y + 6);
+    doc.text(pdfTexts.technician[lang], 150, y + 6);
+    doc.text(pdfTexts.status[lang], 180, y + 6);
     y += 12;
     
     doc.setFont("helvetica", "normal");
@@ -803,7 +1001,11 @@ window.exportFlightsPDF = () => {
         y += 7;
     });
     
-    doc.save(`Voos_${new Date().toISOString().split('T')[0]}.pdf`);
+    const filename = lang === 'pt' ? `Voos_${new Date().toISOString().split('T')[0]}.pdf` : 
+                     lang === 'en' ? `Flights_${new Date().toISOString().split('T')[0]}.pdf` :
+                     lang === 'es' ? `Vuelos_${new Date().toISOString().split('T')[0]}.pdf` :
+                     `Vols_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
 };
 
 // --- RENDERIZAÇÃO DA TABELA ---
@@ -835,7 +1037,6 @@ const renderTable = () => {
                     </div>
                 </td>
                 <td class="px-8 py-6 text-right flex justify-end gap-2">
-                    <button onclick="exportToPDF('${item.id}')" title="PDF" class="p-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 border border-emerald-100"><i data-lucide="file-down" style="width:18px"></i></button>
                     <button onclick="editForm('${item.id}')" title="Editar" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 border border-blue-100"><i data-lucide="search" style="width:18px"></i></button>
                     <button onclick="deleteHandler('${item.id}')" title="Apagar" class="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 border border-red-100"><i data-lucide="trash-2" style="width:18px"></i></button>
                 </td>
@@ -1239,18 +1440,54 @@ window.deleteHandler = async (id) => {
 // --- EXPORTAÇÃO PARA PDF ---
 window.exportToPDF = (id) => {
     const item = complianceData.find(d => d.id === id);
-    if (item) generatePDF(item);
+    if (item) window.generatePDF(item);
 };
 
 window.exportCurrentToPDF = () => {
-    if (editingDoc) generatePDF(editingDoc);
+    console.log('[PDF] exportCurrentToPDF called');
+    console.log('[PDF] editingDoc:', editingDoc);
+    
+    if (!editingDoc) {
+        console.log('[PDF] ERROR: No document being edited');
+        alert('Please open or create an equipment record first.');
+        return;
+    }
+    
+    console.log('[PDF] Showing modal for language selection');
+    window.showPDFLanguageSelector((lang) => {
+        console.log('[PDF] User selected language:', lang);
+        window.generatePDF(editingDoc, lang);
+    });
 };
 
-const generatePDF = (item) => {
+window.generatePDF = (item, lang = 'en') => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
+    
+    // Função auxiliar para traduzir com fallback
+    const translateField = (text, targetLang) => {
+        if (!window.translationsData) return text;
+        if (window.translationsData[text]) {
+            return window.translationsData[text][targetLang] || window.translationsData[text]['en'] || text;
+        }
+        if (window.translate) {
+            return window.translate(text, targetLang);
+        }
+        return text;
+    };
+    
+    // Traduções para o PDF
+    const pdfTexts = {
+        title: { pt: "FICHA TÉCNICA DE CONFORMIDADE", en: "TECHNICAL COMPLIANCE SHEET", es: "HOJA TÉCNICA DE CUMPLIMIENTO", fr: "FICHE TECHNIQUE DE CONFORMITÉ" },
+        equipment: { pt: "Equipamento:", en: "Equipment:", es: "Equipo:", fr: "Équipement:" },
+        customer: { pt: "Cliente:", en: "Customer:", es: "Cliente:", fr: "Client:" },
+        technician: { pt: "Técnico:", en: "Technician:", es: "Técnico:", fr: "Technicien:" },
+        exportedAt: { pt: "Exportado em:", en: "Exported on:", es: "Exportado el:", fr: "Exporté le:" },
+        signatureImage: { pt: "[Imagem de Assinatura]", en: "[Signature Image]", es: "[Imagen de Firma]", fr: "[Image de Signature]" },
+        signaturePresent: { pt: "[Assinatura Presente]", en: "[Signature Present]", es: "[Firma Presente]", fr: "[Signature Présente]" }
+    };
 
     // Add logo to top left (40mm width, aspect ratio maintained automatically)
     try {
@@ -1269,7 +1506,7 @@ const generatePDF = (item) => {
     y += 10;
     doc.setFontSize(12);
     doc.setTextColor(100, 100, 100);
-    doc.text("FICHA TÉCNICA DE COMPLIANCE", pageWidth / 2, y, { align: "center" });
+    doc.text(pdfTexts.title[lang], pageWidth / 2, y, { align: "center" });
     
     y += 15;
     doc.setDrawColor(200, 200, 200);
@@ -1278,11 +1515,12 @@ const generatePDF = (item) => {
     y += 10;
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Equipamento: ${item.Equip_Serial_Number || '---'}`, 20, y);
-    doc.text(`Cliente: ${item.Cust_Name || '---'}`, 100, y);
+    const dateFormatted = new Date().toLocaleDateString(lang === 'pt' ? 'pt-PT' : lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'fr-FR');
+    doc.text(`${pdfTexts.equipment[lang]} ${item.Equip_Serial_Number || '---'}`, 20, y);
+    doc.text(`${pdfTexts.customer[lang]} ${item.Cust_Name || '---'}`, 100, y);
     y += 7;
-    doc.text(`Técnico: ${item.Inst_Technician_Name || '---'}`, 20, y);
-    doc.text(`Exportado em: ${new Date().toLocaleDateString('pt-PT')}`, 100, y);
+    doc.text(`${pdfTexts.technician[lang]} ${item.Inst_Technician_Name || '---'}`, 20, y);
+    doc.text(`${pdfTexts.exportedAt[lang]} ${dateFormatted}`, 100, y);
 
     y += 15;
 
@@ -1291,16 +1529,19 @@ const generatePDF = (item) => {
         doc.setFont("helvetica", "bold");
         doc.setFillColor(240, 240, 240);
         doc.rect(20, y, pageWidth - 40, 8, "F");
-        doc.text(section.label.toUpperCase(), 25, y + 6);
+        // Traduzir o título da seção se existir tradução
+        const sectionLabel = translateField(section.label, lang);
+        doc.text(sectionLabel.toUpperCase(), 25, y + 6);
         y += 12;
 
         doc.setFont("helvetica", "normal");
         section.fields.forEach(field => {
             if (y > 280) { doc.addPage(); y = 20; }
             const val = item[field] || "---";
-            const label = field.replace(/_/g, ' ');
+            // Traduzir o rótulo do campo se existir tradução
+            const translatedLabel = translateField(field, lang);
             doc.setFont("helvetica", "bold");
-            doc.text(`${label}:`, 25, y);
+            doc.text(`${translatedLabel}:`, 25, y);
             
             // Handle signature fields as images
             if ((field === 'Signature_Technician' || field === 'Signature_Customer') && val !== "---") {
@@ -1312,12 +1553,12 @@ const generatePDF = (item) => {
                         y += 35;
                     } catch (e) {
                         doc.setFont("helvetica", "normal");
-                        doc.text("[Signature Image]", 80, y);
+                        doc.text(pdfTexts.signatureImage[lang], 80, y);
                         y += 7;
                     }
                 } else {
                     doc.setFont("helvetica", "normal");
-                    doc.text("[Signature Present]", 80, y);
+                    doc.text(pdfTexts.signaturePresent[lang], 80, y);
                     y += 7;
                 }
             } else {
@@ -1329,7 +1570,11 @@ const generatePDF = (item) => {
         y += 5;
     });
 
-    doc.save(`Ficha_${item.Equip_Serial_Number || 'Somengil'}.pdf`);
+    const filename = lang === 'pt' ? `Ficha_${item.Equip_Serial_Number || 'Somengil'}.pdf` : 
+                     lang === 'en' ? `Sheet_${item.Equip_Serial_Number || 'Somengil'}.pdf` :
+                     lang === 'es' ? `Hoja_${item.Equip_Serial_Number || 'Somengil'}.pdf` :
+                     `Fiche_${item.Equip_Serial_Number || 'Somengil'}.pdf`;
+    doc.save(filename);
 };
 
 // Mobile sidebar overlay handler
@@ -1344,4 +1589,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-})();
