@@ -306,12 +306,26 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
         document.getElementById('header-user-name').innerText = sessionUser.name;
         document.getElementById('header-user-role').innerText = sessionUser.role === 'ADMIN' ? 'Gestão Somengil' : 'Técnico';
         document.getElementById('user-avatar').innerText = sessionUser.name.charAt(0);
-        // Forçar sidebar recolhido ao entrar
-        sidebarExpanded = false;
-        const sidebar = document.getElementById('sidebar');
-        const sidebarTexts = document.querySelectorAll('.sidebar-text');
-        sidebar.classList.remove('expanded');
-        sidebarTexts.forEach(t => t.classList.add('hidden'));
+        // Expandir sidebar automaticamente em desktop após login
+        const isMobile = window.innerWidth <= 768;
+        if (!isMobile) {
+            sidebarExpanded = true;
+            const sidebar = document.getElementById('sidebar');
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            const sidebarLogo = document.getElementById('sidebar-logo');
+            const sidebarCollapsedLogo = document.getElementById('sidebar-collapsed-logo');
+            sidebar.classList.add('expanded');
+            sidebarTexts.forEach(t => t.classList.remove('hidden'));
+            if (sidebarLogo) sidebarLogo.classList.remove('hidden');
+            if (sidebarCollapsedLogo) sidebarCollapsedLogo.classList.add('hidden');
+        } else {
+            // Em mobile, manter sidebar recolhido
+            sidebarExpanded = false;
+            const sidebar = document.getElementById('sidebar');
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            sidebar.classList.remove('expanded');
+            sidebarTexts.forEach(t => t.classList.add('hidden'));
+        }
         lucide.createIcons();
         setView('dashboard');
         renderDashboard();
