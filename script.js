@@ -1182,18 +1182,30 @@ const renderForm = () => {
     const container = document.getElementById('form-sections-container');
     const sidebarContainer = document.getElementById('sidebar-sections');
 
-    // Dropdown config for GESTÃO
-    const YESNO_FIELDS = [
-        "Inst_Status_Planned_NotPlanned",
+    // Field type configurations
+    const YESNO_BUTTON_FIELDS = [
         "Equip_Delivered_Yes_No",
-        "Doc_Manual_Delivered_Explained",
         "Train_Wash_Daily_Yes_No",
         "Train_Clean_Daily_Yes_No",
         "PrevMaint_Training_Yes_No",
         "Prog_Training_Yes_No",
         "Machine_Programmed_Yes_No",
-        "WashTest_Performed_Yes_No"
+        "WashTest_Performed_Yes_No",
+        "EXTRA_SDS",
+        "EXTRA_DRD",
+        "EXTRA_DTC",
+        "EXTRA_CRE_DRD",
+        "EXTRA_IVS_DRD",
+        "EXTRA_EFS",
+        "EXTRA_EXD",
+        "EXTRA_HMI",
+        "EXTRA_STM"
     ];
+    const YESNO_DROPDOWN_FIELDS = [
+        "Inst_Status_Planned_NotPlanned",
+        "Doc_Manual_Delivered_Explained"
+    ];
+    const EQUIP_MODEL_OPTIONS = ["MWS200", "MWS300", "MWS500", "MWS700", "MWS715", "Outro"];
     const COUNTRY_LIST = [
         "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
     ];
@@ -1227,8 +1239,22 @@ const renderForm = () => {
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${section.fields.map(field => {
+                        // YES/NO Button fields
+                        if (YESNO_BUTTON_FIELDS.includes(field)) {
+                            const yesActive = editingDoc[field] === 'Sim' ? 'active' : '';
+                            const noActive = editingDoc[field] === 'Não' ? 'active' : '';
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <div class="yes-no-buttons">
+                                        <button type="button" class="btn-yes ${yesActive}" data-field="${field}" data-value="Sim" onclick="updateDocField('${field}', 'Sim')">YES</button>
+                                        <button type="button" class="btn-no ${noActive}" data-field="${field}" data-value="Não" onclick="updateDocField('${field}', 'Não')">NO</button>
+                                    </div>
+                                </div>
+                            `;
+                        }
                         // Dropdown for YES/NO fields
-                        if (YESNO_FIELDS.includes(field)) {
+                        if (YESNO_DROPDOWN_FIELDS.includes(field)) {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
@@ -1236,6 +1262,18 @@ const renderForm = () => {
                                         <option value="">Selecionar...</option>
                                         <option value="Sim" ${editingDoc[field]==='Sim'?'selected':''}>Sim</option>
                                         <option value="Não" ${editingDoc[field]==='Não'?'selected':''}>Não</option>
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Dropdown for Equip_Model_Product
+                        if (field === "Equip_Model_Product") {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        ${EQUIP_MODEL_OPTIONS.map(opt => `<option value="${opt}" ${editingDoc[field]===opt?'selected':''}>${opt}</option>`).join('')}
                                     </select>
                                 </div>
                             `;
@@ -1367,6 +1405,38 @@ const renderForm = () => {
 
 window.updateDocField = (field, value) => {
     editingDoc[field] = value;
+    
+    // Update button states for YES/NO button fields
+    const YESNO_BUTTON_FIELDS = [
+        "Equip_Delivered_Yes_No",
+        "Train_Wash_Daily_Yes_No",
+        "Train_Clean_Daily_Yes_No",
+        "PrevMaint_Training_Yes_No",
+        "Prog_Training_Yes_No",
+        "Machine_Programmed_Yes_No",
+        "WashTest_Performed_Yes_No",
+        "EXTRA_SDS",
+        "EXTRA_DRD",
+        "EXTRA_DTC",
+        "EXTRA_CRE_DRD",
+        "EXTRA_IVS_DRD",
+        "EXTRA_EFS",
+        "EXTRA_EXD",
+        "EXTRA_HMI",
+        "EXTRA_STM"
+    ];
+    
+    if (YESNO_BUTTON_FIELDS.includes(field)) {
+        // Find all buttons for this field using data attribute
+        const buttons = document.querySelectorAll(`button[data-field="${field}"]`);
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-value') === value) {
+                btn.classList.add('active');
+            }
+        });
+    }
+    
     updateUIsForProgress();
     // Atualiza também o sidebar das secções
     const sidebarContainer = document.getElementById('sidebar-sections');
