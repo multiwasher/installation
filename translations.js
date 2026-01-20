@@ -237,7 +237,9 @@ const translationsData = {
     // 14 - SUMMARY
     "Summary_Notes": { pt: "Notas Resumo", en: "Summary Notes", es: "Notas resumen", fr: "Notes résumé" },
     "Summary_Date": { pt: "Data Resumo", en: "Summary Date", es: "Fecha resumen", fr: "Date résumé" },
+    "Signature_Technician_Name": { pt: "Nome Técnico", en: "Technician Name", es: "Nombre técnico", fr: "Nom technicien" },
     "Signature_Technician": { pt: "Assinatura Técnico", en: "Technician Signature", es: "Firma técnico", fr: "Signature technicien" },
+    "Signature_Customer_Name": { pt: "Nome Cliente", en: "Customer Name", es: "Nombre cliente", fr: "Nom client" },
     "Signature_Customer": { pt: "Assinatura Cliente", en: "Customer Signature", es: "Firma cliente", fr: "Signature client" },
     
     // ========== SEÇÕES DO FORMULÁRIO ==========

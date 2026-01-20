@@ -241,7 +241,7 @@ const FORM_STRUCTURE = [
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
     { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
     { id: "s13", label: "13 - Consumption", fields: ["Cons_Tension_Tests", "Cons_Heater_1_Tank_A", "Cons_Heater_2_Tank_A", "Cons_Heater_3_Tank_A", "Cons_Heater_4_Tank_A", "Cons_Heater_Boiler_1_A", "Cons_Heater_Boiler_2_A", "Cons_Washing_Pump_A", "Cons_Basket_Motor_4_Hz_A", "Cons_Basket_Motor_80_Hz_A", "Cons_Fan_A", "Cons_Rising_Pump_A", "Temp_Confirm_Tank", "Temp_Confirm_Boiler", "Relay_Supervision_Regulation_A", "Thermal_Reg_Rinsing_Pump_A", "Thermal_Reg_Fan_A", "Thermal_Variable_Speed_Drive_A_P305", "Washing_Pressure"] },
-    { id: "s14", label: "14 - Summary", fields: ["Summary_Notes", "Summary_Date", "Signature_Technician", "Signature_Customer"] }
+    { id: "s14", label: "14 - Summary", fields: ["Summary_Notes", "Summary_Date", "Signature_Technician_Name", "Signature_Technician", "Signature_Customer_Name", "Signature_Customer"] }
 ];
 
 let sessionUser = null;
@@ -1190,6 +1190,7 @@ const renderForm = () => {
         "PrevMaint_Training_Yes_No",
         "Prog_Training_Yes_No",
         "Machine_Programmed_Yes_No",
+        "Machine_Programmed_For_Utensils",
         "WashTest_Performed_Yes_No",
         "EXTRA_SDS",
         "EXTRA_DRD",
@@ -1199,12 +1200,16 @@ const renderForm = () => {
         "EXTRA_EFS",
         "EXTRA_EXD",
         "EXTRA_HMI",
-        "EXTRA_STM"
-    ];
-    const YESNO_DROPDOWN_FIELDS = [
+        "EXTRA_STM",
         "Inst_Status_Planned_NotPlanned",
-        "Doc_Manual_Delivered_Explained"
+        "Svc_Installation",
+        "Svc_Preventive_Maintenance",
+        "Svc_Corrective_Maintenance",
+        "Svc_Warranty",
+        "Doc_Manual_Delivered_Explained",
+        "Status_Installation_Training_Completed"
     ];
+    const YESNO_DROPDOWN_FIELDS = [];
     const EQUIP_MODEL_OPTIONS = ["MWS200", "MWS300", "MWS500", "MWS700", "MWS715", "Outro"];
     const COUNTRY_LIST = [
         "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
@@ -1414,6 +1419,7 @@ window.updateDocField = (field, value) => {
         "PrevMaint_Training_Yes_No",
         "Prog_Training_Yes_No",
         "Machine_Programmed_Yes_No",
+        "Machine_Programmed_For_Utensils",
         "WashTest_Performed_Yes_No",
         "EXTRA_SDS",
         "EXTRA_DRD",
@@ -1423,7 +1429,14 @@ window.updateDocField = (field, value) => {
         "EXTRA_EFS",
         "EXTRA_EXD",
         "EXTRA_HMI",
-        "EXTRA_STM"
+        "EXTRA_STM",
+        "Inst_Status_Planned_NotPlanned",
+        "Svc_Installation",
+        "Svc_Preventive_Maintenance",
+        "Svc_Corrective_Maintenance",
+        "Svc_Warranty",
+        "Doc_Manual_Delivered_Explained",
+        "Status_Installation_Training_Completed"
     ];
     
     if (YESNO_BUTTON_FIELDS.includes(field)) {
