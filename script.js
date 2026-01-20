@@ -1273,6 +1273,56 @@ window.saveSignatureCustomer = () => {
     }
 };
 
+// Function to get clean field label by removing section-specific prefixes
+window.getFieldLabel = (fieldName, sectionId) => {
+    let label = fieldName.replace(/_/g, ' ');
+    
+    // Define prefix patterns to remove based on section
+    const prefixPatterns = {
+        's3': ['TRAIN WASH WHO ', 'TRAIN WASH NO ', 'TRAIN WASH '],  // 3 - Training (washing)
+        's4': ['TRAIN CLEAN WHO ', 'TRAIN CLEAN NO ', 'TRAIN CLEAN '],  // 4 - Training (cleaning)
+        's5': ['MEAS ', 'MEAS CONSUMPTION '],  // 5 - Measurements
+        's6': ['WASH TEST ', 'WASH '],  // 6 - Washing
+        's7': ['PREV MAINT WHO ', 'PREV MAINT NO ', 'PREV MAINT '],  // 7 - Preventive Maintenance
+        's8': ['PROG TRAINING WHO ', 'PROG TRAINING NO ', 'PROG TRAINING '],  // 8 - Programming
+        's10': ['DATA '],  // 10 - Program Data
+        's12': ['EVAL '],  // 12 - Points to evaluate
+        's13': ['CONS ', 'THERMAL ', 'RELAY '],  // 13 - Consumption
+    };
+    
+    // Get the patterns for this section
+    const patterns = prefixPatterns[sectionId] || [];
+    
+    // Remove the matching prefix
+    for (const pattern of patterns) {
+        if (label.toUpperCase().startsWith(pattern)) {
+            label = label.substring(pattern.length);
+            break;
+        }
+    }
+    
+    // Clean up special cases
+    label = label.replace(/^WHO /, '').trim();
+    label = label.replace(/NO EXPLAIN WHY/, 'No, Explain Why');
+    label = label.replace(/DAILY YES NO/, 'Daily Training');
+    
+    return label;
+};
+
+// Constants for form rendering (outside renderForm so they're accessible)
+const EQUIP_MODEL_OPTIONS = ["MWS200", "MWS300", "MWS500", "MWS700", "MWS715", "Outro"];
+const COUNTRY_LIST = [
+    "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
+];
+const RATING_FIELDS = {
+    "WashTest_Quality_Rating": [
+        { value: "very bad", label: "😡 Muito Mau" },
+        { value: "bad", label: "😕 Mau" },
+        { value: "good", label: "🙂 Bom" },
+        { value: "very good", label: "😃 Muito Bom" }
+    ]
+};
+
 const renderForm = () => {
     const container = document.getElementById('form-sections-container');
     const sidebarContainer = document.getElementById('sidebar-sections');
@@ -1305,18 +1355,6 @@ const renderForm = () => {
         "Status_Installation_Training_Completed"
     ];
     const YESNO_DROPDOWN_FIELDS = [];
-    const EQUIP_MODEL_OPTIONS = ["MWS200", "MWS300", "MWS500", "MWS700", "MWS715", "Outro"];
-    const COUNTRY_LIST = [
-        "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
-    ];
-    const RATING_FIELDS = {
-        "WashTest_Quality_Rating": [
-            { value: "very bad", label: "😡 Muito Mau" },
-            { value: "bad", label: "😕 Mau" },
-            { value: "good", label: "🙂 Bom" },
-            { value: "very good", label: "😃 Muito Bom" }
-        ]
-    };
     const TECHNICIAN_FIELD = "Inst_Technician_Name";
     const getTechnicianOptions = () => {
         return Object.values(USERS)
@@ -1346,7 +1384,7 @@ const renderForm = () => {
                                 const noActive = editingDoc[field] === 'Não' ? 'active' : '';
                                 return `
                                     <div>
-                                        <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                        <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                         <div class="yes-no-buttons">
                                             <button type="button" class="btn-yes ${yesActive}" data-field="${field}" data-value="Sim" onclick="updateDocField('${field}', 'Sim')">YES</button>
                                             <button type="button" class="btn-no ${noActive}" data-field="${field}" data-value="Não" onclick="updateDocField('${field}', 'Não')">NO</button>
@@ -1453,7 +1491,7 @@ const renderForm = () => {
                             const noActive = editingDoc[field] === 'Não' ? 'active' : '';
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <div class="yes-no-buttons">
                                         <button type="button" class="btn-yes ${yesActive}" data-field="${field}" data-value="Sim" onclick="updateDocField('${field}', 'Sim')">YES</button>
                                         <button type="button" class="btn-no ${noActive}" data-field="${field}" data-value="Não" onclick="updateDocField('${field}', 'Não')">NO</button>
@@ -1465,7 +1503,7 @@ const renderForm = () => {
                         if (YESNO_DROPDOWN_FIELDS.includes(field)) {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
                                         <option value="">Selecionar...</option>
                                         <option value="Sim" ${editingDoc[field]==='Sim'?'selected':''}>Sim</option>
@@ -1474,15 +1512,29 @@ const renderForm = () => {
                                 </div>
                             `;
                         }
-                        // Dropdown for Equip_Model_Product
+                        // Button options for Equip_Model_Product
                         if (field === "Equip_Model_Product") {
+                            const showOtherInput = editingDoc[field] === 'Outro';
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
-                                        <option value="">Selecionar...</option>
-                                        ${EQUIP_MODEL_OPTIONS.map(opt => `<option value="${opt}" ${editingDoc[field]===opt?'selected':''}>${opt}</option>`).join('')}
-                                    </select>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
+                                    <div class="space-y-2">
+                                        <div class="grid grid-cols-2 gap-2">
+                                            ${EQUIP_MODEL_OPTIONS.map(opt => {
+                                                const isActive = editingDoc[field] === opt ? 'active' : '';
+                                                const btnClass = `px-4 py-2 rounded-lg border-2 font-bold text-sm transition-all cursor-pointer ${isActive ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-900 border-slate-300 hover:border-blue-600'}`;
+                                                return `<button type="button" class="${btnClass}" onclick="updateDocField('${field}', '${opt}')">${opt}</button>`;
+                                            }).join('')}
+                                        </div>
+                                        ${showOtherInput ? `
+                                            <input type="text" 
+                                                   class="form-input mt-3" 
+                                                   data-field="Equip_Model_Product_Other" 
+                                                   placeholder="Especifique o modelo/produto"
+                                                   value="${editingDoc['Equip_Model_Product_Other'] || ''}" 
+                                                   oninput="updateDocField('Equip_Model_Product_Other', this.value)">
+                                        ` : ''}
+                                    </div>
                                 </div>
                             `;
                         }
@@ -1490,7 +1542,7 @@ const renderForm = () => {
                         if (RATING_FIELDS[field]) {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
                                         <option value="">Selecionar...</option>
                                         ${RATING_FIELDS[field].map(opt => `<option value=\"${opt.value}\" ${editingDoc[field]===opt.value?'selected':''}>${opt.label}</option>`).join('')}
@@ -1502,7 +1554,7 @@ const renderForm = () => {
                         if (field === "Cust_Country") {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
                                         <option value="">Selecionar...</option>
                                         ${COUNTRY_LIST.map(opt => `<option value="${opt}" ${editingDoc[field]===opt?'selected':''}>${opt}</option>`).join('')}
@@ -1514,7 +1566,7 @@ const renderForm = () => {
                         if (field === TECHNICIAN_FIELD && sessionUser.role === 'ADMIN') {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
                                         <option value="">Selecionar...</option>
                                         ${getTechnicianOptions().replace(`value=\"${editingDoc[field]}\"`, `value=\"${editingDoc[field]}\" selected`)}
@@ -1526,7 +1578,7 @@ const renderForm = () => {
                         if (field === TECHNICIAN_FIELD && sessionUser.role === 'TECH') {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <input type="text" class="form-input" data-field="${field}" value="${editingDoc[field] || ''}" disabled>
                                 </div>
                             `;
@@ -1535,7 +1587,7 @@ const renderForm = () => {
                         if (field === "Inst_Date") {
                             return `
                                 <div>
-                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                     <input type="date" 
                                            class="form-input" 
                                            data-field="${field}" 
@@ -1566,7 +1618,7 @@ const renderForm = () => {
                         // Default: text input
                         return `
                             <div>
-                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
                                 <input type="text" 
                                        class="form-input" 
                                        data-field="${field}" 
@@ -1652,6 +1704,12 @@ window.updateDocField = (field, value) => {
                 btn.classList.add('active');
             }
         });
+    }
+    
+    // Re-render form for fields that need dynamic content updates
+    if (field === "Equip_Model_Product") {
+        renderForm();
+        lucide.createIcons();
     }
     
     updateUIsForProgress();

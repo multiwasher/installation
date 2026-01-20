@@ -93,6 +93,7 @@ const translationsData = {
     // 1.4 - EQUIPMENT AND ACCESSORIES IDENTIFICATION
     "Equip_Quantity": { pt: "Quantidade Equipamento", en: "Equipment Quantity", es: "Cantidad de equipos", fr: "Quantité d'équipement" },
     "Equip_Model_Product": { pt: "Modelo/Produto Equipamento", en: "Equipment Model/Product", es: "Modelo/Producto del equipo", fr: "Modèle/Produit d'équipement" },
+    "Equip_Model_Product_Other": { pt: "Especifique o modelo/produto", en: "Specify the model/product", es: "Especifique el modelo/producto", fr: "Spécifiez le modèle/produit" },
     "Equip_Serial_Number": { pt: "Número Série Equipamento", en: "Equipment Serial Number", es: "Número de serie del equipo", fr: "Numéro de série d'équipement" },
     "Equip_Delivered_Yes_No": { pt: "Equipamento Entregue (Sim/Não)", en: "Equipment Delivered (Yes/No)", es: "Equipo entregado (Sí/No)", fr: "Équipement livré (Oui/Non)" },
     "Equip_Notes": { pt: "Notas Equipamento", en: "Equipment Notes", es: "Notas del equipo", fr: "Notes équipement" },
