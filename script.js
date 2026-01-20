@@ -230,8 +230,8 @@ const FORM_STRUCTURE = [
     { id: "s1_4", label: "1.4 - Equipment and Accessories Identification", fields: ["Equip_Quantity", "Equip_Model_Product", "Equip_Serial_Number", "Equip_Delivered_Yes_No", "Equip_Notes"] },
     { id: "s1_5", label: "1.5 - EXTRAS", fields: ["EXTRA_SDS", "EXTRA_DRD", "EXTRA_DTC", "EXTRA_CRE_DRD", "EXTRA_IVS_DRD", "EXTRA_EFS", "EXTRA_EXD", "EXTRA_HMI", "EXTRA_STM"] },
     { id: "s2", label: "2 - Documentation", fields: ["Doc_Manual_Delivered_Explained", "Doc_Receiver_Name", "Doc_Receiver_Position", "Doc_Receiver_Phone", "Doc_Receiver_Email", "Doc_No_Explain_Why"] },
-    { id: "s3", label: "3 - Training (washing)", fields: ["Train_Wash_Daily_Yes_No", "Train_Wash_Who_Name", "Train_Wash_Who_Position", "Train_Wash_Who_Phone", "Train_Wash_Who_Email", "Train_Wash_No_Explain_Why"] },
-    { id: "s4", label: "4 - Training (cleaning)", fields: ["Train_Clean_Daily_Yes_No", "Train_Clean_Who_Name", "Train_Clean_Who_Position", "Train_Clean_Who_Phone", "Train_Clean_Who_Email", "Train_Clean_No_Explain_Why"] },
+    { id: "s3", label: "3 - Training (washing)", fields: ["Train_Wash_Daily_Yes_No", "Train_Wash_No_Explain_Why"], specialType: "training_washing_section" },
+    { id: "s4", label: "4 - Training (cleaning)", fields: ["Train_Clean_Daily_Yes_No", "Train_Clean_No_Explain_Why"], specialType: "training_cleaning_section" },
     { id: "s5", label: "5 - Measurements", fields: ["Meas_Water_Input_Temp", "Meas_Input_Pressure", "Meas_Water_Quality", "Meas_Electrical_Info", "Meas_Electrical_Consumption", "Meas_Consumption_Measurement", "Meas_Consumption_Who_Identified"] },
     { id: "s6", label: "6 - Washing", fields: ["WashTest_Performed_Yes_No", "WashTest_Quality_Rating", "WashTest_Answer_Explanation", "WashTest_Detergent_Used", "WashTest_Debit", "WashTest_Concentration"] },
     { id: "s7", label: "7 - Preventive Maintenance", fields: ["PrevMaint_Training_Yes_No", "PrevMaint_Who_Name", "PrevMaint_Who_Position", "PrevMaint_Who_Phone", "PrevMaint_Who_Email", "PrevMaint_No_Explain_Why"] },
@@ -1131,6 +1131,50 @@ window.updateProgramDataField = (idx, field, value) => {
     editingDoc.programData[idx][field] = value;
 };
 
+// --- TRAINING CLEANING ENTRY MANAGEMENT ---
+window.addTrainingCleaningEntry = () => {
+    if (!editingDoc.trainingCleaning) editingDoc.trainingCleaning = [];
+    editingDoc.trainingCleaning.push({ name: '', position: '', phone: '', email: '' });
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeTrainingCleaningEntry = (idx) => {
+    if (editingDoc.trainingCleaning) {
+        editingDoc.trainingCleaning.splice(idx, 1);
+        renderForm();
+        lucide.createIcons();
+    }
+};
+
+window.updateTrainingCleaningField = (idx, field, value) => {
+    if (!editingDoc.trainingCleaning) editingDoc.trainingCleaning = [];
+    editingDoc.trainingCleaning[idx] = editingDoc.trainingCleaning[idx] || {};
+    editingDoc.trainingCleaning[idx][field] = value;
+};
+
+// --- TRAINING WASHING ENTRY MANAGEMENT ---
+window.addTrainingWashingEntry = () => {
+    if (!editingDoc.trainingWashing) editingDoc.trainingWashing = [];
+    editingDoc.trainingWashing.push({ name: '', position: '', phone: '', email: '' });
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeTrainingWashingEntry = (idx) => {
+    if (editingDoc.trainingWashing) {
+        editingDoc.trainingWashing.splice(idx, 1);
+        renderForm();
+        lucide.createIcons();
+    }
+};
+
+window.updateTrainingWashingField = (idx, field, value) => {
+    if (!editingDoc.trainingWashing) editingDoc.trainingWashing = [];
+    editingDoc.trainingWashing[idx] = editingDoc.trainingWashing[idx] || {};
+    editingDoc.trainingWashing[idx][field] = value;
+};
+
 // --- PROGRAM & UTENSIL ENTRY MANAGEMENT ---
 window.addProgramEntry = () => {
     if (!editingDoc.programs) editingDoc.programs = [];
@@ -1431,7 +1475,121 @@ const renderForm = () => {
                         <span class="text-[10px] font-black text-slate-400">${prog}%</span>
                     </div>
                 </div>
-                ${section.specialType === 'program_section' ? `
+                ${section.specialType === 'training_washing_section' ? `
+                    <div class="space-y-12">
+                        <!-- Daily Training Field -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Wash_Daily_Yes_No', section.id)}</label>
+                                <div class="yes-no-buttons">
+                                    <button type="button" class="btn-yes ${editingDoc['Train_Wash_Daily_Yes_No'] === 'Sim' ? 'active' : ''}" onclick="updateDocField('Train_Wash_Daily_Yes_No', 'Sim')">YES</button>
+                                    <button type="button" class="btn-no ${editingDoc['Train_Wash_Daily_Yes_No'] === 'Não' ? 'active' : ''}" onclick="updateDocField('Train_Wash_Daily_Yes_No', 'Não')">NO</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Wash_No_Explain_Why', section.id)}</label>
+                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Wash_No_Explain_Why', this.value)">${editingDoc['Train_Wash_No_Explain_Why'] || ''}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Training Entries Section -->
+                        <div class="border-t pt-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Training Personnel</h4>
+                                <button type="button" onclick="addTrainingWashingEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Person
+                                </button>
+                            </div>
+                            <div id="training-washing-container" class="space-y-6">
+                                ${(editingDoc.trainingWashing || []).map((person, idx) => `
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <span class="text-sm font-bold text-slate-600">Person ${idx + 1}</span>
+                                            <button type="button" onclick="removeTrainingWashingEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Name</label>
+                                                <input type="text" class="form-input" value="${person.name || ''}" onchange="updateTrainingWashingField(${idx}, 'name', this.value)" placeholder="Enter name">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Position</label>
+                                                <input type="text" class="form-input" value="${person.position || ''}" onchange="updateTrainingWashingField(${idx}, 'position', this.value)" placeholder="Enter position">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Phone</label>
+                                                <input type="tel" class="form-input" value="${person.phone || ''}" onchange="updateTrainingWashingField(${idx}, 'phone', this.value)" placeholder="Enter phone">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Email</label>
+                                                <input type="email" class="form-input" value="${person.email || ''}" onchange="updateTrainingWashingField(${idx}, 'email', this.value)" placeholder="Enter email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                ` : section.specialType === 'training_cleaning_section' ? `
+                    <div class="space-y-12">
+                        <!-- Daily Training Field -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Clean_Daily_Yes_No', section.id)}</label>
+                                <div class="yes-no-buttons">
+                                    <button type="button" class="btn-yes ${editingDoc['Train_Clean_Daily_Yes_No'] === 'Sim' ? 'active' : ''}" onclick="updateDocField('Train_Clean_Daily_Yes_No', 'Sim')">YES</button>
+                                    <button type="button" class="btn-no ${editingDoc['Train_Clean_Daily_Yes_No'] === 'Não' ? 'active' : ''}" onclick="updateDocField('Train_Clean_Daily_Yes_No', 'Não')">NO</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Clean_No_Explain_Why', section.id)}</label>
+                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Clean_No_Explain_Why', this.value)">${editingDoc['Train_Clean_No_Explain_Why'] || ''}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Training Entries Section -->
+                        <div class="border-t pt-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Training Personnel</h4>
+                                <button type="button" onclick="addTrainingCleaningEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Person
+                                </button>
+                            </div>
+                            <div id="training-cleaning-container" class="space-y-6">
+                                ${(editingDoc.trainingCleaning || []).map((person, idx) => `
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <span class="text-sm font-bold text-slate-600">Person ${idx + 1}</span>
+                                            <button type="button" onclick="removeTrainingCleaningEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Name</label>
+                                                <input type="text" class="form-input" value="${person.name || ''}" onchange="updateTrainingCleaningField(${idx}, 'name', this.value)" placeholder="Enter name">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Position</label>
+                                                <input type="text" class="form-input" value="${person.position || ''}" onchange="updateTrainingCleaningField(${idx}, 'position', this.value)" placeholder="Enter position">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Phone</label>
+                                                <input type="tel" class="form-input" value="${person.phone || ''}" onchange="updateTrainingCleaningField(${idx}, 'phone', this.value)" placeholder="Enter phone">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Email</label>
+                                                <input type="email" class="form-input" value="${person.email || ''}" onchange="updateTrainingCleaningField(${idx}, 'email', this.value)" placeholder="Enter email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                ` : section.specialType === 'program_section' ? `
                     <div class="space-y-12">
                         <!-- Machine Programmed Fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
