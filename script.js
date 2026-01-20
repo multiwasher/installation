@@ -237,7 +237,7 @@ const FORM_STRUCTURE = [
     { id: "s7", label: "7 - Preventive Maintenance", fields: ["PrevMaint_Training_Yes_No", "PrevMaint_Who_Name", "PrevMaint_Who_Position", "PrevMaint_Who_Phone", "PrevMaint_Who_Email", "PrevMaint_No_Explain_Why"] },
     { id: "s8", label: "8 - Programming", fields: ["Prog_Training_Yes_No", "Prog_Training_Who_Name", "Prog_Training_Who_Position", "Prog_Training_Who_Phone", "Prog_Training_Who_Email", "Prog_Training_No_Explain_Why"] },
     { id: "s9", label: "9 - Program", fields: ["Machine_Programmed_Yes_No", "Machine_Programmed_For_Utensils"], specialType: "program_section" },
-    { id: "s10", label: "10 - Program Data", fields: ["Data_Wash_Time", "Data_Rinse_Time", "Data_Spin_Time", "Data_Wash_Temperature", "Data_Rinse_Temperature", "Data_Final_Ventilation", "Data_Open_Door_Ventilation"] },
+    { id: "s10", label: "10 - Program Data", fields: [], specialType: "program_data_section" },
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
     { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
     { id: "s13", label: "13 - Consumption", fields: ["Cons_Tension_Tests", "Cons_Heater_1_Tank_A", "Cons_Heater_2_Tank_A", "Cons_Heater_3_Tank_A", "Cons_Heater_4_Tank_A", "Cons_Heater_Boiler_1_A", "Cons_Heater_Boiler_2_A", "Cons_Washing_Pump_A", "Cons_Basket_Motor_4_Hz_A", "Cons_Basket_Motor_80_Hz_A", "Cons_Fan_A", "Cons_Rising_Pump_A", "Temp_Confirm_Tank", "Temp_Confirm_Boiler", "Relay_Supervision_Regulation_A", "Thermal_Reg_Rinsing_Pump_A", "Thermal_Reg_Fan_A", "Thermal_Variable_Speed_Drive_A_P305", "Washing_Pressure"] },
@@ -1103,6 +1103,34 @@ const renderDashboard = () => {
     }
 };
 
+// --- PROGRAM DATA ENTRY MANAGEMENT ---
+window.addProgramDataEntry = () => {
+    if (!editingDoc.programData) editingDoc.programData = [];
+    editingDoc.programData.push({ 
+        Data_Wash_Time: '', 
+        Data_Rinse_Time: '', 
+        Data_Spin_Time: '', 
+        Data_Wash_Temperature: '', 
+        Data_Rinse_Temperature: '', 
+        Data_Final_Ventilation: '', 
+        Data_Open_Door_Ventilation: '' 
+    });
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeProgramDataEntry = (idx) => {
+    editingDoc.programData.splice(idx, 1);
+    renderForm();
+    lucide.createIcons();
+};
+
+window.updateProgramDataField = (idx, field, value) => {
+    if (!editingDoc.programData) editingDoc.programData = [];
+    editingDoc.programData[idx] = editingDoc.programData[idx] || {};
+    editingDoc.programData[idx][field] = value;
+};
+
 // --- PROGRAM & UTENSIL ENTRY MANAGEMENT ---
 window.addProgramEntry = () => {
     if (!editingDoc.programs) editingDoc.programs = [];
@@ -1279,11 +1307,17 @@ window.getFieldLabel = (fieldName, sectionId) => {
     
     // Define prefix patterns to remove based on section
     const prefixPatterns = {
+        's1_1': ['INST '],  // 1.1 - Installation Responsibility
+        's1_2': ['CUST '],  // 1.2 - Customer Identification
+        's1_3': ['SVC '],  // 1.3 - Service Identification
+        's1_4': ['EQUIP '],  // 1.4 - Equipment and Accessories Identification
+        's1_5': ['EXTRA '],  // 1.5 - EXTRAS
+        's2': ['DOC '],  // 2 - Documentation
         's3': ['TRAIN WASH WHO ', 'TRAIN WASH NO ', 'TRAIN WASH '],  // 3 - Training (washing)
         's4': ['TRAIN CLEAN WHO ', 'TRAIN CLEAN NO ', 'TRAIN CLEAN '],  // 4 - Training (cleaning)
         's5': ['MEAS ', 'MEAS CONSUMPTION '],  // 5 - Measurements
-        's6': ['WASH TEST ', 'WASH '],  // 6 - Washing
-        's7': ['PREV MAINT WHO ', 'PREV MAINT NO ', 'PREV MAINT '],  // 7 - Preventive Maintenance
+        's6': ['WASHTEST '],  // 6 - Washing
+        's7': ['PREVMAINT '],  // 7 - Preventive Maintenance
         's8': ['PROG TRAINING WHO ', 'PROG TRAINING NO ', 'PROG TRAINING '],  // 8 - Programming
         's10': ['DATA '],  // 10 - Program Data
         's12': ['EVAL '],  // 12 - Points to evaluate
@@ -1303,7 +1337,10 @@ window.getFieldLabel = (fieldName, sectionId) => {
     
     // Clean up special cases
     label = label.replace(/^WHO /, '').trim();
-    label = label.replace(/NO EXPLAIN WHY/, 'No, Explain Why');
+    label = label.replace(/No Explain Why/i, 'IF NO,  EXPLAIN WHY');
+    if (!label.includes('IF NO,')) {
+        label = label.replace(/Explain Why/i, 'IF NO, EXPLAIN WHY');
+    }
     label = label.replace(/DAILY YES NO/, 'Daily Training');
     
     return label;
@@ -1314,6 +1351,25 @@ const EQUIP_MODEL_OPTIONS = ["MWS200", "MWS300", "MWS500", "MWS700", "MWS715", "
 const COUNTRY_LIST = [
     "Portugal", "Espanha", "França", "Alemanha", "Itália", "Reino Unido", "Irlanda", "Bélgica", "Holanda", "Luxemburgo", "Suíça", "Áustria", "Polónia", "República Checa", "Hungria", "Roménia", "Bulgária", "Grécia", "Turquia", "Estados Unidos", "Brasil", "Angola", "Moçambique", "Cabo Verde", "Outros"
 ];
+
+// Section 12 - Points to Evaluate dropdown options
+const EVAL_DROPDOWN_OPTIONS = {
+    "Eval_Machine_Type": ["Left", "Right"],
+    "Eval_Heating": ["Steam", "Electrical"],
+    "Eval_Assembly": ["Disassembled", "Assembled"],
+    "Eval_Language_Console": ["PT", "HR", "FR", "RU", "CZ", "PL", "IT", "RO", "NO", "DE", "ES", "EV", "HU", "DA", "EN", "FI", "LT", "ZH"],
+    "Eval_Unit_Setpoint_Temperature": ["°C", "°F"]
+};
+
+// Fields that should have Yes/No buttons in section 12
+const EVAL_YESNO_FIELDS = [
+    "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", 
+    "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", 
+    "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", 
+    "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", 
+    "Eval_Console_Calibration_Procedure"
+];
+
 const RATING_FIELDS = {
     "WashTest_Quality_Rating": [
         { value: "very bad", label: "😡 Muito Mau" },
@@ -1482,6 +1538,57 @@ const renderForm = () => {
                             </div>
                         </div>
                     </div>
+                ` : section.specialType === 'program_data_section' ? `
+                    <div class="space-y-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Program Data Entries</h4>
+                            <button type="button" onclick="addProgramDataEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i> Add Program Data
+                            </button>
+                        </div>
+                        <div id="program-data-container" class="space-y-6">
+                            ${(editingDoc.programData || []).map((programData, idx) => `
+                                <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="text-sm font-bold text-slate-600">Program Data ${idx + 1}</span>
+                                        <button type="button" onclick="removeProgramDataEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Wash Time</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Wash_Time || ''}" onchange="updateProgramDataField(${idx}, 'Data_Wash_Time', this.value)" placeholder="Enter wash time">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Rinse Time</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Rinse_Time || ''}" onchange="updateProgramDataField(${idx}, 'Data_Rinse_Time', this.value)" placeholder="Enter rinse time">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Spin Time</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Spin_Time || ''}" onchange="updateProgramDataField(${idx}, 'Data_Spin_Time', this.value)" placeholder="Enter spin time">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Wash Temperature</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Wash_Temperature || ''}" onchange="updateProgramDataField(${idx}, 'Data_Wash_Temperature', this.value)" placeholder="Enter wash temperature">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Rinse Temperature</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Rinse_Temperature || ''}" onchange="updateProgramDataField(${idx}, 'Data_Rinse_Temperature', this.value)" placeholder="Enter rinse temperature">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Final Ventilation</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Final_Ventilation || ''}" onchange="updateProgramDataField(${idx}, 'Data_Final_Ventilation', this.value)" placeholder="Enter final ventilation">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Open Door Ventilation</label>
+                                            <input type="text" class="form-input" value="${programData.Data_Open_Door_Ventilation || ''}" onchange="updateProgramDataField(${idx}, 'Data_Open_Door_Ventilation', this.value)" placeholder="Enter open door ventilation">
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
                 ` : `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${section.fields.map(field => {
@@ -1527,12 +1634,14 @@ const renderForm = () => {
                                             }).join('')}
                                         </div>
                                         ${showOtherInput ? `
-                                            <input type="text" 
-                                                   class="form-input mt-3" 
-                                                   data-field="Equip_Model_Product_Other" 
-                                                   placeholder="Especifique o modelo/produto"
-                                                   value="${editingDoc['Equip_Model_Product_Other'] || ''}" 
-                                                   oninput="updateDocField('Equip_Model_Product_Other', this.value)">
+                                            <div class="mt-3">
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">Machine Description</label>
+                                                <textarea 
+                                                       class="form-input" 
+                                                       data-field="Machine_Description" 
+                                                       placeholder="Enter machine description"
+                                                       oninput="updateDocField('Machine_Description', this.value)">${editingDoc['Machine_Description'] || ''}</textarea>
+                                            </div>
                                         ` : ''}
                                     </div>
                                 </div>
@@ -1593,6 +1702,45 @@ const renderForm = () => {
                                            data-field="${field}" 
                                            value="${editingDoc[field] || ''}" 
                                            oninput="updateDocField('${field}', this.value)">
+                                </div>
+                            `;
+                        }
+                        // Summary_Date as date input
+                        if (field === "Summary_Date") {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
+                                    <input type="date" 
+                                           class="form-input" 
+                                           data-field="${field}" 
+                                           value="${editingDoc[field] || ''}" 
+                                           oninput="updateDocField('${field}', this.value)">
+                                </div>
+                            `;
+                        }
+                        // Section 12 - Eval dropdown fields
+                        if (EVAL_DROPDOWN_OPTIONS[field]) {
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                        <option value="">Selecionar...</option>
+                                        ${EVAL_DROPDOWN_OPTIONS[field].map(opt => `<option value="${opt}" ${editingDoc[field] === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                                    </select>
+                                </div>
+                            `;
+                        }
+                        // Section 12 - Eval Yes/No button fields
+                        if (EVAL_YESNO_FIELDS.includes(field)) {
+                            const yesActive = editingDoc[field] === 'Sim' ? 'active' : '';
+                            const noActive = editingDoc[field] === 'Não' ? 'active' : '';
+                            return `
+                                <div>
+                                    <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
+                                    <div class="yes-no-buttons">
+                                        <button type="button" class="btn-yes ${yesActive}" data-field="${field}" data-value="Sim" onclick="updateDocField('${field}', 'Sim')">OK</button>
+                                        <button type="button" class="btn-no ${noActive}" data-field="${field}" data-value="Não" onclick="updateDocField('${field}', 'Não')">NOK</button>
+                                    </div>
                                 </div>
                             `;
                         }
@@ -1692,7 +1840,21 @@ window.updateDocField = (field, value) => {
         "Svc_Corrective_Maintenance",
         "Svc_Warranty",
         "Doc_Manual_Delivered_Explained",
-        "Status_Installation_Training_Completed"
+        "Status_Installation_Training_Completed",
+        // Section 12 - Points to evaluate Yes/No fields
+        "Eval_General_Condition",
+        "Eval_Sensor_Level_Tank",
+        "Eval_Tank_Boiler_Solenoid_Valve",
+        "Eval_EV_Steam_Vat_Boiler",
+        "Eval_Detergent_Dispenser_Dryer",
+        "Eval_Sensor_Safety_Interlock",
+        "Eval_Inductive_Position_Sensor",
+        "Eval_Unit_Parameters_Post_Discharge",
+        "Eval_Drive_Parameters_Reboot",
+        "Eval_Direction_Rotation_Basket",
+        "Eval_Wash_Rinse_Injectors",
+        "Eval_Screw_Tightening_Rinsing_Pump",
+        "Eval_Console_Calibration_Procedure"
     ];
     
     if (YESNO_BUTTON_FIELDS.includes(field)) {
@@ -1757,6 +1919,32 @@ const updateUIsForProgress = () => {
 
 const calculateProgress = (section) => {
     if (!editingDoc) return 0;
+    
+    // Special handling for program_data_section
+    if (section.specialType === 'program_data_section') {
+        const programDataList = editingDoc.programData || [];
+        if (programDataList.length === 0) return 0;
+        
+        // Check if at least one entry has data in any of the required fields
+        const dataFields = ["Data_Wash_Time", "Data_Rinse_Time", "Data_Spin_Time", "Data_Wash_Temperature", "Data_Rinse_Temperature", "Data_Final_Ventilation", "Data_Open_Door_Ventilation"];
+        const hasData = programDataList.some(entry => 
+            dataFields.some(field => entry[field] && entry[field].toString().trim() !== "")
+        );
+        return hasData ? 100 : 0;
+    }
+    
+    // Special handling for program_section
+    if (section.specialType === 'program_section') {
+        const hasPrograms = (editingDoc.programs || []).length > 0;
+        const hasUtensils = (editingDoc.utensils || []).length > 0;
+        if (hasPrograms || hasUtensils) return 100;
+        // Check if the regular fields are filled
+        const filled = section.fields.filter(f => editingDoc[f] && editingDoc[f].toString().trim() !== "");
+        return filled.length > 0 ? 50 : 0;
+    }
+    
+    // Default calculation for regular sections
+    if (section.fields.length === 0) return 0;
     const filled = section.fields.filter(f => editingDoc[f] && editingDoc[f].toString().trim() !== "");
     return Math.round((filled.length / section.fields.length) * 100);
 };
