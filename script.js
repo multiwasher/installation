@@ -236,7 +236,7 @@ const FORM_STRUCTURE = [
     { id: "s6", label: "6 - Washing", fields: ["WashTest_Performed_Yes_No", "WashTest_Quality_Rating", "WashTest_Answer_Explanation", "WashTest_Detergent_Used", "WashTest_Debit", "WashTest_Concentration"] },
     { id: "s7", label: "7 - Preventive Maintenance", fields: ["PrevMaint_Training_Yes_No", "PrevMaint_Who_Name", "PrevMaint_Who_Position", "PrevMaint_Who_Phone", "PrevMaint_Who_Email", "PrevMaint_No_Explain_Why"] },
     { id: "s8", label: "8 - Programming", fields: ["Prog_Training_Yes_No", "Prog_Training_Who_Name", "Prog_Training_Who_Position", "Prog_Training_Who_Phone", "Prog_Training_Who_Email", "Prog_Training_No_Explain_Why"] },
-    { id: "s9", label: "9 - Program", fields: ["Machine_Programmed_Yes_No", "Machine_Programmed_For_Utensils", "Program_Number", "Photo_Program1", "Photo_Program2", "Photo_Program3", "Photo_Program4_A", "Photo_Program4_B", "Utensils_Description_Trolley", "Photo_Utensil1", "Photo_Utensil2", "Photo_Utensil3", "Photo_Utensil4", "Photo_Utensil5"] },
+    { id: "s9", label: "9 - Program", fields: ["Machine_Programmed_Yes_No", "Machine_Programmed_For_Utensils"], specialType: "program_section" },
     { id: "s10", label: "10 - Program Data", fields: ["Data_Wash_Time", "Data_Rinse_Time", "Data_Spin_Time", "Data_Wash_Temperature", "Data_Rinse_Temperature", "Data_Final_Ventilation", "Data_Open_Door_Ventilation"] },
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
     { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
@@ -1103,6 +1103,101 @@ const renderDashboard = () => {
     }
 };
 
+// --- PROGRAM & UTENSIL ENTRY MANAGEMENT ---
+window.addProgramEntry = () => {
+    if (!editingDoc.programs) editingDoc.programs = [];
+    editingDoc.programs.push({ number: '', photos: [] });
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeProgramEntry = (idx) => {
+    editingDoc.programs.splice(idx, 1);
+    renderForm();
+    lucide.createIcons();
+};
+
+window.updateProgramField = (idx, field, value) => {
+    if (!editingDoc.programs) editingDoc.programs = [];
+    editingDoc.programs[idx] = editingDoc.programs[idx] || {};
+    editingDoc.programs[idx][field] = value;
+};
+
+window.addProgramPhoto = (idx) => {
+    if (!editingDoc.programs) editingDoc.programs = [];
+    if (!editingDoc.programs[idx].photos) editingDoc.programs[idx].photos = [];
+    editingDoc.programs[idx].photos.push('');
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeProgramPhoto = (idx, photoIdx) => {
+    if (editingDoc.programs && editingDoc.programs[idx] && editingDoc.programs[idx].photos) {
+        editingDoc.programs[idx].photos.splice(photoIdx, 1);
+        renderForm();
+        lucide.createIcons();
+    }
+};
+
+window.updateProgramPhoto = (idx, photoIdx, input) => {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (!editingDoc.programs) editingDoc.programs = [];
+            if (!editingDoc.programs[idx].photos) editingDoc.programs[idx].photos = [];
+            editingDoc.programs[idx].photos[photoIdx] = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+window.addUtensilEntry = () => {
+    if (!editingDoc.utensils) editingDoc.utensils = [];
+    editingDoc.utensils.push({ description: '', photos: [] });
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeUtensilEntry = (idx) => {
+    editingDoc.utensils.splice(idx, 1);
+    renderForm();
+    lucide.createIcons();
+};
+
+window.updateUtensilField = (idx, field, value) => {
+    if (!editingDoc.utensils) editingDoc.utensils = [];
+    editingDoc.utensils[idx] = editingDoc.utensils[idx] || {};
+    editingDoc.utensils[idx][field] = value;
+};
+
+window.addUtensilPhoto = (idx) => {
+    if (!editingDoc.utensils) editingDoc.utensils = [];
+    if (!editingDoc.utensils[idx].photos) editingDoc.utensils[idx].photos = [];
+    editingDoc.utensils[idx].photos.push('');
+    renderForm();
+    lucide.createIcons();
+};
+
+window.removeUtensilPhoto = (idx, photoIdx) => {
+    if (editingDoc.utensils && editingDoc.utensils[idx] && editingDoc.utensils[idx].photos) {
+        editingDoc.utensils[idx].photos.splice(photoIdx, 1);
+        renderForm();
+        lucide.createIcons();
+    }
+};
+
+window.updateUtensilPhoto = (idx, photoIdx, input) => {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (!editingDoc.utensils) editingDoc.utensils = [];
+            if (!editingDoc.utensils[idx].photos) editingDoc.utensils[idx].photos = [];
+            editingDoc.utensils[idx].photos[photoIdx] = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
 // --- LÓGICA DO FORMULÁRIO ---
 window.createNewForm = () => {
     editingDoc = { id: crypto.randomUUID() };
@@ -1242,6 +1337,114 @@ const renderForm = () => {
                         <span class="text-[10px] font-black text-slate-400">${prog}%</span>
                     </div>
                 </div>
+                ${section.specialType === 'program_section' ? `
+                    <div class="space-y-12">
+                        <!-- Machine Programmed Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${section.fields.map(field => {
+                                const yesActive = editingDoc[field] === 'Sim' ? 'active' : '';
+                                const noActive = editingDoc[field] === 'Não' ? 'active' : '';
+                                return `
+                                    <div>
+                                        <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${field.replace(/_/g, ' ')}</label>
+                                        <div class="yes-no-buttons">
+                                            <button type="button" class="btn-yes ${yesActive}" data-field="${field}" data-value="Sim" onclick="updateDocField('${field}', 'Sim')">YES</button>
+                                            <button type="button" class="btn-no ${noActive}" data-field="${field}" data-value="Não" onclick="updateDocField('${field}', 'Não')">NO</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <!-- Programs Section -->
+                        <div class="border-t pt-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Program Entries</h4>
+                                <button type="button" onclick="addProgramEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Program
+                                </button>
+                            </div>
+                            <div id="programs-container" class="space-y-6">
+                                ${(editingDoc.programs || []).map((prog, idx) => `
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <span class="text-sm font-bold text-slate-600">Program ${idx + 1}</span>
+                                            <button type="button" onclick="removeProgramEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Program Number</label>
+                                                <input type="text" class="form-input" value="${prog.number || ''}" onchange="updateProgramField(${idx}, 'number', this.value)" placeholder="Enter program number">
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Photos (Max 3)</label>
+                                            <div class="space-y-2" id="program-photos-${idx}">
+                                                ${(prog.photos || []).map((photo, photoIdx) => `
+                                                    <div class="flex items-end gap-2">
+                                                        <input type="file" accept="image/*" class="flex-1 form-input" onchange="updateProgramPhoto(${idx}, ${photoIdx}, this)">
+                                                        <button type="button" onclick="removeProgramPhoto(${idx}, ${photoIdx})" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 font-bold text-sm">Remove</button>
+                                                    </div>
+                                                    ${photo ? `<div class="relative inline-block"><img src="${photo}" alt="Program photo" class="w-20 h-20 object-cover rounded"><button type="button" onclick="removeProgramPhoto(${idx}, ${photoIdx})" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button></div>` : ''}
+                                                `).join('')}
+                                            </div>
+                                            ${(prog.photos || []).length < 3 ? `
+                                                <button type="button" onclick="addProgramPhoto(${idx})" class="mt-2 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1">
+                                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Photo
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Utensils Section -->
+                        <div class="border-t pt-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Utensils Entries</h4>
+                                <button type="button" onclick="addUtensilEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Utensils
+                                </button>
+                            </div>
+                            <div id="utensils-container" class="space-y-6">
+                                ${(editingDoc.utensils || []).map((utensil, idx) => `
+                                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <span class="text-sm font-bold text-slate-600">Utensil Set ${idx + 1}</span>
+                                            <button type="button" onclick="removeUtensilEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Description Trolley</label>
+                                                <input type="text" class="form-input" value="${utensil.description || ''}" onchange="updateUtensilField(${idx}, 'description', this.value)" placeholder="Enter trolley description">
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Photos</label>
+                                            <div class="space-y-2" id="utensil-photos-${idx}">
+                                                ${(utensil.photos || []).map((photo, photoIdx) => `
+                                                    <div class="flex items-end gap-2">
+                                                        <input type="file" accept="image/*" class="flex-1 form-input" onchange="updateUtensilPhoto(${idx}, ${photoIdx}, this)">
+                                                        <button type="button" onclick="removeUtensilPhoto(${idx}, ${photoIdx})" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 font-bold text-sm">Remove</button>
+                                                    </div>
+                                                    ${photo ? `<div class="relative inline-block"><img src="${photo}" alt="Utensil photo" class="w-20 h-20 object-cover rounded"><button type="button" onclick="removeUtensilPhoto(${idx}, ${photoIdx})" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button></div>` : ''}
+                                                `).join('')}
+                                            </div>
+                                            <button type="button" onclick="addUtensilPhoto(${idx})" class="mt-2 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1">
+                                                <i data-lucide="plus" class="w-4 h-4"></i> Add Photo
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                ` : `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${section.fields.map(field => {
                         // YES/NO Button fields
@@ -1373,6 +1576,7 @@ const renderForm = () => {
                         `;
                     }).join('')}
                 </div>
+                `}
             </div>
         `;
     }).join('');
@@ -1451,6 +1655,7 @@ window.updateDocField = (field, value) => {
     }
     
     updateUIsForProgress();
+    
     // Atualiza também o sidebar das secções
     const sidebarContainer = document.getElementById('sidebar-sections');
     if (sidebarContainer && !sidebarContainer.classList.contains('hidden')) {
