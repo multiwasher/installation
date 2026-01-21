@@ -1880,9 +1880,9 @@ const renderForm = () => {
                                     <tr class="bg-blue-100">
                                         <th class="border border-slate-300 px-2 md:px-3 py-3 text-left text-sm md:text-xs font-bold" style="width: auto;">Element</th>
                                         <th class="border border-slate-300 px-2 md:px-3 py-3 text-center text-sm md:text-xs font-bold">ID</th>            
-                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase 1 (A)</th>
-                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase 2 (A)</th>
-                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase 3 (A)</th>
+                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase1 (A)</th>
+                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase2 (A)</th>
+                                        <th class="border border-slate-300 px-3 md:px-4 py-3 text-center text-sm md:text-xs font-bold" style="width: calc((100% - 10px) / 3);">Phase3 (A)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
