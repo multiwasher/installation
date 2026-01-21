@@ -245,7 +245,7 @@ const FORM_STRUCTURE = [
     { id: "s9", label: "9 - Program", fields: ["Machine_Programmed_Yes_No", "Machine_Programmed_For_Utensils"], specialType: "program_section" },
     { id: "s10", label: "10 - Program Data", fields: [], specialType: "program_data_section" },
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
-    { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
+    { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heat", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
     { id: "s13", label: "13 - Consumption", fields: [], specialType: "consumption_measurements_section" },
     { id: "s14", label: "14 - Summary", fields: ["Summary_Notes", "Summary_Date", "Signature_Technician_Name", "Signature_Technician", "Signature_Customer_Name", "Signature_Customer"] }
 ];
@@ -1486,7 +1486,7 @@ const COUNTRY_LIST = [
 // Section 12 - Points to Evaluate dropdown options
 const EVAL_DROPDOWN_OPTIONS = {
     "Eval_Machine_Type": ["Left", "Right"],
-    "Eval_Heating": ["Steam", "Electrical"],
+    "Eval_Heat": ["Steam", "Electrical"],
     "Eval_Assembly": ["Disassembled", "Assembled"],
     "Eval_Language_Console": ["PT", "HR", "FR", "RU", "CZ", "PL", "IT", "RO", "NO", "DE", "ES", "EV", "HU", "DA", "EN", "FI", "LT", "ZH"],
     "Eval_Unit_Setpoint_Temperature": ["°C", "°F"]
@@ -2067,32 +2067,32 @@ const renderForm = () => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Element 1 Tank</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 1 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R4</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R4_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R4_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Element 2 Tank</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 2 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R5</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R5_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R5_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Element 3 Tank</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 3 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R6</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R6_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R6_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Element 4 Tank</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 4 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R7</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R7_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R7_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Boiler 1</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 1</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R2</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R2_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R2_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heating Boiler 2</td>
+                                        <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 2</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R3</td>
                                         <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R3_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R3_Value', this.value)"></td>
                                     </tr>
