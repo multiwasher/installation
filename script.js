@@ -2523,7 +2523,10 @@ window.generatePDF = (item, lang = 'en') => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
     let y = 20;
+    let totalPages = 0;
+    let isLastPage = false;
     
     // Função auxiliar para traduzir com fallback
     const translateField = (text, targetLang) => {
@@ -2548,22 +2551,24 @@ window.generatePDF = (item, lang = 'en') => {
         signaturePresent: { pt: "[Assinatura Presente]", en: "[Signature Present]", es: "[Firma Presente]", fr: "[Signature Présente]" }
     };
 
-    // Add logo to top left (40mm width, aspect ratio maintained automatically)
+    // Add logo to top left (new logo) - increased 15%
     try {
-        doc.addImage('https://static.wixstatic.com/media/a6967f_d83f45c5e4f446009fcfd984d5d85f6f~mv2.png', 'PNG', 20, 10, 35, 0);
+        doc.addImage('https://static.wixstatic.com/media/a6967f_eee0d017524f4a48bf2870cc2385c10b~mv2.png', 'PNG', 20, 10, 46, 0);
         y = 50;
     } catch (e) {
-        console.log("Could not load logo image");
+        console.log("Could not load left logo image");
         y = 20;
     }
 
+    // Add old logo to top right
+    try {
+        doc.addImage('https://static.wixstatic.com/media/a6967f_d83f45c5e4f446009fcfd984d5d85f6f~mv2.png', 'PNG', pageWidth - 55, 10, 35, 0);
+    } catch (e) {
+        console.log("Could not load right logo image");
+    }
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(0, 74, 173);
-    doc.text("SOMENGIL", pageWidth / 2, y, { align: "center" });
-    
-    y += 10;
-    doc.setFontSize(12);
+    doc.setFontSize(14);
     doc.setTextColor(100, 100, 100);
     doc.text(pdfTexts.title[lang], pageWidth / 2, y, { align: "center" });
     
@@ -2595,7 +2600,7 @@ window.generatePDF = (item, lang = 'en') => {
 
         doc.setFont("helvetica", "normal");
         section.fields.forEach(field => {
-            if (y > 280) { doc.addPage(); y = 20; }
+            if (y > 270) { doc.addPage(); y = 20; }
             const val = item[field] || "---";
             // Traduzir o rótulo do campo se existir tradução
             const translatedLabel = translateField(field, lang);
@@ -2608,26 +2613,33 @@ window.generatePDF = (item, lang = 'en') => {
                 if (val.startsWith('data:image')) {
                     // Image is already base64 encoded
                     try {
-                        doc.addImage(val, 'PNG', 80, y - 2, 60, 30);
+                        doc.addImage(val, 'PNG', 110, y - 2, 60, 30);
                         y += 35;
                     } catch (e) {
                         doc.setFont("helvetica", "normal");
-                        doc.text(pdfTexts.signatureImage[lang], 80, y);
+                        doc.text(pdfTexts.signatureImage[lang], 110, y);
                         y += 7;
                     }
                 } else {
                     doc.setFont("helvetica", "normal");
-                    doc.text(pdfTexts.signaturePresent[lang], 80, y);
+                    doc.text(pdfTexts.signaturePresent[lang], 110, y);
                     y += 7;
                 }
             } else {
                 doc.setFont("helvetica", "normal");
-                doc.text(`${val}`, 80, y);
+                doc.text(`${val}`, 110, y);
                 y += 7;
             }
         });
         y += 5;
     });
+
+    // Add footer logo to bottom right of last page - decreased 15%
+    try {
+        doc.addImage('https://static.wixstatic.com/media/a6967f_0db968f0a9864debae3bd716ad0ebeb6~mv2.png', 'PNG', pageWidth - 55, pageHeight - 40, 38, 0);
+    } catch (e) {
+        console.log("Could not load footer logo image");
+    }
 
     const filename = lang === 'pt' ? `Ficha_${item.Equip_Serial_Number || 'Somengil'}.pdf` : 
                      lang === 'en' ? `Sheet_${item.Equip_Serial_Number || 'Somengil'}.pdf` :

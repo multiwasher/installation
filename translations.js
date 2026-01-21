@@ -66,7 +66,7 @@ const translationsData = {
     
     // ========== TRADUÇÕES DOS CAMPOS DO FORMULÁRIO ==========
     // 1.1 - INSTALLATION RESPONSIBILITY
-    "Inst_Status_Planned_NotPlanned": { pt: "Status Instalação (Planejada/Não Planejada)", en: "Installation Status (Planned/Not Planned)", es: "Estado de instalación (Planificada/No planificada)", fr: "Statut installation (Prévue/Non prévue)" },
+    "Inst_Status_Planned_NotPlanned": { pt: "Status Instalação (Planeada/Não Planeada)", en: "Installation Status (Planned/Not Planned)", es: "Estado de instalación (Planificada/No planificada)", fr: "Statut installation (Prévue/Non prévue)" },
     "Inst_Date": { pt: "Data Instalação", en: "Installation Date", es: "Fecha de instalación", fr: "Date d'installation" },
     "Inst_Company": { pt: "Empresa Instalação", en: "Installation Company", es: "Empresa de instalación", fr: "Entreprise d'installation" },
     "Inst_Technician_Name": { pt: "Nome Técnico Instalação", en: "Installation Technician Name", es: "Nombre del técnico de instalación", fr: "Nom du technicien d'installation" },
