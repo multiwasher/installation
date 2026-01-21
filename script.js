@@ -247,6 +247,7 @@ const FORM_STRUCTURE = [
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
     { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
     { id: "s13", label: "13 - Consumption", fields: ["Cons_Tension_Tests", "Cons_Heater_1_Tank_A", "Cons_Heater_2_Tank_A", "Cons_Heater_3_Tank_A", "Cons_Heater_4_Tank_A", "Cons_Heater_Boiler_1_A", "Cons_Heater_Boiler_2_A", "Cons_Washing_Pump_A", "Cons_Basket_Motor_4_Hz_A", "Cons_Basket_Motor_80_Hz_A", "Cons_Fan_A", "Cons_Rising_Pump_A", "Cons_Total_Consumption_In_Operation_A", "Temp_Confirm_Tank", "Temp_Confirm_Boiler", "Relay_Supervision_Regulation_A", "Thermal_Reg_Rinsing_Pump_A", "Thermal_Reg_Fan_A", "Thermal_Variable_Speed_Drive_A_P305", "Washing_Pressure"] },
+    { id: "s13_1", label: "13_1 - CONSUMPTION MEASUREMENTS", fields: [], specialType: "consumption_measurements_section" },
     { id: "s14", label: "14 - Summary", fields: ["Summary_Notes", "Summary_Date", "Signature_Technician_Name", "Signature_Technician", "Signature_Customer_Name", "Signature_Customer"] }
 ];
 
@@ -1756,6 +1757,246 @@ const renderForm = () => {
                                     </div>
                                 </div>
                             `).join('')}
+                        </div>
+                    </div>
+                ` : section.specialType === 'consumption_measurements_section' ? `
+                    <div class="space-y-8">
+                        <!-- Table 1: Tension Tests -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Tension in the tests (V)</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Tension in the tests (V)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.Tension_Tests_Value || ''}" onchange="updateDocField('Tension_Tests_Value', this.value)" placeholder="Enter value"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 2: Consumption Elements -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">ID</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Phase 1</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Phase 2</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Phase 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 1 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R4</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R4_Phase1 || ''}" onchange="updateDocField('ConsMeas_R4_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R4_Phase2 || ''}" onchange="updateDocField('ConsMeas_R4_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R4_Phase3 || ''}" onchange="updateDocField('ConsMeas_R4_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 2 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R5</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R5_Phase1 || ''}" onchange="updateDocField('ConsMeas_R5_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R5_Phase2 || ''}" onchange="updateDocField('ConsMeas_R5_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R5_Phase3 || ''}" onchange="updateDocField('ConsMeas_R5_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 3 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R6</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R6_Phase1 || ''}" onchange="updateDocField('ConsMeas_R6_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R6_Phase2 || ''}" onchange="updateDocField('ConsMeas_R6_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R6_Phase3 || ''}" onchange="updateDocField('ConsMeas_R6_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 4 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R7</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R7_Phase1 || ''}" onchange="updateDocField('ConsMeas_R7_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R7_Phase2 || ''}" onchange="updateDocField('ConsMeas_R7_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R7_Phase3 || ''}" onchange="updateDocField('ConsMeas_R7_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 1 (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R2</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R2_Phase1 || ''}" onchange="updateDocField('ConsMeas_R2_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R2_Phase2 || ''}" onchange="updateDocField('ConsMeas_R2_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R2_Phase3 || ''}" onchange="updateDocField('ConsMeas_R2_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 2 (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">R3</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R3_Phase1 || ''}" onchange="updateDocField('ConsMeas_R3_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R3_Phase2 || ''}" onchange="updateDocField('ConsMeas_R3_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_R3_Phase3 || ''}" onchange="updateDocField('ConsMeas_R3_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Washing pump consumption (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">M1</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M1_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M1_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M1_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Cons. Basket Motor 4 Hz (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">M11</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_4Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_4Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_4Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Cons. Basket Motor 80 Hz (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">M11</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_80Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_80Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M11_80Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Fan Consumption (A) - M10</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">M10</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M10_Fan_Phase1 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M10_Fan_Phase2 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_M10_Fan_Phase3 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Rising Pump (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">M1</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Rising_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Rising_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Rising_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase3', this.value)"></td>
+                                    </tr>
+                                    <tr class="bg-yellow-50">
+                                        <td class="border border-slate-300 px-3 py-2 text-xs font-bold">Total Consumption in operation (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">-</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Total_Phase1 || ''}" onchange="updateDocField('ConsMeas_Total_Phase1', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Total_Phase2 || ''}" onchange="updateDocField('ConsMeas_Total_Phase2', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Total_Phase3 || ''}" onchange="updateDocField('ConsMeas_Total_Phase3', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 3: Temperature Confirmation -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Machine (°C/°F)</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Multimeter (°C/°F)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Temperature confirmation Tank (°C/°F)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Temp_Tank_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Machine', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Temp_Tank_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Multimeter', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Boiler Temperature confirmation (°C/°F)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Temp_Boiler_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Machine', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Temp_Boiler_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Multimeter', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 4: Supervision -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Minimum</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Maximum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Supervision of the rising pump (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Supervision_Min || ''}" onchange="updateDocField('ConsMeas_Supervision_Min', this.value)"></td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Supervision_Max || ''}" onchange="updateDocField('ConsMeas_Supervision_Max', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 5: Variable Speed Drive -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Thermal variable speed drive control [P305] (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Variable_Speed_Value || ''}" onchange="updateDocField('ConsMeas_Variable_Speed_Value', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 6: Washing Pressure -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Value (bar/PSI)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Washing pressure (bar/PSI)</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Washing_Pressure_Value || ''}" onchange="updateDocField('ConsMeas_Washing_Pressure_Value', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table 7: Thermal Values -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse border border-slate-300">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="border border-slate-300 px-3 py-2 text-left text-xs font-bold">Element</th>
+                                        <th class="border border-slate-300 px-3 py-2 text-center text-xs font-bold">Value Thermics</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 1 Tank (A) | R4 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R4_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R4_Value', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 2 Tank (A) | R5 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R5_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R5_Value', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 3 Tank (A) | R6 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R6_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R6_Value', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 4 Tank (A) | R7 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R7_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R7_Value', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 1 (A) | R2 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R2_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R2_Value', this.value)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 2 (A) | R3 | VALUE OF THERMICS</td>
+                                        <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R3_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R3_Value', this.value)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 ` : `
