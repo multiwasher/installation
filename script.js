@@ -11,10 +11,16 @@ const uiTranslations = {
     'Sign In': { pt: 'Entrar', en: 'Sign In', es: 'Iniciar sesión', fr: 'Se connecter' },
 };
 
+// Merge translations from translations.js
+if (typeof translationsData !== 'undefined') {
+    Object.assign(uiTranslations, translationsData);
+}
+window.uiTranslations = uiTranslations;
+
 // Função para traduzir um texto
 window.t = (key) => {
-    if (uiTranslations[key]) {
-        return uiTranslations[key][window.currentLanguage] || uiTranslations[key]['en'];
+    if (window.uiTranslations && window.uiTranslations[key]) {
+        return window.uiTranslations[key][window.currentLanguage] || window.uiTranslations[key]['en'];
     }
     return key;
 };
@@ -240,7 +246,7 @@ const FORM_STRUCTURE = [
     { id: "s10", label: "10 - Program Data", fields: [], specialType: "program_data_section" },
     { id: "s11", label: "11 - Status Training", fields: ["Status_Installation_Training_Completed"] },
     { id: "s12", label: "12 - Points to evaluate", fields: ["Eval_Machine_Type", "Eval_Heating", "Eval_Assembly", "Eval_General_Condition", "Eval_Sensor_Level_Tank", "Eval_Tank_Boiler_Solenoid_Valve", "Eval_EV_Steam_Vat_Boiler", "Eval_Detergent_Dispenser_Dryer", "Eval_Sensor_Safety_Interlock", "Eval_Inductive_Position_Sensor", "Eval_Unit_Parameters_Post_Discharge", "Eval_Drive_Parameters_Reboot", "Eval_Direction_Rotation_Basket", "Eval_Wash_Rinse_Injectors", "Eval_Screw_Tightening_Rinsing_Pump", "Eval_Console_Calibration_Procedure", "Eval_Language_Console", "Eval_Unit_Setpoint_Temperature"] },
-    { id: "s13", label: "13 - Consumption", fields: ["Cons_Tension_Tests", "Cons_Heater_1_Tank_A", "Cons_Heater_2_Tank_A", "Cons_Heater_3_Tank_A", "Cons_Heater_4_Tank_A", "Cons_Heater_Boiler_1_A", "Cons_Heater_Boiler_2_A", "Cons_Washing_Pump_A", "Cons_Basket_Motor_4_Hz_A", "Cons_Basket_Motor_80_Hz_A", "Cons_Fan_A", "Cons_Rising_Pump_A", "Temp_Confirm_Tank", "Temp_Confirm_Boiler", "Relay_Supervision_Regulation_A", "Thermal_Reg_Rinsing_Pump_A", "Thermal_Reg_Fan_A", "Thermal_Variable_Speed_Drive_A_P305", "Washing_Pressure"] },
+    { id: "s13", label: "13 - Consumption", fields: ["Cons_Tension_Tests", "Cons_Heater_1_Tank_A", "Cons_Heater_2_Tank_A", "Cons_Heater_3_Tank_A", "Cons_Heater_4_Tank_A", "Cons_Heater_Boiler_1_A", "Cons_Heater_Boiler_2_A", "Cons_Washing_Pump_A", "Cons_Basket_Motor_4_Hz_A", "Cons_Basket_Motor_80_Hz_A", "Cons_Fan_A", "Cons_Rising_Pump_A", "Cons_Total_Consumption_In_Operation_A", "Temp_Confirm_Tank", "Temp_Confirm_Boiler", "Relay_Supervision_Regulation_A", "Thermal_Reg_Rinsing_Pump_A", "Thermal_Reg_Fan_A", "Thermal_Variable_Speed_Drive_A_P305", "Washing_Pressure"] },
     { id: "s14", label: "14 - Summary", fields: ["Summary_Notes", "Summary_Date", "Signature_Technician_Name", "Signature_Technician", "Signature_Customer_Name", "Signature_Customer"] }
 ];
 
@@ -1347,6 +1353,11 @@ window.saveSignatureCustomer = () => {
 
 // Function to get clean field label by removing section-specific prefixes
 window.getFieldLabel = (fieldName, sectionId) => {
+    // First, check if there's a translation for this field
+    if (window.uiTranslations && window.uiTranslations[fieldName]) {
+        return window.uiTranslations[fieldName][window.currentLanguage] || window.uiTranslations[fieldName]['en'];
+    }
+    
     let label = fieldName.replace(/_/g, ' ');
     
     // Define prefix patterns to remove based on section
