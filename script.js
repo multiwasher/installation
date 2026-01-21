@@ -1594,7 +1594,7 @@ const renderForm = () => {
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Wash_No_Explain_Why', section.id)}</label>
-                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Wash_No_Explain_Why', this.value)">${editingDoc['Train_Wash_No_Explain_Why'] || ''}</textarea>
+                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Wash_No_Explain_Why', this.value, this)">${editingDoc['Train_Wash_No_Explain_Why'] || ''}</textarea>
                             </div>
                         </div>
 
@@ -1651,7 +1651,7 @@ const renderForm = () => {
                             </div>
                             <div>
                                 <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel('Train_Clean_No_Explain_Why', section.id)}</label>
-                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Clean_No_Explain_Why', this.value)">${editingDoc['Train_Clean_No_Explain_Why'] || ''}</textarea>
+                                <textarea class="form-input" placeholder="Enter reason if no training..." onchange="updateDocField('Train_Clean_No_Explain_Why', this.value, this)">${editingDoc['Train_Clean_No_Explain_Why'] || ''}</textarea>
                             </div>
                         </div>
 
@@ -1867,7 +1867,7 @@ const renderForm = () => {
                                 <tbody>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Tension in the tests</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.Tension_Tests_Value || ''}" onchange="updateDocField('Tension_Tests_Value', this.value)" placeholder="Enter value"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.Tension_Tests_Value || ''}" onchange="updateDocField('Tension_Tests_Value', this.value, this)" placeholder="Enter value"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1889,86 +1889,86 @@ const renderForm = () => {
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 1 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R4</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase1 || ''}" onchange="updateDocField('ConsMeas_R4_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase2 || ''}" onchange="updateDocField('ConsMeas_R4_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase3 || ''}" onchange="updateDocField('ConsMeas_R4_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase1 || ''}" onchange="updateDocField('ConsMeas_R4_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase2 || ''}" onchange="updateDocField('ConsMeas_R4_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R4_Phase3 || ''}" onchange="updateDocField('ConsMeas_R4_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 2 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R5</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase1 || ''}" onchange="updateDocField('ConsMeas_R5_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase2 || ''}" onchange="updateDocField('ConsMeas_R5_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase3 || ''}" onchange="updateDocField('ConsMeas_R5_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase1 || ''}" onchange="updateDocField('ConsMeas_R5_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase2 || ''}" onchange="updateDocField('ConsMeas_R5_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R5_Phase3 || ''}" onchange="updateDocField('ConsMeas_R5_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 3 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R6</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase1 || ''}" onchange="updateDocField('ConsMeas_R6_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase2 || ''}" onchange="updateDocField('ConsMeas_R6_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase3 || ''}" onchange="updateDocField('ConsMeas_R6_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase1 || ''}" onchange="updateDocField('ConsMeas_R6_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase2 || ''}" onchange="updateDocField('ConsMeas_R6_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R6_Phase3 || ''}" onchange="updateDocField('ConsMeas_R6_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 4 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R7</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase1 || ''}" onchange="updateDocField('ConsMeas_R7_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase2 || ''}" onchange="updateDocField('ConsMeas_R7_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase3 || ''}" onchange="updateDocField('ConsMeas_R7_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase1 || ''}" onchange="updateDocField('ConsMeas_R7_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase2 || ''}" onchange="updateDocField('ConsMeas_R7_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R7_Phase3 || ''}" onchange="updateDocField('ConsMeas_R7_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 1</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R2</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase1 || ''}" onchange="updateDocField('ConsMeas_R2_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase2 || ''}" onchange="updateDocField('ConsMeas_R2_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase3 || ''}" onchange="updateDocField('ConsMeas_R2_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase1 || ''}" onchange="updateDocField('ConsMeas_R2_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase2 || ''}" onchange="updateDocField('ConsMeas_R2_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R2_Phase3 || ''}" onchange="updateDocField('ConsMeas_R2_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 2</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R3</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase1 || ''}" onchange="updateDocField('ConsMeas_R3_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase2 || ''}" onchange="updateDocField('ConsMeas_R3_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase3 || ''}" onchange="updateDocField('ConsMeas_R3_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase1 || ''}" onchange="updateDocField('ConsMeas_R3_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase2 || ''}" onchange="updateDocField('ConsMeas_R3_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_R3_Phase3 || ''}" onchange="updateDocField('ConsMeas_R3_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Washing pump usage</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">M1</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M1_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_M1_Pump_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Basket Motor 4 Hz</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">M11</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_4Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_4Hz_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Basket Motor 80 Hz</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">M11</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase1 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase2 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M11_80Hz_Phase3 || ''}" onchange="updateDocField('ConsMeas_M11_80Hz_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Fan Usage</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">M10</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase1 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase2 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase3 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase1 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase2 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_M10_Fan_Phase3 || ''}" onchange="updateDocField('ConsMeas_M10_Fan_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Consumption Rising Pump</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">M1</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase1 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase2 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Rising_Pump_Phase3 || ''}" onchange="updateDocField('ConsMeas_Rising_Pump_Phase3', this.value, this)"></td>
                                     </tr>
                                     <tr class="bg-yellow-50">
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs font-bold">Total Consumption in operation</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">-</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase1 || ''}" onchange="updateDocField('ConsMeas_Total_Phase1', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase2 || ''}" onchange="updateDocField('ConsMeas_Total_Phase2', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase3 || ''}" onchange="updateDocField('ConsMeas_Total_Phase3', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase1 || ''}" onchange="updateDocField('ConsMeas_Total_Phase1', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase2 || ''}" onchange="updateDocField('ConsMeas_Total_Phase2', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="padding: 0; border-radius: 0; margin: 0; font-size: 0.875rem;" value="${editingDoc.ConsMeas_Total_Phase3 || ''}" onchange="updateDocField('ConsMeas_Total_Phase3', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1987,13 +1987,13 @@ const renderForm = () => {
                                 <tbody>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Temperature confirmation Tank</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Tank_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Machine', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Tank_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Multimeter', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Tank_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Machine', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Tank_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Tank_Multimeter', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Boiler Temperature confirmation</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Boiler_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Machine', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Boiler_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Multimeter', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Boiler_Machine || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Machine', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Temp_Boiler_Multimeter || ''}" onchange="updateDocField('ConsMeas_Temp_Boiler_Multimeter', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2012,8 +2012,8 @@ const renderForm = () => {
                                 <tbody>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Supervision of the rising pump</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Supervision_Min || ''}" onchange="updateDocField('ConsMeas_Supervision_Min', this.value)"></td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Supervision_Max || ''}" onchange="updateDocField('ConsMeas_Supervision_Max', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Supervision_Min || ''}" onchange="updateDocField('ConsMeas_Supervision_Min', this.value, this)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Supervision_Max || ''}" onchange="updateDocField('ConsMeas_Supervision_Max', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2031,7 +2031,7 @@ const renderForm = () => {
                                 <tbody>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Thermal variable speed drive control [P305]</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Variable_Speed_Value || ''}" onchange="updateDocField('ConsMeas_Variable_Speed_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Variable_Speed_Value || ''}" onchange="updateDocField('ConsMeas_Variable_Speed_Value', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2049,7 +2049,7 @@ const renderForm = () => {
                                 <tbody>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Washing pressure</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Washing_Pressure_Value || ''}" onchange="updateDocField('ConsMeas_Washing_Pressure_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Washing_Pressure_Value || ''}" onchange="updateDocField('ConsMeas_Washing_Pressure_Value', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2069,32 +2069,32 @@ const renderForm = () => {
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 1 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R4</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R4_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R4_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R4_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R4_Value', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 2 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R5</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R5_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R5_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R5_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R5_Value', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 3 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R6</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R6_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R6_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R6_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R6_Value', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Element 4 Tank</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R7</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R7_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R7_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R7_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R7_Value', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 1</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R2</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R2_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R2_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R2_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R2_Value', this.value, this)"></td>
                                     </tr>
                                     <tr>
                                         <td class="border border-slate-300 px-2 md:px-3 py-3 text-sm md:text-xs">Cons. Heat Boiler 2</td>
                                         <td class="border border-slate-300 px-0 md:px-0.5 py-3 text-center text-sm md:text-xs" style="width: 10px; min-width: 10px; max-width: 10px;">R3</td>
-                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R3_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R3_Value', this.value)"></td>
+                                        <td class="border border-slate-300 px-1.5 md:px-2 py-1" style="width: calc((100% - 10px) / 3);"><input type="text" class="form-input w-full text-sm md:text-xs" style="/* min-width: 0px; */padding: 0.10rem 0.5rem;font-size: 0.875rem;" value="${editingDoc.ConsMeas_Thermal_R3_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R3_Value', this.value, this)"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2122,7 +2122,7 @@ const renderForm = () => {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value, this)">
                                         <option value="">Selecionar...</option>
                                         <option value="Sim" ${editingDoc[field]==='Sim'?'selected':''}>Sim</option>
                                         <option value="Não" ${editingDoc[field]==='Não'?'selected':''}>Não</option>
@@ -2163,7 +2163,7 @@ const renderForm = () => {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value, this)">
                                         <option value="">Selecionar...</option>
                                         ${RATING_FIELDS[field].map(opt => `<option value=\"${opt.value}\" ${editingDoc[field]===opt.value?'selected':''}>${opt.label}</option>`).join('')}
                                     </select>
@@ -2175,7 +2175,7 @@ const renderForm = () => {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value, this)">
                                         <option value="">Selecionar...</option>
                                         ${COUNTRY_LIST.map(opt => `<option value="${opt}" ${editingDoc[field]===opt?'selected':''}>${opt}</option>`).join('')}
                                     </select>
@@ -2187,7 +2187,7 @@ const renderForm = () => {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value, this)">
                                         <option value="">Selecionar...</option>
                                         ${getTechnicianOptions().replace(`value=\"${editingDoc[field]}\"`, `value=\"${editingDoc[field]}\" selected`)}
                                     </select>
@@ -2234,7 +2234,7 @@ const renderForm = () => {
                             return `
                                 <div>
                                     <label class="text-[10px] font-black text-slate-400 uppercase block pl-1 mb-2 tracking-wider">${getFieldLabel(field, section.id)}</label>
-                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value)">
+                                    <select class="form-input" data-field="${field}" onchange="updateDocField('${field}', this.value, this)">
                                         <option value="">Selecionar...</option>
                                         ${EVAL_DROPDOWN_OPTIONS[field].map(opt => `<option value="${opt}" ${editingDoc[field] === opt ? 'selected' : ''}>${opt}</option>`).join('')}
                                     </select>
@@ -2323,8 +2323,13 @@ const renderForm = () => {
     }, 100);
 };
 
-window.updateDocField = (field, value) => {
+window.updateDocField = (field, value, element) => {
     editingDoc[field] = value;
+    
+    // Mark the input field as edited by adding the 'edited' class
+    if (element) {
+        element.classList.add('edited');
+    }
     
     // Update button states for YES/NO button fields
     const YESNO_BUTTON_FIELDS = [

@@ -279,14 +279,15 @@ body {
     padding: 0.25rem 1rem;
     border-radius: 0.2rem;
     /*border: 1px solid #e2e8f0;*/
-    background: #f5f3f3;
+    background: rgb(245, 243, 243);
     font-weight: 600;
     font-size: 0.875rem;
     outline: none;
     transition: border-color 0.2s, background 0.2s, color 0.2s;
     color: rgb(0, 0, 0);
 }
-.form-input:focus { border-color: var(--somengil-blue); background: hwb(182 44% 3%); color: black; }
+.form-input:focus { border-color: var(--somengil-blue); background: rgb(27, 183, 245); color: black; }
+.form-input.edited { background: rgb(189, 232, 249); color: black; }
 
 /* Table form inputs - increased height */
 td .form-input {
@@ -300,7 +301,7 @@ td .form-input {
 .main-title {
   font-size: 2.25rem; /* text-4xl */
   font-weight: 900;    /* font-black */
-  color: #bfcff5;      /* text-slate-900 */
+  color: rgb(200, 245, 243);      /* text-slate-900 */
   letter-spacing: -0.04em; /* tracking-tighter */
   line-height: 1.1;
   margin-bottom: 0.25em;
