@@ -1032,36 +1032,70 @@ window.generateFlightsPDF = (lang = 'en') => {
 const renderTable = () => {
     if (!sessionUser) return;
     const tbody = document.getElementById('table-body');
+    const theadRow = document.querySelector('thead tr');
     const dataToShow = sessionUser.role === 'ADMIN' 
         ? complianceData 
         : complianceData.filter(d => d.Inst_Technician_Name === sessionUser.name);
 
+    // Update table headers based on user role
+    if (theadRow && sessionUser.role === 'TECH') {
+        theadRow.innerHTML = `
+            <th class="px-8 py-4 text-left text-[10px] font-black text-slate-400 uppercase">Serial</th>
+            <th class="px-8 py-4 text-left text-[10px] font-black text-slate-400 uppercase">Cliente</th>
+            <th class="px-8 py-4 text-left text-[10px] font-black text-slate-400 uppercase">Data</th>
+            <th class="px-8 py-4 text-left text-[10px] font-black text-slate-400 uppercase">Progresso</th>
+            <th class="px-8 py-4 text-right text-[10px] font-black text-slate-400 uppercase">Ações</th>
+        `;
+    }
+
     if (dataToShow.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="px-8 py-20 text-center text-slate-400 italic">Sem registos encontrados.</td></tr>`;
+        const colspan = sessionUser.role === 'TECH' ? 5 : 5;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" class="px-8 py-20 text-center text-slate-400 italic">${sessionUser.role === 'TECH' ? 'Nenhuma ficha atribuída.' : 'Sem registos encontrados.'}</td></tr>`;
         return;
     }
 
     tbody.innerHTML = dataToShow.map(item => {
         const prog = calculateTotalProgress(item);
-        return `
-            <tr class="hover:bg-blue-50/30 transition-colors">
-                <td class="px-8 py-6 font-mono font-black text-blue-700">${item.Equip_Serial_Number || '---'}</td>
-                <td class="px-8 py-6 text-slate-700">${item.Cust_Name || '---'}</td>
-                <td class="px-8 py-6 text-slate-700">${item.Inst_Technician_Name || '---'}</td>
-                <td class="px-8 py-6">
-                    <div class="flex items-center gap-2">
-                        <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden">
-                            <div class="h-full ${prog === 100 ? 'bg-emerald-500' : 'bg-blue-500'}" style="width: ${prog}%"></div>
+        if (sessionUser.role === 'TECH') {
+            return `
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                    <td class="px-8 py-6 font-mono font-black text-blue-700">${item.Equip_Serial_Number || '---'}</td>
+                    <td class="px-8 py-6 text-slate-700">${item.Cust_Name || '---'}</td>
+                    <td class="px-8 py-6 text-slate-700 text-sm">${item.Inst_Date ? new Date(item.Inst_Date).toLocaleDateString('pt-PT') : '---'}</td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full ${prog === 100 ? 'bg-emerald-500' : 'bg-blue-500'}" style="width: ${prog}%"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-600 min-w-[30px]">${prog}%</span>
                         </div>
-                        <span class="text-[10px]">${prog}%</span>
-                    </div>
-                </td>
-                <td class="px-8 py-6 text-right flex justify-end gap-2">
-                    <button onclick="editForm('${item.id}')" title="Editar" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 border border-blue-100"><i data-lucide="search" style="width:18px"></i></button>
-                    <button onclick="deleteHandler('${item.id}')" title="Apagar" class="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 border border-red-100"><i data-lucide="trash-2" style="width:18px"></i></button>
-                </td>
-            </tr>
-        `;
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <button onclick="editForm('${item.id}')" title="Editar" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 border border-blue-100"><i data-lucide="edit" style="width:18px"></i></button>
+                    </td>
+                </tr>
+            `;
+        } else {
+            return `
+                <tr class="hover:bg-blue-50/30 transition-colors">
+                    <td class="px-8 py-6 font-mono font-black text-blue-700">${item.Equip_Serial_Number || '---'}</td>
+                    <td class="px-8 py-6 text-slate-700">${item.Cust_Name || '---'}</td>
+                    <td class="px-8 py-6 text-slate-700">${item.Inst_Technician_Name || '---'}</td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-16 h-1 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full ${prog === 100 ? 'bg-emerald-500' : 'bg-blue-500'}" style="width: ${prog}%"></div>
+                            </div>
+                            <span class="text-[10px]">${prog}%</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6 text-right flex justify-end gap-2">
+                        <button onclick="editForm('${item.id}')" title="Editar" class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 border border-blue-100"><i data-lucide="search" style="width:18px"></i></button>
+                        <button onclick="deleteHandler('${item.id}')" title="Apagar" class="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 border border-red-100"><i data-lucide="trash-2" style="width:18px"></i></button>
+                    </td>
+                </tr>
+            `;
+        }
     }).join('');
     lucide.createIcons();
 };
@@ -1069,6 +1103,7 @@ const renderTable = () => {
 const renderDashboard = () => {
     if (!sessionUser) return; // Verificação de segurança
     renderTable();
+    
     if (sessionUser.role === 'ADMIN') {
         const activeTechs = new Set(complianceData.map(d => d.Inst_Technician_Name).filter(Boolean)).size;
         const completedInstalls = complianceData.filter(d => d.Inst_Date).length;
@@ -1104,6 +1139,47 @@ const renderDashboard = () => {
             const statsCard2 = document.querySelector('[id="stats-cards"] > div:nth-child(2) p:last-child');
             if (statsCard1) statsCard1.textContent = activeTechs;
             if (statsCard2) statsCard2.textContent = completedInstalls;
+        }
+        lucide.createIcons();
+    } else if (sessionUser.role === 'TECH') {
+        // Dashboard para TECH - Mostrar apenas fichas atribuídas
+        const myForms = complianceData.filter(d => d.Inst_Technician_Name === sessionUser.name);
+        const completedForms = myForms.filter(d => calculateTotalProgress(d) === 100).length;
+        
+        const statsContainer = document.querySelector('.flex.justify-between.items-end');
+        if (statsContainer && !document.getElementById('stats-cards')) {
+            statsContainer.innerHTML = `
+                <div class="flex flex-col gap-4 w-full">
+                    <div>
+                        <h1 class="text-3xl font-black text-slate-900 tracking-tighter">Minhas Fichas</h1>
+                        <p class="text-slate-500 font-medium">Fichas de Instalação Somengil atribuídas a si.</p>
+                    </div>
+                    <div class="flex gap-4 flex-col md:flex-row dashboard-header-cards w-full" id="stats-cards">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 flex-1">
+                            <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Total de Fichas</p>
+                            <p class="text-4xl font-black text-blue-900">${myForms.length}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200 flex-1">
+                            <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Concluídas</p>
+                            <p class="text-4xl font-black text-emerald-900">${completedForms}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200 flex-1">
+                            <p class="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">Em Progresso</p>
+                            <p class="text-4xl font-black text-amber-900">${myForms.length - completedForms}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (!statsContainer) {
+            return;
+        } else {
+            // Atualizar apenas os números se já existem os cards
+            const statsCard1 = document.querySelector('[id="stats-cards"] > div:nth-child(1) p:last-child');
+            const statsCard2 = document.querySelector('[id="stats-cards"] > div:nth-child(2) p:last-child');
+            const statsCard3 = document.querySelector('[id="stats-cards"] > div:nth-child(3) p:last-child');
+            if (statsCard1) statsCard1.textContent = myForms.length;
+            if (statsCard2) statsCard2.textContent = completedForms;
+            if (statsCard3) statsCard3.textContent = myForms.length - completedForms;
         }
         lucide.createIcons();
     }
@@ -1432,6 +1508,25 @@ const RATING_FIELDS = {
         { value: "good", label: "🙂 Bom" },
         { value: "very good", label: "😃 Muito Bom" }
     ]
+};
+
+// --- FIELD ACCESS CONTROL ---
+// Fields that TECH users should not edit (read-only for TECH)
+const READONLY_FOR_TECH = [
+    "Inst_Company",
+    "Inst_Status_Planned_NotPlanned",
+    "Svc_Installation",
+    "Svc_Preventive_Maintenance",
+    "Svc_Corrective_Maintenance",
+    "Svc_Warranty",
+    "Doc_Manual_Delivered_Explained"
+];
+
+const isFieldReadOnly = (fieldName) => {
+    if (sessionUser && sessionUser.role === 'TECH') {
+        return READONLY_FOR_TECH.includes(fieldName);
+    }
+    return false;
 };
 
 const renderForm = () => {
