@@ -276,23 +276,31 @@ body {
 
 .form-input {
     width: 100%;
-    /*padding: 0.8rem 1rem;*/
+    padding: 0.25rem 1rem;
     border-radius: 0.2rem;
     /*border: 1px solid #e2e8f0;*/
-    background: #b8babb;
+    background: #f5f3f3;
     font-weight: 600;
     font-size: 0.875rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    color: rgb(0, 0, 0);
 }
-.form-input:focus { border-color: var(--somengil-blue); background: white; }
+.form-input:focus { border-color: var(--somengil-blue); background: hwb(182 44% 3%); color: black; }
+
+/* Table form inputs - increased height */
+td .form-input {
+    /*padding: 0.5rem 1rem !important;*/
+    min-height: 2.5rem;
+    text-align: center;
+}
 
 .hidden { display: none !important; }
 
 .main-title {
   font-size: 2.25rem; /* text-4xl */
   font-weight: 900;    /* font-black */
-  color: #0f172a;      /* text-slate-900 */
+  color: #bfcff5;      /* text-slate-900 */
   letter-spacing: -0.04em; /* tracking-tighter */
   line-height: 1.1;
   margin-bottom: 0.25em;
@@ -389,7 +397,7 @@ body {
         z-index: auto !important;
     }
 }
-}
+
 
 .ml-\[5px\] {
     margin-left: 5px !important;
