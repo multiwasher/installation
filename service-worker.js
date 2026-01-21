@@ -1,7 +1,7 @@
 // Service Worker para Somengil Compliance Portal
-// Versão 3.0 - Caching e funcionamento offline
+// Versão 4.0 - Caching e funcionamento offline
 
-const CACHE_NAME = 'somengil-compliance-v3';
+const CACHE_NAME = 'somengil-compliance-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
