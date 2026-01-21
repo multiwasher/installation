@@ -1972,32 +1972,32 @@ const renderForm = () => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 1 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 1 Tank</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R4</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R4_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R4_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 2 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 2 Tank</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R5</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R5_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R5_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 3 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 3 Tank</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R6</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R6_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R6_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 4 Tank (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Element 4 Tank</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R7</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R7_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R7_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 1 (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 1</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R2</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R2_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R2_Value', this.value)"></td>
                                     </tr>
                                     <tr>
-                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 2 (A)</td>
+                                        <td class="border border-slate-300 px-3 py-2 text-xs">Consumption Heating Boiler 2</td>
                                         <td class="border border-slate-300 px-3 py-2 text-center text-xs">R3</td>
                                         <td class="border border-slate-300 px-3 py-2"><input type="text" class="form-input w-full" value="${editingDoc.ConsMeas_Thermal_R3_Value || ''}" onchange="updateDocField('ConsMeas_Thermal_R3_Value', this.value)"></td>
                                     </tr>
