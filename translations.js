@@ -315,7 +315,6 @@ const translationsData = {
     "11 - STATUS TRAINING": { pt: "11 - STATUS TREINAMENTO", en: "11 - STATUS TRAINING", es: "11 - ESTADO ENTRENAMIENTO", fr: "11 - STATUT FORMATION" },
     "12 - POINTS TO EVALUATE": { pt: "12 - PONTOS A AVALIAR", en: "12 - POINTS TO EVALUATE", es: "12 - PUNTOS A EVALUAR", fr: "12 - POINTS À ÉVALUER" },
     "13 - CONSUMPTION": { pt: "13 - CONSUMO", en: "13 - CONSUMPTION", es: "13 - CONSUMO", fr: "13 - CONSOMMATION" },
-    "13_1 - CONSUMPTION MEASUREMENTS": { pt: "13.1 - MEDIÇÕES CONSUMO", en: "13.1 - CONSUMPTION MEASUREMENTS", es: "13.1 - MEDICIONES CONSUMO", fr: "13.1 - MESURES CONSOMMATION" },
     "14 - SUMMARY": { pt: "14 - RESUMO", en: "14 - SUMMARY", es: "14 - RESUMEN", fr: "14 - RÉSUMÉ" },
     "HOJA TÉCNICA DE CUMPLIMIENTO": { pt: "FICHA TÉCNICA DE CONFORMIDADE", en: "TECHNICAL COMPLIANCE SHEET", es: "HOJA TÉCNICA DE CUMPLIMIENTO", fr: "FICHE TECHNIQUE DE CONFORMITÉ" },
     "Equipo": { pt: "Equipamento", en: "Equipment", es: "Equipo", fr: "Équipement" },
