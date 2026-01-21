@@ -276,10 +276,10 @@ body {
 
 .form-input {
     width: 100%;
-    padding: 0.8rem 1rem;
-    border-radius: 0.75rem;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
+    /*padding: 0.8rem 1rem;*/
+    border-radius: 0.2rem;
+    /*border: 1px solid #e2e8f0;*/
+    background: #b8babb;
     font-weight: 600;
     font-size: 0.875rem;
     outline: none;
