@@ -314,6 +314,10 @@ const listenToData = () => {
     window.fbOnSnapshot(costsRef, (snap) => {
         console.log('[Firestore] Costs data received:', snap.docs.length, 'docs');
         costsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Re-render if costs view is currently visible
+        if (!document.getElementById('view-costs').classList.contains('hidden')) {
+            renderCostsTable();
+        }
     }, (error) => {
         console.error('[Firestore] Costs error:', error.code, error.message);
     });
@@ -322,6 +326,10 @@ const listenToData = () => {
     window.fbOnSnapshot(flightsRef, (snap) => {
         console.log('[Firestore] Flights data received:', snap.docs.length, 'docs');
         window.flightsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Re-render if flights view is currently visible
+        if (!document.getElementById('view-voos').classList.contains('hidden')) {
+            renderFlightsTable();
+        }
     }, (error) => {
         console.error('[Firestore] Flights error:', error.code, error.message);
     });
