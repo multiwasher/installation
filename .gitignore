@@ -1,0 +1,7 @@
+node_modules/
+*.json.key
+*.pem
+.DS_Store
+.env
+.env.local
+firebase-adminsdk-*.json
