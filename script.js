@@ -236,11 +236,14 @@ window.hideLoading = () => {
 
 // Utilizadores Autorizados
 const USERS = {
-    "4827": { name: "Miguel Moura", role: "TECH" },
-    "9053": { name: "Richard Carvalhais", role: "TECH" },
-    "1749": { name: "Tiago Dias", role: "TECH" },
-    "6382": { name: "Leonel Pereira", role: "TECH" },
-    "2916": { name: "Diogo Martins", role: "TECH" },
+    "243023170": { name: "Miguel Moura", role: "TECH" },
+    "225870401": { name: "Richard Carvalhais", role: "TECH" },
+    "214796922": { name: "Tiago Dias", role: "TECH" },
+    "237613573": { name: "Leonel Pereira", role: "TECH" },
+    "252863445": { name: "Diogo Martins", role: "TECH" },
+    "516845039": { name: "Nevado Colling Solutions", role: "TECH" },
+    "517519305": { name: "MCOLD", role: "TECH" },
+    "518363295": { name: "OnAssist", role: "TECH" },
     "112": { name: "GESTÃO", role: "ADMIN" },
     "999": { name: "VOOS", role: "ADMIN" }
 };
