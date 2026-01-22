@@ -873,19 +873,19 @@ window.exportCostsExcel = () => {
     rows.push(['', '', '', totalValue.toFixed(2), '']);
     
     // Criar conteúdo CSV (compatível com Excel)
-    const csvContent = [
+    const csvLines = [
         ['SOMENGIL'],
         ['RELATÓRIO DE DESPESAS'],
         [''],
         [`Gerado em: ${new Date().toLocaleDateString('pt-PT')}`],
         [`Utilizador: ${sessionUser.name}`],
         [''],
-        [headers.join('\t')],
-        ...rows.map(row => row.join('\t'))
+        headers,
+        ...rows
     ].map(row => row.join('\t')).join('\n');
     
     // Criar blob e download
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob(['\uFEFF' + csvLines], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `Despesas_${new Date().toISOString().split('T')[0]}.xlsx`;
