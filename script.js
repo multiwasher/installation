@@ -2393,6 +2393,32 @@ window.updateDocField = (field, value, element) => {
                 btn.classList.add('active');
             }
         });
+        
+        // Also find buttons in training sections (inline rendered)
+        // Look for parent with yes-no-buttons class and update all buttons that match this action
+        const parentYesNoButtons = document.querySelectorAll('.yes-no-buttons');
+        parentYesNoButtons.forEach(parent => {
+            const yesBtn = parent.querySelector('.btn-yes');
+            const noBtn = parent.querySelector('.btn-no');
+            
+            if (yesBtn && noBtn) {
+                // Check if this parent's onclick contains our field
+                const yesBtnOnclick = yesBtn.getAttribute('onclick') || '';
+                const noBtnOnclick = noBtn.getAttribute('onclick') || '';
+                
+                if (yesBtnOnclick.includes(`'${field}'`) || noBtnOnclick.includes(`'${field}'`)) {
+                    // Update the buttons for this field
+                    yesBtn.classList.remove('active');
+                    noBtn.classList.remove('active');
+                    
+                    if (value === 'Sim') {
+                        yesBtn.classList.add('active');
+                    } else if (value === 'Não') {
+                        noBtn.classList.add('active');
+                    }
+                }
+            }
+        });
     }
     
     // Re-render form for fields that need dynamic content updates
