@@ -1728,7 +1728,7 @@ const renderForm = () => {
                         <!-- Programs Section -->
                         <div class="border-t pt-8">
                             <div class="flex justify-between items-center mb-6">
-                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Program Entries</h4>
+                                <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Program Entries [screen photo]</h4>
                                 <button type="button" onclick="addProgramEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
                                     <i data-lucide="plus" class="w-4 h-4"></i> Add Program
                                 </button>
