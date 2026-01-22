@@ -482,34 +482,101 @@ window.showCostModal = () => {
     document.getElementById('cost-date').valueAsDate = new Date();
     // Reset hint visibility
     document.getElementById('cost-description-hint').classList.add('hidden');
+    document.getElementById('flight-cost-hint').classList.add('hidden');
+    document.getElementById('cost-technician-container').classList.add('hidden');
+    document.getElementById('cost-flight-container').classList.add('hidden');
 };
 
 window.closeCostModal = () => {
     document.getElementById('cost-modal').classList.add('hidden');
     document.getElementById('cost-form').reset();
     document.getElementById('cost-description-hint').classList.add('hidden');
+    document.getElementById('flight-cost-hint').classList.add('hidden');
 };
 
-// Toggle hint for Daily Technician Cost
+// Função para popular lista de Técnicos no dropdown
+window.updateCostTechnicianList = () => {
+    const select = document.getElementById('cost-technician');
+    const techs = Object.entries(USERS)
+        .filter(([_, user]) => user.role === 'TECH')
+        .map(([_, user]) => user.name);
+    
+    select.innerHTML = '<option value="">Select...</option>';
+    techs.forEach(tech => {
+        const option = document.createElement('option');
+        option.value = tech;
+        option.textContent = tech;
+        select.appendChild(option);
+    });
+};
+
+// Função para popular lista de Voos no dropdown
+window.updateCostFlightList = () => {
+    const select = document.getElementById('cost-flight');
+    const flights = window.flightsData || [];
+    
+    select.innerHTML = '<option value="">Select...</option>';
+    flights.forEach(flight => {
+        const option = document.createElement('option');
+        const flightLabel = `${flight.airport} → ${flight.destination} (${flight.date})`;
+        option.value = flight.id;
+        option.textContent = flightLabel;
+        select.appendChild(option);
+    });
+};
+
+// Toggle hint and fields for Daily Technician Cost and Flight Costs
 document.getElementById('cost-type')?.addEventListener('change', (e) => {
-    const hint = document.getElementById('cost-description-hint');
+    const descHint = document.getElementById('cost-description-hint');
+    const flightHint = document.getElementById('flight-cost-hint');
+    const techContainer = document.getElementById('cost-technician-container');
+    const flightContainer = document.getElementById('cost-flight-container');
+    
     if (e.target.value === 'Daily Technician Cost') {
-        hint.classList.remove('hidden');
+        descHint.classList.remove('hidden');
+        flightHint.classList.add('hidden');
+        techContainer.classList.add('hidden');
+        flightContainer.classList.add('hidden');
+    } else if (e.target.value === 'Flight Costs') {
+        descHint.classList.add('hidden');
+        flightHint.classList.remove('hidden');
+        techContainer.classList.remove('hidden');
+        flightContainer.classList.remove('hidden');
+        updateCostTechnicianList();
+        updateCostFlightList();
     } else {
-        hint.classList.add('hidden');
+        descHint.classList.add('hidden');
+        flightHint.classList.add('hidden');
+        techContainer.classList.add('hidden');
+        flightContainer.classList.add('hidden');
     }
 });
 
 document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const costType = document.getElementById('cost-type').value;
+    
     const costData = {
         date: document.getElementById('cost-date').value,
-        type: document.getElementById('cost-type').value,
+        type: costType,
         description: document.getElementById('cost-description').value,
         value: parseFloat(document.getElementById('cost-value').value),
-        technician: sessionUser.name,
+        technician: costType === 'Flight Costs' ? document.getElementById('cost-technician').value : sessionUser.name,
         createdAt: new Date().toISOString()
     };
+    
+    // Adicionar dados específicos para Flight Costs
+    if (costType === 'Flight Costs') {
+        const flightId = document.getElementById('cost-flight').value;
+        if (flightId) {
+            const flight = window.flightsData.find(f => f.id === flightId);
+            if (flight) {
+                costData.flightId = flightId;
+                costData.flightDestination = `${flight.airport} → ${flight.destination}`;
+                costData.flightDate = flight.date;
+            }
+        }
+    }
     
     try {
         const costId = crypto.randomUUID();
@@ -578,11 +645,16 @@ const renderCostsTable = () => {
     
     const totalValue = dataToShow.reduce((sum, c) => sum + (c.value || 0), 0);
     
-    tbody.innerHTML = dataToShow.map(item => `
+    tbody.innerHTML = dataToShow.map(item => {
+        let descriptionDisplay = item.description || '---';
+        if (item.type === 'Flight Costs' && item.flightDestination) {
+            descriptionDisplay = `<strong>${item.flightDestination}</strong><br><small class="text-slate-500">${item.description || ''}</small>`;
+        }
+        return `
         <tr class="hover:bg-blue-50/30 transition-colors">
             <td class="px-8 py-6 font-mono">${item.date || '---'}</td>
-            <td class="px-8 py-6 font-bold text-blue-600">${item.type || '---'}</td>
-            <td class="px-8 py-6 text-slate-700">${item.description || '---'}</td>
+            <td class="px-8 py-6 font-bold text-blue-600">${item.type === 'Flight Costs' ? '✈️ Flight Costs' : item.type || '---'}</td>
+            <td class="px-8 py-6 text-slate-700">${descriptionDisplay}</td>
             <td class="px-8 py-6 font-black text-emerald-600">${item.value?.toFixed(2) || '0.00'}€</td>
             <td class="px-8 py-6 text-slate-600">${item.technician || '---'}</td>
             <td class="px-8 py-6 text-right">
@@ -591,7 +663,8 @@ const renderCostsTable = () => {
                 </button>
             </td>
         </tr>
-    `).join('');
+    `;
+    }).join('');
     
     // Adicionar linha de total
     if (dataToShow.length > 0) {
