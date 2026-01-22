@@ -234,18 +234,28 @@ window.hideLoading = () => {
     }
 };
 
-// Utilizadores Autorizados
+// Utilizadores Autorizados (com passwords em hash SHA-256)
 const USERS = {
-    "243023170": { name: "Miguel Moura", role: "TECH" },
-    "225870401": { name: "Richard Carvalhais", role: "TECH" },
-    "214796922": { name: "Tiago Dias", role: "TECH" },
-    "237613573": { name: "Leonel Pereira", role: "TECH" },
-    "252863445": { name: "Diogo Martins", role: "TECH" },
-    "516845039": { name: "Nevado Colling Solutions", role: "TECH" },
-    "517519305": { name: "MCOLD", role: "TECH" },
-    "518363295": { name: "OnAssist", role: "TECH" },
-    "112": { name: "GESTÃO", role: "ADMIN" },
-    "999": { name: "VOOS", role: "ADMIN" }
+    "afdbd2b8d56bfea300262bec39993886064a67efd663c54af5544d5f2fccc70e": { name: "Diogo Martins", role: "TECH" },
+    "e320664f361479008577f48a8f948bb383ffa0d91624734194e024295b8c3580": { name: "Leonel Pereira", role: "TECH" },
+    "08701ca5a70c1ec2aa0444402ce04b61aaa2461df7444bcfc86e3cd7d9a8823e": { name: "Miguel Moura", role: "TECH" },
+    "f46b0497e19353f6a1ca6b17a3b4f9f010fdafe1fe478f7999489dd1a1fa53dd": { name: "Ricardo Carvalhais", role: "TECH" },
+    "615ea222512a6c75247c47d93e9632bff0b01cfc6c0716600cd85cc3fa2c8eef": { name: "Tiago Dias", role: "TECH" },
+    "7a4022c02b3d019836ddc49bd4fd6f58a1702221de6e64f0adae65e73fb0506a": { name: "Nevado Colling Solutions", role: "TECH" },
+    "dbe157c5bb268378e27084817e19ff2906593c8f6c5027e691187faf2ff4dd04": { name: "MCOLD", role: "TECH" },
+    "5583a8b51f67a4845de73aeed6a0045f3b3d9ae71beeacba54f8f582dad445de": { name: "OnAssist", role: "TECH" },
+    "b1556dea32e9d0cdbfed038fd7787275775ea40939c146a64e205bcb349ad02f": { name: "GESTÃO", role: "ADMIN" },
+    "83cf8b609de60036a8277bd0e96135751bbc07eb234256d4b65b893360651bf2": { name: "VOOS", role: "ADMIN" }
+};
+
+// --- FUNÇÃO DE HASHING SHA-256 ---
+window.hashPassword = async (password) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
 };
 
 // Estrutura Completa das Secções do Portal (Restaurada)
@@ -339,13 +349,16 @@ const listenToData = () => {
 };
 
 // --- GESTÃO DE LOGIN ---
-document.getElementById('login-form').addEventListener('submit', (e) => {
+document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const u = document.getElementById('login-user').value;
     const p = document.getElementById('login-pass').value;
 
-    if (USERS[p] && USERS[p].name.toLowerCase() === u.toLowerCase()) {
-        sessionUser = USERS[p];
+    // Hash da password e comparação segura
+    const passwordHash = await window.hashPassword(p);
+    
+    if (USERS[passwordHash] && USERS[passwordHash].name.toLowerCase() === u.toLowerCase()) {
+        sessionUser = USERS[passwordHash];
         document.getElementById('view-login').classList.add('hidden');
         document.getElementById('app-container').classList.remove('hidden');
         document.getElementById('header-user-name').innerText = sessionUser.name;
