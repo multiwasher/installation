@@ -807,10 +807,10 @@ window.generateCostsPDF = (lang = 'en') => {
     doc.setFillColor(240, 240, 240);
     doc.rect(20, y, pageWidth - 40, 8, "F");
     doc.text(pdfTexts.date[lang], 25, y + 6);
-    doc.text(pdfTexts.type[lang], 60, y + 6);
-    doc.text(pdfTexts.description[lang], 90, y + 6);
-    doc.text(pdfTexts.value[lang], 170, y + 6);
-    doc.text(pdfTexts.technician[lang], 195, y + 6);
+    doc.text(pdfTexts.type[lang], 50, y + 6);
+    doc.text(pdfTexts.description[lang], 80, y + 6);
+    doc.text(pdfTexts.value[lang], 155, y + 6);
+    doc.text(pdfTexts.technician[lang], 175, y + 6);
     y += 12;
     
     doc.setFont("helvetica", "normal");
@@ -818,17 +818,17 @@ window.generateCostsPDF = (lang = 'en') => {
     dataToExport.forEach(item => {
         if (y > 270) { doc.addPage(); y = 20; }
         doc.text(item.date || '---', 25, y);
-        doc.text((item.type || '---').substring(0, 15), 60, y);
-        doc.text((item.description || '---').substring(0, 20), 90, y);
-        doc.text(`${item.value?.toFixed(2) || '0.00'}€`, 170, y);
-        doc.text(item.technician || '---', 195, y);
+        doc.text((item.type || '---').substring(0, 12), 50, y);
+        doc.text((item.description || '---').substring(0, 18), 80, y);
+        doc.text(`${item.value?.toFixed(2) || '0.00'}€`, 155, y);
+        doc.text((item.technician || '---').substring(0, 12), 175, y);
         y += 7;
         totalValue += item.value || 0;
     });
     
     y += 5;
     doc.setFont("helvetica", "bold");
-    doc.text(`${pdfTexts.total[lang]} ${totalValue.toFixed(2)}€`, 170, y);
+    doc.text(`${pdfTexts.total[lang]} ${totalValue.toFixed(2)}€`, 155, y);
     
     const filename = lang === 'pt' ? `Despesas_${new Date().toISOString().split('T')[0]}.pdf` : 
                      lang === 'en' ? `Expenses_${new Date().toISOString().split('T')[0]}.pdf` :
