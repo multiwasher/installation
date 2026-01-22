@@ -61,6 +61,7 @@ body {
     margin: 0; 
     color: #1e293b;
     overflow-x: hidden;
+    font-size: 16px;
 }
 
 /* --- ESTILOS DO LOGIN --- */
@@ -281,7 +282,7 @@ body {
     /*border: 1px solid #e2e8f0;*/
     background: rgb(245, 243, 243);
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 1rem;
     outline: none;
     transition: border-color 0.2s, background 0.2s, color 0.2s;
     color: rgb(0, 0, 0);
@@ -292,8 +293,9 @@ body {
 /* Table form inputs - increased height */
 td .form-input {
     /*padding: 0.5rem 1rem !important;*/
-    min-height: 2.5rem;
+    min-height: 2.75rem;
     text-align: center;
+    font-size: 1.05rem;
 }
 
 .hidden { display: none !important; }
@@ -444,7 +446,7 @@ td .form-input {
     border-radius: 0.5rem;
     border: none;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -530,7 +532,7 @@ td .form-input {
     border-radius: 0.75rem;
     border: 1px solid #cbd5e1;
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s;
     text-transform: uppercase;
