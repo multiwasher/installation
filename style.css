@@ -61,7 +61,6 @@ body {
     margin: 0; 
     color: #1e293b;
     overflow-x: hidden;
-    font-size: 16px;
 }
 
 /* --- ESTILOS DO LOGIN --- */
@@ -282,7 +281,7 @@ body {
     /*border: 1px solid #e2e8f0;*/
     background: rgb(245, 243, 243);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.875rem;
     outline: none;
     transition: border-color 0.2s, background 0.2s, color 0.2s;
     color: rgb(0, 0, 0);
@@ -293,9 +292,8 @@ body {
 /* Table form inputs - increased height */
 td .form-input {
     /*padding: 0.5rem 1rem !important;*/
-    min-height: 2.75rem;
+    min-height: 2.5rem;
     text-align: center;
-    font-size: 1.05rem;
 }
 
 .hidden { display: none !important; }
@@ -446,7 +444,7 @@ td .form-input {
     border-radius: 0.5rem;
     border: none;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -532,7 +530,7 @@ td .form-input {
     border-radius: 0.75rem;
     border: 1px solid #cbd5e1;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
     text-transform: uppercase;
@@ -568,4 +566,56 @@ td .form-input {
     color: white;
     border-color: #dc2626;
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* --- DESKTOP FONT SIZE IMPROVEMENTS --- */
+@media (min-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .main-title {
+        font-size: 2.5rem !important;
+    }
+    
+    table {
+        font-size: 0.975rem;
+    }
+    
+    thead {
+        font-size: 0.95rem;
+    }
+    
+    tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.975rem;
+    }
+    
+    input, select, textarea {
+        font-size: 1rem;
+    }
+    
+    button {
+        font-size: 1rem;
+    }
+    
+    .btn-principal {
+        font-size: 1.05rem;
+    }
+    
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+    
+    p {
+        font-size: 1.05rem;
+    }
+    
+    .text-sm {
+        font-size: 0.95rem !important;
+    }
+    
+    .text-xs {
+        font-size: 0.85rem !important;
+    }
 }
