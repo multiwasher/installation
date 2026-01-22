@@ -872,7 +872,7 @@ window.exportCostsExcel = () => {
     const totalValue = dataToExport.reduce((sum, item) => sum + (item.value || 0), 0);
     rows.push(['', '', '', totalValue.toFixed(2), '']);
     
-    // Criar conteúdo CSV (compatível com Excel)
+    // Criar conteúdo CSV com separador ; (padrão europeu)
     const csvLines = [
         ['SOMENGIL'],
         ['RELATÓRIO DE DESPESAS'],
@@ -882,13 +882,13 @@ window.exportCostsExcel = () => {
         [''],
         headers,
         ...rows
-    ].map(row => row.join('\t')).join('\n');
+    ].map(row => row.map(cell => `"${cell}"`).join(';')).join('\n');
     
-    // Criar blob e download
-    const blob = new Blob(['\uFEFF' + csvLines], { type: 'text/plain;charset=utf-8' });
+    // Criar blob e download com extensão .csv
+    const blob = new Blob(['\uFEFF' + csvLines], { type: 'text/csv;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `Despesas_${new Date().toISOString().split('T')[0]}.xlsx`;
+    link.download = `Despesas_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
 };
