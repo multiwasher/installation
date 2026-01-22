@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fbDoc = doc;
     window.fbSetDoc = setDoc;
     window.fbDeleteDoc = deleteDoc;
-    window.appId = 'somengil-compliance-v5';
+    window.appId = 'somengil-compliance-live';
     
     // Inicializar autenticação
     signInAnonymously(window.auth).catch(err => console.error("Erro ao conectar Firebase:", err));
