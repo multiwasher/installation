@@ -464,12 +464,25 @@ window.handleLogout = () => {
 window.showCostModal = () => {
     document.getElementById('cost-modal').classList.remove('hidden');
     document.getElementById('cost-date').valueAsDate = new Date();
+    // Reset hint visibility
+    document.getElementById('cost-description-hint').classList.add('hidden');
 };
 
 window.closeCostModal = () => {
     document.getElementById('cost-modal').classList.add('hidden');
     document.getElementById('cost-form').reset();
+    document.getElementById('cost-description-hint').classList.add('hidden');
 };
+
+// Toggle hint for Daily Technician Cost
+document.getElementById('cost-type')?.addEventListener('change', (e) => {
+    const hint = document.getElementById('cost-description-hint');
+    if (e.target.value === 'Daily Technician Cost') {
+        hint.classList.remove('hidden');
+    } else {
+        hint.classList.add('hidden');
+    }
+});
 
 document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
