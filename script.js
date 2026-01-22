@@ -506,11 +506,14 @@ document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
 
 const renderCostsView = () => {
     const filtersContainer = document.getElementById('cost-filters');
+    const exportExcelBtn = document.getElementById('btn-export-excel');
     if (sessionUser.role === 'ADMIN') {
         filtersContainer.classList.remove('hidden');
+        exportExcelBtn.classList.remove('hidden');
         updateTechnicianFilter();
     } else {
         filtersContainer.classList.add('hidden');
+        exportExcelBtn.classList.add('hidden');
     }
     renderCostsTable();
 };
@@ -835,6 +838,59 @@ window.generateCostsPDF = (lang = 'en') => {
                      lang === 'es' ? `Gastos_${new Date().toISOString().split('T')[0]}.pdf` :
                      `Depenses_${new Date().toISOString().split('T')[0]}.pdf`;
     doc.save(filename);
+};
+
+window.exportCostsExcel = () => {
+    // Coletar dados com filtros aplicados (igual ao PDF)
+    let dataToExport = costsData;
+    if (sessionUser.role === 'ADMIN') {
+        const dateFrom = document.getElementById('filter-date-from').value;
+        const dateTo = document.getElementById('filter-date-to').value;
+        const techFilter = document.getElementById('filter-technician').value;
+        
+        dataToExport = costsData.filter(c => {
+            if (dateFrom && c.date < dateFrom) return false;
+            if (dateTo && c.date > dateTo) return false;
+            if (techFilter && c.technician !== techFilter) return false;
+            return true;
+        });
+    } else {
+        dataToExport = costsData.filter(c => c.technician === sessionUser.name);
+    }
+    
+    // Preparar dados para Excel
+    const headers = ['Data', 'Tipo', 'Descrição', 'Valor (€)', 'Técnico'];
+    const rows = dataToExport.map(item => [
+        item.date || '---',
+        item.type || '---',
+        item.description || '---',
+        item.value?.toFixed(2) || '0.00',
+        item.technician || '---'
+    ]);
+    
+    // Adicionar linha de total
+    const totalValue = dataToExport.reduce((sum, item) => sum + (item.value || 0), 0);
+    rows.push(['', '', '', totalValue.toFixed(2), '']);
+    
+    // Criar conteúdo CSV (compatível com Excel)
+    const csvContent = [
+        ['SOMENGIL'],
+        ['RELATÓRIO DE DESPESAS'],
+        [''],
+        [`Gerado em: ${new Date().toLocaleDateString('pt-PT')}`],
+        [`Utilizador: ${sessionUser.name}`],
+        [''],
+        [headers.join('\t')],
+        ...rows.map(row => row.join('\t'))
+    ].map(row => row.join('\t')).join('\n');
+    
+    // Criar blob e download
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Despesas_${new Date().toISOString().split('T')[0]}.xlsx`;
+    link.click();
+    URL.revokeObjectURL(link.href);
 };
 
 // --- MÓDULO DE VOOS ---
