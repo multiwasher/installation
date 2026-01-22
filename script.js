@@ -282,20 +282,31 @@ window.addEventListener('load', () => {
 });
 
 const listenToData = () => {
+    console.log('[Firestore] Listening to data with appId:', window.appId);
+    
     const colRef = window.fbCollection(window.db, 'artifacts', window.appId, 'public', 'data', 'compliance');
     window.fbOnSnapshot(colRef, (snap) => {
+        console.log('[Firestore] Compliance data received:', snap.docs.length, 'docs');
         complianceData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderDashboard();
+    }, (error) => {
+        console.error('[Firestore] Compliance error:', error.code, error.message);
     });
     
     const costsRef = window.fbCollection(window.db, 'artifacts', window.appId, 'public', 'data', 'costs');
     window.fbOnSnapshot(costsRef, (snap) => {
+        console.log('[Firestore] Costs data received:', snap.docs.length, 'docs');
         costsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }, (error) => {
+        console.error('[Firestore] Costs error:', error.code, error.message);
     });
     
     const flightsRef = window.fbCollection(window.db, 'artifacts', window.appId, 'public', 'data', 'flights');
     window.fbOnSnapshot(flightsRef, (snap) => {
+        console.log('[Firestore] Flights data received:', snap.docs.length, 'docs');
         window.flightsData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }, (error) => {
+        console.error('[Firestore] Flights error:', error.code, error.message);
     });
 };
 
