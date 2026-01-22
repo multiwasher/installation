@@ -39,6 +39,17 @@
 </head>
 <body>
 
+    <!-- LOADING OVERLAY -->
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+        <div class="bg-white rounded-3xl p-8 flex flex-col items-center gap-6 shadow-2xl">
+            <img id="loading-spinner" src="https://static.wixstatic.com/media/a6967f_95db0dbb18554c0299efd61c7e081848~mv2.png" alt="Loading" class="w-16 h-16 animate-spin">
+            <div class="text-center">
+                <p class="text-lg font-black text-slate-900">Processando...</p>
+                <p id="loading-text" class="text-sm text-slate-500 mt-2">Por favor aguarde</p>
+            </div>
+        </div>
+    </div>
+
     <!-- PWA Installation Button (floating) -->
     <div id="install-prompt" class="hidden fixed top-4 right-4 bg-white shadow-lg rounded-lg p-4 z-50 max-w-xs">
         <div class="flex items-center justify-between gap-4">

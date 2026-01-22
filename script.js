@@ -217,6 +217,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })();
 
+// --- LOADING OVERLAY FUNCTIONS ---
+window.showLoading = (message = 'Por favor aguarde') => {
+    const overlay = document.getElementById('loading-overlay');
+    const text = document.getElementById('loading-text');
+    if (overlay && text) {
+        text.innerText = message;
+        overlay.classList.remove('hidden');
+    }
+};
+
+window.hideLoading = () => {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+};
+
 // Utilizadores Autorizados
 const USERS = {
     "4827": { name: "Miguel Moura", role: "TECH" },
@@ -2514,6 +2531,8 @@ const calculateTotalProgress = (item) => {
 window.saveForm = async () => {
     if (!editingDoc) return;
     try {
+        window.showLoading('A guardar formulário...');
+        
         // Save any pending signatures before saving the form
         saveSignatureTechnician();
         saveSignatureCustomer();
@@ -2523,18 +2542,26 @@ window.saveForm = async () => {
             ...editingDoc,
             lastUpdate: new Date().toISOString()
         }, { merge: true });
+        
+        window.hideLoading();
         setView('dashboard');
         editingDoc = null;
         signaturePadTechnician = null;
         signaturePadCustomer = null;
     } catch (err) {
+        window.hideLoading();
         alert("Erro ao gravar. Verifique as suas permissões.");
     }
 };
 
 window.deleteHandler = async (id) => {
     if (confirm("Apagar permanentemente este registo?")) {
-        await window.fbDeleteDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'compliance', id));
+        window.showLoading('A apagar registo...');
+        try {
+            await window.fbDeleteDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'compliance', id));
+        } finally {
+            window.hideLoading();
+        }
     }
 };
 
@@ -2557,7 +2584,11 @@ window.exportCurrentToPDF = () => {
     console.log('[PDF] Showing modal for language selection');
     window.showPDFLanguageSelector((lang) => {
         console.log('[PDF] User selected language:', lang);
-        window.generatePDF(editingDoc, lang);
+        window.showLoading('A gerar PDF...');
+        setTimeout(() => {
+            window.generatePDF(editingDoc, lang);
+            window.hideLoading();
+        }, 100);
     });
 };
 
