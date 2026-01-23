@@ -590,13 +590,16 @@ document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
 const renderCostsView = () => {
     const filtersContainer = document.getElementById('cost-filters');
     const exportExcelBtn = document.getElementById('btn-export-excel');
+    const btnNewCost = document.getElementById('btn-new-cost');
     if (sessionUser.role === 'ADMIN') {
         filtersContainer.classList.remove('hidden');
         exportExcelBtn.classList.remove('hidden');
+        btnNewCost.style.display = '';
         updateTechnicianFilter();
     } else {
         filtersContainer.classList.add('hidden');
         exportExcelBtn.classList.add('hidden');
+        btnNewCost.style.display = 'none';
     }
     renderCostsTable();
 };
