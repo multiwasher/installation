@@ -217,6 +217,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })();
 
+// --- OFFLINE-AWARE DATA OPERATIONS ---
+/**
+ * Guardar documento com suporte offline
+ * Se online: grava diretamente no Firebase
+ * Se offline: grava em IndexedDB e sincroniza mais tarde
+ */
+window.saveDocumentOnline = async (path, data, operation = 'saveCompliance') => {
+    try {
+        const docId = path[path.length - 1]; // Último item é o ID
+        
+        if (navigator.onLine && window.offlineManager.isOnline) {
+            // Online: usar Firebase normalmente
+            await window.fbSetDoc(window.fbDoc(...path), data);
+            window.offlineManager.showStatusNotification('✅ Guardado com sucesso', 'success');
+        } else {
+            // Offline: guardar na fila e localmente
+            await window.offlineManager.queueOperation(operation, {
+                id: docId,
+                payload: data
+            });
+            window.offlineManager.showStatusNotification('📱 Guardado offline - Sincronizará quando voltar online', 'warning');
+        }
+    } catch (err) {
+        console.error('Erro ao guardar documento:', err);
+        
+        // Se falhar online, tentar guardar offline
+        if (window.offlineManager && window.offlineManager.db) {
+            const docId = path[path.length - 1];
+            await window.offlineManager.queueOperation(operation, {
+                id: docId,
+                payload: data
+            });
+            window.offlineManager.showStatusNotification('📱 Erro ao sincronizar - Guardado offline', 'warning');
+        } else {
+            throw err;
+        }
+    }
+};
+
+/**
+ * Apagar documento com suporte offline
+ */
+window.deleteDocumentOnline = async (path, operation = 'deleteCompliance') => {
+    try {
+        const docId = path[path.length - 1];
+        
+        if (navigator.onLine && window.offlineManager.isOnline) {
+            await window.fbDeleteDoc(window.fbDoc(...path));
+            window.offlineManager.showStatusNotification('✅ Apagado com sucesso', 'success');
+        } else {
+            await window.offlineManager.queueOperation(operation, {
+                id: docId
+            });
+            window.offlineManager.showStatusNotification('📱 Apagado offline - Sincronizará quando voltar online', 'warning');
+        }
+    } catch (err) {
+        console.error('Erro ao apagar documento:', err);
+        
+        if (window.offlineManager && window.offlineManager.db) {
+            const docId = path[path.length - 1];
+            await window.offlineManager.queueOperation(operation, {
+                id: docId
+            });
+            window.offlineManager.showStatusNotification('📱 Erro ao sincronizar - Apagado offline', 'warning');
+        } else {
+            throw err;
+        }
+    }
+};
+
 // --- LOADING OVERLAY FUNCTIONS ---
 window.showLoading = (message = 'Por favor aguarde') => {
     const overlay = document.getElementById('loading-overlay');
@@ -616,9 +686,14 @@ document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
     
     try {
         const costId = crypto.randomUUID();
-        await window.fbSetDoc(window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'costs', costId), costData);
+        await window.saveDocumentOnline(
+            [window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'costs', costId)],
+            costData,
+            'saveCost'
+        );
         closeCostModal();
     } catch (err) {
+        console.error("Erro ao guardar custo:", err);
         alert("Erro ao guardar custo.");
     }
 });

@@ -39,6 +39,30 @@
 </head>
 <body>
 
+    <!-- OFFLINE STATUS INDICATOR -->
+    <div id="offline-indicator" class="hidden fixed top-0 left-0 right-0 bg-orange-500 text-white px-4 py-2 text-center font-semibold text-sm z-[9997] flex items-center justify-center gap-2">
+        <i data-lucide="wifi-off" style="width:16px; height:16px;"></i>
+        <span>Modo Offline - Os dados serão sincronizados quando voltar online</span>
+    </div>
+
+    <!-- SYNC PROGRESS INDICATOR -->
+    <div id="sync-indicator" class="hidden fixed bottom-4 left-4 bg-white rounded-lg shadow-lg p-4 z-[9997] max-w-xs border border-blue-200">
+        <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="animate-spin">
+                    <i data-lucide="upload-cloud" class="text-blue-600" style="width:20px; height:20px;"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-sm text-slate-900">Sincronizando dados</p>
+                    <p id="sync-counter" class="text-xs text-slate-500">Aguarde...</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('sync-indicator').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" style="width:16px; height:16px;"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- LOADING OVERLAY -->
     <div id="loading-overlay" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
         <div class="bg-white rounded-3xl p-8 flex flex-col items-center gap-6 shadow-2xl">
@@ -496,6 +520,9 @@
 
     <!-- TRANSLATIONS SYSTEM -->
     <script src="translations.js?v=20260121r"></script>
+
+    <!-- OFFLINE MANAGER -->
+    <script src="offline-manager.js?v=20260203r"></script>
 
     <!-- APPLICATION LOGIC AND FIREBASE -->
     <script src="script.js?v=20260121r"></script>
