@@ -1124,6 +1124,18 @@ window.updateFlightTechnicianList = () => {
     });
 };
 
+// Função para atualizar os dropdowns do modal de voos
+window.refreshFlightModal = () => {
+    updateFlightTechnicianList();
+};
+
+// Função para atualizar os dropdowns do modal de custos
+window.refreshCostModal = () => {
+    // Atualizar todos os dropdowns que podem estar visíveis
+    updateCostTechnicianList();
+    updateCostTechList();
+    updateCostFlightList();
+};
 
 
 const renderFlightsView = () => {

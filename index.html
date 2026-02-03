@@ -331,7 +331,12 @@
                 <!-- NEW FLIGHT MODAL -->
                 <div id="flight-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">New Flight</h2>
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-black text-slate-900">New Flight</h2>
+                            <button type="button" onclick="refreshFlightModal()" title="Refresh dropdown lists" class="p-2 hover:bg-slate-100 rounded-lg transition">
+                                <i data-lucide="rotate-cw" style="width:18px; height:18px;"></i>
+                            </button>
+                        </div>
                         <form id="flight-form" class="space-y-4">
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
@@ -451,7 +456,12 @@
                 <!-- NEW COST MODAL -->
                 <div id="cost-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                        <h2 class="text-2xl font-black text-slate-900 mb-6">New Cost</h2>
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-black text-slate-900">New Cost</h2>
+                            <button type="button" onclick="refreshCostModal()" title="Refresh dropdown lists" class="p-2 hover:bg-slate-100 rounded-lg transition">
+                                <i data-lucide="rotate-cw" style="width:18px; height:18px;"></i>
+                            </button>
+                        </div>
                         
                         <form id="cost-form" class="space-y-4">
                             <div>
