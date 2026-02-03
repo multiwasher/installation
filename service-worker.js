@@ -86,10 +86,15 @@ self.addEventListener('fetch', (event) => {
       }).catch(() => {
         // Se falhar, tentar cache
         return caches.match(request).catch(() => {
-          return new Response(
+          const errorResponse = new Response(
             JSON.stringify({ error: 'Offline' }),
-            { status: 503, headers: { 'Content-Type': 'application/json' } }
+            { 
+              status: 503, 
+              statusText: 'Service Unavailable',
+              headers: { 'Content-Type': 'application/json' } 
+            }
           );
+          return errorResponse;
         });
       })
     );
