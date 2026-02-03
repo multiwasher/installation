@@ -229,13 +229,16 @@ window.saveDocumentOnline = async (path, data, operation = 'saveCompliance') => 
         
         if (navigator.onLine && window.offlineManager.isOnline) {
             // Online: usar Firebase normalmente
-            await window.fbSetDoc(window.fbDoc(...path), data);
+            await window.fbSetDoc(window.fbDoc(window.db, ...path), data);
             window.offlineManager.showStatusNotification('✅ Guardado com sucesso', 'success');
         } else {
             // Offline: guardar na fila e localmente
+            // Clone only serializable data (remove Firebase SDK objects)
+            const serializableData = JSON.parse(JSON.stringify(data));
             await window.offlineManager.queueOperation(operation, {
                 id: docId,
-                payload: data
+                payload: serializableData,
+                pathSegments: path
             });
             window.offlineManager.showStatusNotification('📱 Guardado offline - Sincronizará quando voltar online', 'warning');
         }
@@ -245,9 +248,12 @@ window.saveDocumentOnline = async (path, data, operation = 'saveCompliance') => 
         // Se falhar online, tentar guardar offline
         if (window.offlineManager && window.offlineManager.db) {
             const docId = path[path.length - 1];
+            // Clone only serializable data (remove Firebase SDK objects)
+            const serializableData = JSON.parse(JSON.stringify(data));
             await window.offlineManager.queueOperation(operation, {
                 id: docId,
-                payload: data
+                payload: serializableData,
+                pathSegments: path
             });
             window.offlineManager.showStatusNotification('📱 Erro ao sincronizar - Guardado offline', 'warning');
         } else {
@@ -264,7 +270,7 @@ window.deleteDocumentOnline = async (path, operation = 'deleteCompliance') => {
         const docId = path[path.length - 1];
         
         if (navigator.onLine && window.offlineManager.isOnline) {
-            await window.fbDeleteDoc(window.fbDoc(...path));
+            await window.fbDeleteDoc(window.fbDoc(window.db, ...path));
             window.offlineManager.showStatusNotification('✅ Apagado com sucesso', 'success');
         } else {
             await window.offlineManager.queueOperation(operation, {
@@ -687,7 +693,7 @@ document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
     try {
         const costId = crypto.randomUUID();
         await window.saveDocumentOnline(
-            [window.fbDoc(window.db, 'artifacts', window.appId, 'public', 'data', 'costs', costId)],
+            ['artifacts', window.appId, 'public', 'data', 'costs', costId],
             costData,
             'saveCost'
         );
