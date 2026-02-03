@@ -707,6 +707,10 @@ const renderCostsView = () => {
         exportExcelBtn.classList.remove('hidden');
         btnNewCost.style.display = '';
         updateTechnicianFilter();
+    } else if (sessionUser.role === 'TECH') {
+        filtersContainer.classList.add('hidden');
+        exportExcelBtn.classList.add('hidden');
+        btnNewCost.style.display = '';
     } else {
         filtersContainer.classList.add('hidden');
         exportExcelBtn.classList.add('hidden');
