@@ -525,22 +525,42 @@ window.updateCostFlightList = () => {
     });
 };
 
+// Função para atualizar lista de TECH
+const updateCostTechList = () => {
+    const select = document.getElementById('cost-tech-profile');
+    select.innerHTML = '<option value="">Select...</option>';
+    
+    // Obter todos os TECH a partir do objeto USERS
+    Object.entries(USERS).forEach(([_, user]) => {
+        if (user.role === 'TECH') {
+            const option = document.createElement('option');
+            option.value = user.name;
+            option.textContent = user.name;
+            select.appendChild(option);
+        }
+    });
+};
+
 // Toggle hint and fields for Daily Technician Cost and Flight Costs
 document.getElementById('cost-type')?.addEventListener('change', (e) => {
     const descHint = document.getElementById('cost-description-hint');
     const flightHint = document.getElementById('flight-cost-hint');
     const techContainer = document.getElementById('cost-technician-container');
+    const techProfileContainer = document.getElementById('cost-tech-container');
     const flightContainer = document.getElementById('cost-flight-container');
     
     if (e.target.value === 'Daily Technician Cost') {
         descHint.classList.remove('hidden');
         flightHint.classList.add('hidden');
         techContainer.classList.add('hidden');
+        techProfileContainer.classList.remove('hidden');
         flightContainer.classList.add('hidden');
+        updateCostTechList();
     } else if (e.target.value === 'Flight Costs') {
         descHint.classList.add('hidden');
         flightHint.classList.remove('hidden');
         techContainer.classList.remove('hidden');
+        techProfileContainer.classList.add('hidden');
         flightContainer.classList.remove('hidden');
         updateCostTechnicianList();
         updateCostFlightList();
@@ -548,6 +568,7 @@ document.getElementById('cost-type')?.addEventListener('change', (e) => {
         descHint.classList.add('hidden');
         flightHint.classList.add('hidden');
         techContainer.classList.add('hidden');
+        techProfileContainer.classList.add('hidden');
         flightContainer.classList.add('hidden');
     }
 });
@@ -556,12 +577,27 @@ document.getElementById('cost-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const costType = document.getElementById('cost-type').value;
     
+    let technician = sessionUser.name;
+    
+    // Se for Daily Technician Cost, usar o TECH selecionado
+    if (costType === 'Daily Technician Cost') {
+        technician = document.getElementById('cost-tech-profile').value;
+        if (!technician) {
+            alert("Por favor seleccione um perfil TECH.");
+            return;
+        }
+    }
+    // Se for Flight Costs, usar o technician selecionado
+    else if (costType === 'Flight Costs') {
+        technician = document.getElementById('cost-technician').value;
+    }
+    
     const costData = {
         date: document.getElementById('cost-date').value,
         type: costType,
         description: document.getElementById('cost-description').value,
         value: parseFloat(document.getElementById('cost-value').value),
-        technician: costType === 'Flight Costs' ? document.getElementById('cost-technician').value : sessionUser.name,
+        technician: technician,
         createdAt: new Date().toISOString()
     };
     
