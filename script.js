@@ -1686,12 +1686,18 @@ window.updateUtensilPhoto = (idx, photoIdx, input) => {
 window.createNewForm = () => {
     editingDoc = { id: crypto.randomUUID() };
     if (sessionUser.role === 'TECH') editingDoc.Inst_Technician_Name = sessionUser.name;
+    // Initialize programs with one default program
+    editingDoc.programs = [{ number: '', photos: [] }];
     renderForm();
     setView('form');
 };
 
 window.editForm = (id) => {
     editingDoc = complianceData.find(d => d.id === id);
+    // Initialize programs with one default program if not exists
+    if (!editingDoc.programs) {
+        editingDoc.programs = [{ number: '', photos: [] }];
+    }
     renderForm();
     setView('form');
 };
@@ -2048,24 +2054,12 @@ const renderForm = () => {
                         <div class="border-t pt-8">
                             <div class="flex justify-between items-center mb-6">
                                 <h4 class="text-sm font-black text-slate-600 uppercase tracking-wide">Program Entries [screen photo]</h4>
-                                <button type="button" onclick="addProgramEntry()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 flex items-center gap-2">
-                                    <i data-lucide="plus" class="w-4 h-4"></i> Add Program
-                                </button>
                             </div>
                             <div id="programs-container" class="space-y-6">
-                                ${(editingDoc.programs || []).map((prog, idx) => `
+                                ${(editingDoc.programs || [{}]).slice(0, 1).map((prog, idx) => `
                                     <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                                        <div class="flex justify-between items-start mb-4">
-                                            <span class="text-sm font-bold text-slate-600">Program ${idx + 1}</span>
-                                            <button type="button" onclick="removeProgramEntry(${idx})" class="text-red-500 hover:text-red-700 font-bold text-sm">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                            <div>
-                                                <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Program Number</label>
-                                                <input type="text" class="form-input" value="${prog.number || ''}" onchange="updateProgramField(${idx}, 'number', this.value)" placeholder="Enter program number">
-                                            </div>
+                                        <div class="mb-4">
+                                            <span class="text-sm font-bold text-slate-600">Programs</span>
                                         </div>
                                         <div class="mb-4">
                                             <label class="text-[10px] font-black text-slate-400 uppercase block mb-2">Photos (Max 3)</label>
